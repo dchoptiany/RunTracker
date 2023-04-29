@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MapFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:background="#D1EDA4"
+        android:layout_height="189dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Time"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.066"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.135" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Distance"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.067"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintVertical_bias="0.392" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Pace"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.54"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.135" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="184dp"
+            android:layout_height="69dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.54"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintVertical_bias="0.446">
+
+            <ImageButton
+                android:id="@+id/startButton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/border"
+                android:backgroundTint="#68A620"
+                android:scaleType="centerCrop"
+                android:src="@drawable/play_button_image" />
+
+            <ImageButton
+                android:id="@+id/pauseButton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/border"
+                android:backgroundTint="#FFC107"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pause_button_image"
+                tools:layout_editor_absoluteX="329dp"
+                tools:layout_editor_absoluteY="119dp" />
+
+            <ImageButton
+                android:id="@+id/stopButton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/border"
+                android:backgroundTint="#F44336"
+                android:scaleType="centerCrop"
+                android:src="@drawable/stop_button_image"
+                tools:layout_editor_absoluteX="329dp"
+                tools:layout_editor_absoluteY="119dp" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.osmdroid.views.MapView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/recyclerView"
+            android:visibility="visible"></org.osmdroid.views.MapView>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addPhotoFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/add_image"
+            app:fab_colorNormal="#D1EDA4"
+            app:fab_colorPressed="#4CAF50"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_showShadow="true"
+            app:fab_shadowColor="#66000000"
+            app:fab_shadowRadius="4dp"
+            app:fab_shadowXOffset="1dp"
+            app:fab_shadowYOffset="3dp"
+            app:fab_size="normal"
+            app:fab_progress_color="#FF009688"
+            app:fab_progress_backgroundColor="#4D000000"
+            app:fab_progress_indeterminate="false"
+            app:fab_progress_max="100"
+            app:fab_progress_showBackground="true"/>
+
+    </FrameLayout>
+
+</LinearLayout>
