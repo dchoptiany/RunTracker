@@ -126,8 +126,9 @@
         <org.osmdroid.views.MapView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/recyclerView"
-            android:visibility="visible"></org.osmdroid.views.MapView>
+            android:id="@+id/mapView"
+            android:visibility="visible">
+        </org.osmdroid.views.MapView>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/addPhotoFAB"
