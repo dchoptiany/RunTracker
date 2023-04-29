@@ -13,10 +13,10 @@ interface RunDao {
     fun getByDate(date: Date): Flow<List<Run>>
     
     @Query("SELECT COUNT(*) FROM run")
-    fun getNumberOfRuns(): Int
+    fun getNumberOfRuns(): Flow<Int>
 
     @Query("SELECT SUM(distance) FROM run")
-    fun getTotalDistance(): Float
+    fun getTotalDistance(): Flow<Float>
 
     @Insert
     fun insert(run: Run)

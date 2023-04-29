@@ -2,12 +2,39 @@ package com.example.runtracker
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
+import java.sql.Date
 
 class RunViewModel(private val repository: RunRepository): ViewModel() {
     var runs: LiveData<List<Run>> = repository.allRuns.asLiveData()
+    var numberOfRuns: LiveData<Int> = repository.numberOfRuns.asLiveData()
+    var totalDistance: LiveData<Float> = repository.totalDistance.asLiveData()
 
-    fun addRun(run: Run) = viewModelScope.launch {
+    fun runsByDate(date: Date): LiveData<List<Run>> {
+        var runs: LiveData<List<Run>>? = null
+        viewModelScope.launch {
+            runs = repository.getByDate(date).asLiveData()
+        }
+        return runs as LiveData<List<Run>>
+    }
+
+    fun insertRun(run: Run) = viewModelScope.launch {
         repository.insertRun(run)
+    }
+
+    fun insertRuns(vararg runs: Run) = viewModelScope.launch {
+        repository.insertRuns(*runs)
+    }
+
+    fun deleteRun(run: Run) = viewModelScope.launch {
+        repository.delete(run)
+    }
+
+    fun deleteAllRuns() = viewModelScope.launch {
+        repository.deleteAll()
+    }
+
+    fun updateRun(run: Run) = viewModelScope.launch {
+        repository.updateRun(run)
     }
 }
 
