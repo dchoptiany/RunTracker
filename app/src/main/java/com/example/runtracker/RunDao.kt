@@ -18,6 +18,9 @@ interface RunDao {
     fun getTotalDistance(): Float
 
     @Insert
+    fun insert(run: Run)
+
+    @Insert
     fun insertAll(vararg runs: Run)
 
     @Delete
