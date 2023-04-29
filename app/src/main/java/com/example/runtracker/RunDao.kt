@@ -1,15 +1,16 @@
 package com.example.runtracker
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 @Dao
 interface RunDao {
     @Query("SELECT * FROM run")
-    fun getAll(): List<Run>
+    fun getAll(): Flow<List<Run>>
 
     @Query("SELECT * FROM run WHERE date == :date")
-    fun getByDate(date: Date): List<Run>
+    fun getByDate(date: Date): Flow<List<Run>>
     
     @Query("SELECT COUNT(*) FROM run")
     fun getNumberOfRuns(): Int
@@ -25,6 +26,9 @@ interface RunDao {
 
     @Delete
     fun delete(run: Run)
+
+    @Query("DELETE FROM run")
+    fun deleteAll()
 
     @Update
     fun update(run: Run)
