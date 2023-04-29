@@ -1,13 +1,18 @@
 package com.example.runtracker
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     lateinit var rv : RecyclerView
-    var menuItems : ArrayList<MenuItem> = ArrayList<MenuItem>()
+    var menuItems : ArrayList<MenuItem> = ArrayList()
+
+    private val runViewModel: RunViewModel by viewModels {
+        RunModelFactory((application as RunApplication).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +22,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     }
 
     fun setView(){
-        rv = findViewById<RecyclerView>(R.id.rv)
+        rv = findViewById(R.id.rv)
         rv.layoutManager = GridLayoutManager(applicationContext,2)
         rv.adapter = MenuAdapter(menuItems,this)
     }
