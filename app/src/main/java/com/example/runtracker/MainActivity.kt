@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         addtoMenuItemsList("ACTIVITIES",R.drawable.activites)
         addtoMenuItemsList("GALLERY",R.drawable.aparat)
         addtoMenuItemsList("STATISTICS",R.drawable.statistics)
-        addtoMenuItemsList("MOY ACCOUNT",R.drawable.account)
+        addtoMenuItemsList("MY ACCOUNT",R.drawable.account)
         addtoMenuItemsList("ACHIEVEMENTS",R.drawable.achievements)
         addtoMenuItemsList("SETTINGS",R.drawable.settings)
     }
