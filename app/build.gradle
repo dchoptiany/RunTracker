@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-
+    implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
@@ -63,4 +63,7 @@ dependencies {
 
     // Floating Action Button
     implementation 'com.github.clans:fab:1.6.4'
+
+    //Color picker
+    implementation 'com.larswerkman:HoloColorPicker:1.5'
 }

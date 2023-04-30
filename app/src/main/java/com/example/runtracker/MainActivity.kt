@@ -1,14 +1,25 @@
 package com.example.runtracker
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     lateinit var rv : RecyclerView
     var menuItems : ArrayList<MenuItem> = ArrayList()
+    var defaultSettings = DefaultSettings(Color.BLACK,false,false)
 
     private val runViewModel: RunViewModel by viewModels {
         RunModelFactory((application as RunApplication).repository)
@@ -42,7 +53,49 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     }
 
     override fun onBlockClick(position: Int, date: String) {
-        TODO("Not yet implemented")
+        when(position) {
+            0 -> {
+                val mapIntent = Intent(this, MapActivity::class.java)
+                this.startActivity(mapIntent)
+                }
+            1 -> Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
+            2-> Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
+            3-> Toast.makeText(this,"4",Toast.LENGTH_SHORT).show()
+            4-> Toast.makeText(this,"5",Toast.LENGTH_SHORT).show()
+            5-> {
+                val settings = Intent(this, Settings::class.java)
+                resultLauncher.launch(settings)
+            }
+        }
+
+    }
+
+    @SuppressLint("ResourceAsColor")
+    override fun onResume() {
+        super.onResume()
+        val background = findViewById<ConstraintLayout>(R.id.constraint)
+        val header = findViewById<LinearLayout>(R.id.linearLayout)
+        if(defaultSettings.darkMode){
+            var newColor = Color.rgb(170,170,170)
+            background.setBackgroundColor(newColor)
+            header.setBackgroundColor(Color.BLACK)
+
+        }
+        else{
+            header.setBackgroundColor(defaultSettings.color)
+            background.setBackgroundColor(Color.WHITE)
+        }
+
+    }
+
+
+    var resultLauncher =registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result-> val data = result.data
+        if (data != null) {
+            data.getBooleanExtra("darkMode",false).let { defaultSettings.darkMode = it }
+            data.getBooleanExtra("notifications",false).let { defaultSettings.notifications = it }
+            data.getIntExtra("color",Color.BLACK).let { defaultSettings.color = it }
+        }
     }
 
 }
