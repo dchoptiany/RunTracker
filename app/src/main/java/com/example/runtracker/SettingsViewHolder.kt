@@ -32,12 +32,5 @@ class SettingsViewHolder(val view : View,var onBlockListener : SettingsAdapter.O
         if(adapterPosition==0) {
             onBlockListener.onBlockClick(adapterPosition, "")
         }
-        //Toast.makeText(view.context,text.text,Toast.LENGTH_SHORT).show()
-//
-        //// temporary test for Map Fragment
-        //if(text.text.equals("ACTIVITIES")) {
-        //    var mapIntent = Intent(view.context, MapActivity::class.java)
-        //    view.context.startActivity(mapIntent)
-        //}
     }
 }

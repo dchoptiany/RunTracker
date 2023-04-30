@@ -1,5 +1,7 @@
 package com.example.runtracker
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 
-class SettingsAdapter(var defaultSettings: DefaultSettings,var settingsItems : ArrayList<settingsItem>,var  onBlockListener : OnSettingsItemClickListener): RecyclerView.Adapter<SettingsViewHolder>()  {
+class SettingsAdapter(var settingsItems : ArrayList<settingsItem>,var  onBlockListener : OnSettingsItemClickListener): RecyclerView.Adapter<SettingsViewHolder>()  {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
@@ -25,17 +27,30 @@ class SettingsAdapter(var defaultSettings: DefaultSettings,var settingsItems : A
         return settingsItems.size
     }
 
+    @SuppressLint("CommitPrefEdits")
     override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
+        val sharedPreferences = holder.view.context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
         holder.text.text = settingsItems[position].text
         holder.icon.setImageResource(settingsItems[position].icon)
+        if(sharedPreferences.getBoolean("darkMode",false)){
+            holder.switch.isChecked = true
+        }
         if(!settingsItems[position].showSwith){
             holder.switch.visibility = View.INVISIBLE
         }
         else{
             holder.switch.setOnCheckedChangeListener { buttonView, isChecked ->
                 when(position){
-                    1 -> defaultSettings.darkMode = isChecked
-                    2 -> defaultSettings.notifications = isChecked
+
+                    1 -> {
+                        editor.putBoolean("darkMode",isChecked)
+                        editor.apply()
+                    }
+                    2 -> {
+                        editor.putBoolean("notifications",isChecked)
+                        editor.apply()
+                    }
 
                 }
             }

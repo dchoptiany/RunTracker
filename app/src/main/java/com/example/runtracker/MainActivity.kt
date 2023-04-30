@@ -1,7 +1,9 @@
 package com.example.runtracker
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -19,7 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     lateinit var rv : RecyclerView
     var menuItems : ArrayList<MenuItem> = ArrayList()
-    var defaultSettings = DefaultSettings(Color.BLACK,false,false)
+    lateinit var  sharedPreferences : SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
 
     private val runViewModel: RunViewModel by viewModels {
         RunModelFactory((application as RunApplication).repository)
@@ -28,6 +31,8 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
         addMenuItems()
         setView()
     }
@@ -75,14 +80,14 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         super.onResume()
         val background = findViewById<ConstraintLayout>(R.id.constraint)
         val header = findViewById<LinearLayout>(R.id.linearLayout)
-        if(defaultSettings.darkMode){
+        if(sharedPreferences.getBoolean("darkMode",false)){
             var newColor = Color.rgb(170,170,170)
             background.setBackgroundColor(newColor)
             header.setBackgroundColor(Color.BLACK)
 
         }
         else{
-            header.setBackgroundColor(defaultSettings.color)
+            header.setBackgroundColor(sharedPreferences.getInt("color",Color.BLACK))
             background.setBackgroundColor(Color.WHITE)
         }
 
@@ -92,9 +97,13 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     var resultLauncher =registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result-> val data = result.data
         if (data != null) {
-            data.getBooleanExtra("darkMode",false).let { defaultSettings.darkMode = it }
-            data.getBooleanExtra("notifications",false).let { defaultSettings.notifications = it }
-            data.getIntExtra("color",Color.BLACK).let { defaultSettings.color = it }
+            data.getBooleanExtra("darkMode",false).let { editor.putBoolean("darkMode",it)
+            editor.apply()
+            }
+            data.getBooleanExtra("notifications",false).let { editor.putBoolean("notifications",it)
+            editor.apply()}
+            data.getIntExtra("color",Color.BLACK).let { editor.putInt("color",it)
+            editor.apply()}
         }
     }
 

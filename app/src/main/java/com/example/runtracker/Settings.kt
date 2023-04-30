@@ -1,7 +1,9 @@
 package com.example.runtracker
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -16,12 +18,15 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
 
     lateinit var rv : RecyclerView
     var settingsItems = ArrayList<settingsItem>()
-    var defaultSettings = DefaultSettings(Color.BLACK,false,false)
+    lateinit var  sharedPreferences : SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings)
-        var button = findViewById<Button>(R.id.button)
+        sharedPreferences = getSharedPreferences("settings",Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+        val button = findViewById<Button>(R.id.button)
         button.setOnClickListener {
             rememberContent()
         }
@@ -34,9 +39,9 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
 
     private fun rememberContent() {
         val newIntent = Intent()
-        newIntent.putExtra("color", defaultSettings.color)
-        newIntent.putExtra("notifications", defaultSettings.notifications)
-        newIntent.putExtra("darkMode", defaultSettings.darkMode)
+        newIntent.putExtra("color", sharedPreferences.getInt("color",Color.BLACK))
+        newIntent.putExtra("notifications", sharedPreferences.getBoolean("notifications",false))
+        newIntent.putExtra("darkMode", sharedPreferences.getBoolean("darkMode",false))
         setResult(Activity.RESULT_OK,newIntent)
         finish()
     }
@@ -44,7 +49,7 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
     private fun initRecyclerView() {
         rv = findViewById(R.id.rv)
         rv.layoutManager = GridLayoutManager(applicationContext,1)
-        rv.adapter = SettingsAdapter(defaultSettings,settingsItems,this)
+        rv.adapter = SettingsAdapter(settingsItems,this)
     }
 
     fun addToSettingsItems(){
@@ -58,22 +63,25 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
 
 
     override fun onBlockClick(position: Int, date: String) {
-        var colorIntent = Intent(this,ColorPicker::class.java)
+        val colorIntent = Intent(this,ColorPicker::class.java)
         resultLauncher.launch(colorIntent)
     }
 
     var resultLauncher =registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result-> val data = result.data
         if (data != null) {
-            data.getIntExtra("color",Color.BLACK).let { defaultSettings.color = it }
+            data.getIntExtra("color",Color.BLACK).let {
+                editor.putInt("color",it)
+                editor.apply()
+            }
             val header = findViewById<LinearLayout>(R.id.linearLayout)
-            header.setBackgroundColor(defaultSettings.color)
+            header.setBackgroundColor(sharedPreferences.getInt("color",Color.BLACK))
         }
     }
 
     override fun onResume() {
         super.onResume()
         val header = findViewById<LinearLayout>(R.id.linearLayout)
-        header.setBackgroundColor(defaultSettings.color)
+        header.setBackgroundColor(sharedPreferences.getInt("color",Color.BLACK))
     }
 }
