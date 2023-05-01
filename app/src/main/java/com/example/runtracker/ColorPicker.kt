@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 class ColorPicker: AppCompatActivity() {
 
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.color)
