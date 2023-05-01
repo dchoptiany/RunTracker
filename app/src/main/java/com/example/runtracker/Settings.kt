@@ -24,7 +24,7 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings)
+        setContentView(R.layout.activity_settings)
         sharedPreferences = getSharedPreferences("settings",Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         val button = findViewById<Button>(R.id.button)
