@@ -11,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ColorPicker: AppCompatActivity() {
 
-
+    lateinit var  picker : com.larswerkman.holocolorpicker.ColorPicker
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.color)
-        picker = findViewById(R.id.picker)
+        setContentView(R.layout.activity_color)
+        picker = findViewById<com.larswerkman.holocolorpicker.ColorPicker>(R.id.picker)
         val saturationBar = findViewById<com.larswerkman.holocolorpicker.SaturationBar>(R.id.saturationbar)
         val valueBar = findViewById<com.larswerkman.holocolorpicker.ValueBar>(R.id.valuebar)
         picker.addValueBar(valueBar)
