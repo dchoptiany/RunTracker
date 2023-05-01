@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ColorPicker: AppCompatActivity() {
 
-    var selectedColor : Int = -1
-    lateinit var picker : com.larswerkman.holocolorpicker.ColorPicker
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
