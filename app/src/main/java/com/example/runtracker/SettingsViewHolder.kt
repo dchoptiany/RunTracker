@@ -17,8 +17,7 @@ class SettingsViewHolder(val view : View,var onBlockListener : SettingsAdapter.O
     var text  = view.findViewById<TextView>(R.id.dataText)
     var icon = view.findViewById<ImageView>(R.id.icon)
     var switch = view.findViewById<Switch>(R.id.switch1)
-    var picker = view.findViewById<ColorPicker>(R.id.picker)
-    var selectedColor = Color.WHITE
+
 
     init{
         view.setOnClickListener(this)
