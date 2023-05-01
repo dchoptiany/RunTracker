@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -61,10 +62,20 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
         settingsItems.add(item3)
     }
 
+    fun setDarkMode(){
+        if(sharedPreferences.getBoolean("darkMode",false)){
+            val header = findViewById<LinearLayout>(R.id.linearLayout)
+            val background = findViewById<ConstraintLayout>(R.id.main)
+            header.setBackgroundColor(Color.BLACK)
+            background.setBackgroundColor(Color.rgb(170,170,170))
+        }
+    }
+
 
     override fun onBlockClick(position: Int, date: String) {
         val colorIntent = Intent(this,ColorPicker::class.java)
         resultLauncher.launch(colorIntent)
+
     }
 
     var resultLauncher =registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
@@ -83,5 +94,6 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
         super.onResume()
         val header = findViewById<LinearLayout>(R.id.linearLayout)
         header.setBackgroundColor(sharedPreferences.getInt("color",Color.BLACK))
+        setDarkMode()
     }
 }

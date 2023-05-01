@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -33,7 +34,10 @@ class SettingsAdapter(var settingsItems : ArrayList<settingsItem>,var  onBlockLi
         val editor = sharedPreferences.edit()
         holder.text.text = settingsItems[position].text
         holder.icon.setImageResource(settingsItems[position].icon)
-        if(sharedPreferences.getBoolean("darkMode",false)){
+        if(holder.text.text == "Dark mode" && sharedPreferences.getBoolean("darkMode",false)){
+            holder.switch.isChecked = true
+        }
+        if(holder.text.text == "Notifications" && sharedPreferences.getBoolean("notifications",false)){
             holder.switch.isChecked = true
         }
         if(!settingsItems[position].showSwith){
@@ -51,7 +55,6 @@ class SettingsAdapter(var settingsItems : ArrayList<settingsItem>,var  onBlockLi
                         editor.putBoolean("notifications",isChecked)
                         editor.apply()
                     }
-
                 }
             }
         }
