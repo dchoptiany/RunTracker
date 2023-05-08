@@ -15,6 +15,11 @@ class RunRepository(private val runDao: RunDao) {
     }
 
     @WorkerThread
+    fun getByID(ID: Int): Flow<Run> {
+        return runDao.getByID(ID)
+    }
+
+    @WorkerThread
     fun insertRun(run: Run) {
         runDao.insert(run)
     }

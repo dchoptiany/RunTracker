@@ -11,7 +11,10 @@ interface RunDao {
 
     @Query("SELECT * FROM run WHERE date == :date")
     fun getByDate(date: Date): Flow<List<Run>>
-    
+
+    @Query("SELECT * FROM run WHERE id == :ID")
+    fun getByID(ID: Int): Flow<Run>
+
     @Query("SELECT COUNT(*) FROM run")
     fun getNumberOfRuns(): Flow<Int>
 
