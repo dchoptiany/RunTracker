@@ -17,6 +17,14 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
         return runs as LiveData<List<Run>>
     }
 
+    fun runByID(ID: Int): LiveData<Run> {
+        var run: LiveData<Run>? = null
+        viewModelScope.launch {
+            run = repository.getByID(ID).asLiveData()
+        }
+        return run as LiveData<Run>
+    }
+
     fun insertRun(run: Run) = viewModelScope.launch {
         repository.insertRun(run)
     }

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Run Tracker</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sampleDistance">21.1 km</string>
+    <string name="sampleTime">02:04:09</string>
+    <string name="samplePace">05:53 min/km</string>
 </resources>
