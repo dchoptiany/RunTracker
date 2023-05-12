@@ -60,6 +60,7 @@ class MyAccount : AppCompatActivity(), MyAccountAdapter.OnMyAccountClickListener
         addtoAccountItemsList("Sex","spinner")
         addtoAccountItemsList("Date of birth","calendar")
         addtoAccountItemsList("Weigh","input")
+        addtoAccountItemsList("Height","input")
     }
 
     private fun addtoAccountItemsList(data : String, appWidget : String){

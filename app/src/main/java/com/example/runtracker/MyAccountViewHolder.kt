@@ -52,12 +52,12 @@ class MyAccountViewHolder(var view : View, var onBlockClickListener: MyAccountAd
     override fun onClick(v: View?) {
         if(adapterPosition==0){
 
-            val alertText = createInputAlert("Name")
+            val alertText = createInputAlert("Name","Enter your name")
             alertText.show()
         }
         if(adapterPosition==1){
 
-            val alertText = createInputAlert("Surname")
+            val alertText = createInputAlert("Surname","Enter your surname")
             alertText.show()
         }
         if(adapterPosition==2) {
@@ -100,17 +100,22 @@ class MyAccountViewHolder(var view : View, var onBlockClickListener: MyAccountAd
         }
 
         if(adapterPosition==4){
-            val alertText = createInputAlert("Weigh")
+            val alertText = createInputAlert("Weigh","Enter your weigh")
+            alertText.show()
+        }
+
+        if(adapterPosition==5){
+            val alertText = createInputAlert("Height","Enter your height")
             alertText.show()
         }
     }
 
-    private fun createInputAlert(input : String) : AlertDialog{
+    private fun createInputAlert(input : String, title : String) : AlertDialog{
         val parent = inputText.parent as? ViewGroup
         parent?.removeView(inputText)
 
         val alertText = AlertDialog.Builder(view.context)
-            .setTitle("Enter text")
+            .setTitle(title)
             .setView(inputText)
             .setPositiveButton("OK") { dialog, which ->
 
