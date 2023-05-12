@@ -15,7 +15,7 @@
         android:layout_height="189dp">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/timeTextView"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:background="@drawable/border"
@@ -33,7 +33,7 @@
             app:layout_constraintVertical_bias="0.135" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/distanceTextView"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:background="@drawable/border"
@@ -47,11 +47,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.067"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/timeTextView"
             app:layout_constraintVertical_bias="0.392" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/paceTextView"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:background="@drawable/border"
@@ -64,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.54"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toEndOf="@+id/distanceTextView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.135" />
 
@@ -77,8 +77,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.54"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintStart_toEndOf="@+id/timeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/paceTextView"
             app:layout_constraintVertical_bias="0.446">
 
             <ImageButton
