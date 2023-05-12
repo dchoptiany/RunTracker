@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 class MyAccount : AppCompatActivity(), MyAccountAdapter.OnMyAccountClickListener {
     private lateinit var  sharedPreferences : SharedPreferences
     private lateinit var sharedPreferencesSettings : SharedPreferences
-    lateinit var editor: SharedPreferences.Editor
+    private lateinit var editor: SharedPreferences.Editor
     lateinit var rv : RecyclerView
     var myAccountItems = ArrayList<MyAccountItem>()
 
@@ -27,7 +27,7 @@ class MyAccount : AppCompatActivity(), MyAccountAdapter.OnMyAccountClickListener
         editor = sharedPreferences.edit()
         addMenuItems()
         setView()
-        setAppAppearence()
+        setAppAppearance()
         val backButton = findViewById<Button>(R.id.button)
         backButton.setOnClickListener {
             finish()
@@ -40,7 +40,7 @@ class MyAccount : AppCompatActivity(), MyAccountAdapter.OnMyAccountClickListener
         rv.adapter = MyAccountAdapter(myAccountItems,this)
     }
 
-    private fun setAppAppearence(){
+    private fun setAppAppearance(){
         val header = findViewById<LinearLayout>(R.id.linearLayout)
         val background = findViewById<ConstraintLayout>(R.id.main)
         if(sharedPreferencesSettings.getBoolean("darkMode", false)){

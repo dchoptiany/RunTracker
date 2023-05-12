@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAccountAdapter(val menuItem : ArrayList<MyAccountItem>, var  onBlockListener : OnMyAccountClickListener) : RecyclerView.Adapter<MyAccountViewHolder>(){
+class MyAccountAdapter(private val menuItem : ArrayList<MyAccountItem>, var  onBlockListener : OnMyAccountClickListener) : RecyclerView.Adapter<MyAccountViewHolder>(){
 
-    lateinit var  sharedPreferences : SharedPreferences
+    private lateinit var  sharedPreferences : SharedPreferences
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyAccountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.my_account_item,parent,false)

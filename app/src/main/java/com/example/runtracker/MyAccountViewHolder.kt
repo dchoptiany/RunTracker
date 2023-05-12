@@ -9,24 +9,22 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
-
 import java.util.*
 
 
 class MyAccountViewHolder(var view : View, var onBlockClickListener: MyAccountAdapter.OnMyAccountClickListener) :  RecyclerView.ViewHolder(view), View.OnClickListener {
     var  sharedPreferences : SharedPreferences
-    var editor: SharedPreferences.Editor
-    val spinnerData = listOf("K", "M")
+    private var editor: SharedPreferences.Editor
+    private val spinnerData = listOf("K", "M")
     var spinner : Spinner
-    val inputText = EditText(view.context)
+    private val inputText = EditText(view.context)
 
 
     var title = view.findViewById<TextView>(R.id.title)
     var data = view.findViewById<TextView>(R.id.data)
 
 
-    // Utworzenie adaptera dla Spinnera
-    val adapter = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, spinnerData)
+    private val adapter = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, spinnerData)
 
 
 
@@ -39,7 +37,7 @@ class MyAccountViewHolder(var view : View, var onBlockClickListener: MyAccountAd
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        // Utworzenie obiektu Spinner
+
         spinner = Spinner(view.context).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
