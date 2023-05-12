@@ -29,6 +29,9 @@
             android:name=".Settings"
             android:exported="false" />
         <activity
+            android:name=".MyAccount"
+            android:exported="false" />
+        <activity
             android:name=".ColorPicker"
             android:exported="false" />
         <activity
