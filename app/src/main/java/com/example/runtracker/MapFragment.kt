@@ -1,5 +1,9 @@
 package com.example.runtracker
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -9,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -20,6 +25,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import kotlin.math.roundToInt
 
 
 class MapFragment : Fragment() {
@@ -28,6 +34,13 @@ class MapFragment : Fragment() {
     lateinit var pauseButton : ImageButton
     lateinit var stopButton : ImageButton
     lateinit var mapView : MapView
+    lateinit var timeTextView: TextView
+    lateinit var distanceTextView: TextView
+    lateinit var paceTextView: TextView
+
+    var timerStarted = false
+    lateinit var serviceIntent : Intent
+    var time = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +48,11 @@ class MapFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_map, container, false)
+
+        // text view setup
+        timeTextView = view!!.findViewById(R.id.timeTextView) as TextView
+        distanceTextView = view!!.findViewById(R.id.distanceTextView) as TextView
+        paceTextView = view!!.findViewById(R.id.paceTextView) as TextView
 
         // button setup
         addPhotoButton = view!!.findViewById(R.id.addPhotoFAB) as FloatingActionButton
@@ -101,7 +119,46 @@ class MapFragment : Fragment() {
             })
         }
 
+        // timer service setup
+        serviceIntent = Intent(requireContext(), TimerService::class.java)
+        requireActivity().registerReceiver(updateTime, IntentFilter(TimerService.TIMER_UPDATED))
+
         return view
+    }
+
+    val updateTime : BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent : Intent) {
+            time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
+            timeTextView.text = getTimeStringFromDouble(time)
+        }
+    }
+
+    fun getTimeStringFromDouble(time : Double) : String {
+        val resultInt = time.roundToInt()
+        val hours = resultInt % 84600 / 3600
+        val minutes = resultInt % 86400 % 3600 / 60
+        val seconds = resultInt % 84600 % 3600 % 60
+
+        return makeTimeString(hours, minutes, seconds)
+    }
+
+    private fun makeTimeString(hours: Int, minutes: Int, seconds: Int): String {
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
+    private fun startTimer() {
+        serviceIntent.putExtra(TimerService.TIME_EXTRA, time)
+        requireActivity().startService(serviceIntent)
+    }
+
+    private fun pauseTimer() {
+        requireActivity().stopService(serviceIntent)
+    }
+
+    private fun resetTimer() {
+        pauseTimer()
+        time = 0.0
+        timeTextView.text = getTimeStringFromDouble(time)
     }
 
     fun addPhoto() {
@@ -110,14 +167,20 @@ class MapFragment : Fragment() {
 
     fun startActivity() {
         Toast.makeText(requireContext(), "Start Running!", Toast.LENGTH_SHORT).show()
+
+        startTimer()
     }
 
     fun pauseActivity() {
         Toast.makeText(requireContext(), "Running paused!", Toast.LENGTH_SHORT).show()
+
+        pauseTimer()
     }
 
     fun stopActivity() {
         Toast.makeText(requireContext(), "Running stopped!", Toast.LENGTH_SHORT).show()
+
+        resetTimer()
     }
 
     fun isLocationPermissionGranted() : Boolean {
