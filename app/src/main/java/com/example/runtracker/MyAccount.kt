@@ -59,7 +59,7 @@ class MyAccount : AppCompatActivity(), MyAccountAdapter.OnMyAccountClickListener
         addtoAccountItemsList("Surname","input")
         addtoAccountItemsList("Sex","spinner")
         addtoAccountItemsList("Date of birth","calendar")
-        addtoAccountItemsList("Weigh","input")
+        addtoAccountItemsList("Weigth","input")
         addtoAccountItemsList("Height","input")
     }
 
