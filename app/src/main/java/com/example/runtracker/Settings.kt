@@ -1,5 +1,6 @@
 package com.example.runtracker
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -72,9 +73,13 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
     }
 
 
-    override fun onBlockClick(position: Int, date: String) {
-        val colorIntent = Intent(this,ColorPicker::class.java)
-        resultLauncher.launch(colorIntent)
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onBlockClick(position: Int) {
+        if(position==0) {
+            val colorIntent = Intent(this, ColorPicker::class.java)
+            resultLauncher.launch(colorIntent)
+        }
+        rv.adapter?.notifyDataSetChanged()
 
     }
 
