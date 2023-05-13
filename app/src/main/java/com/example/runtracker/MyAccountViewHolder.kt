@@ -100,7 +100,7 @@ class MyAccountViewHolder(var view : View, var onBlockClickListener: MyAccountAd
         }
 
         if(adapterPosition==4){
-            val alertText = createInputAlert("Weigh","Enter your weigh")
+            val alertText = createInputAlert("Weigth","Enter your weigth")
             alertText.show()
         }
 
