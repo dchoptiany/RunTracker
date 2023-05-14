@@ -65,7 +65,10 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 }
             1 -> Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
             2-> Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
-            3-> Toast.makeText(this,"4",Toast.LENGTH_SHORT).show()
+            3-> {
+                val myAccount = Intent(this, MyAccount::class.java)
+                resultLauncher.launch(myAccount)
+            }
             4-> Toast.makeText(this,"5",Toast.LENGTH_SHORT).show()
             5-> {
                 val settings = Intent(this, Settings::class.java)

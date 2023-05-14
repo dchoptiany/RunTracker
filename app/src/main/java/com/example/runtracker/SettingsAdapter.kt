@@ -50,10 +50,13 @@ class SettingsAdapter(var settingsItems : ArrayList<settingsItem>,var  onBlockLi
                     1 -> {
                         editor.putBoolean("darkMode",isChecked)
                         editor.apply()
+                        onBlockListener.onBlockClick(position)
+
                     }
                     2 -> {
                         editor.putBoolean("notifications",isChecked)
                         editor.apply()
+                        onBlockListener.onBlockClick(position)
                     }
                 }
             }
@@ -61,7 +64,7 @@ class SettingsAdapter(var settingsItems : ArrayList<settingsItem>,var  onBlockLi
     }
 
     interface OnSettingsItemClickListener {
-        fun onBlockClick(position: Int, date: String)
+        fun onBlockClick(position: Int)
 
     }
 }
