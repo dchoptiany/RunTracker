@@ -3,7 +3,6 @@ package com.example.runtracker
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import java.util.*
 
 class TimerService : Service() {

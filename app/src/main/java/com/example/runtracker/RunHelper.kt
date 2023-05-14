@@ -1,7 +1,5 @@
 package com.example.runtracker
 
-import android.util.Log
-import org.osmdroid.util.Distance
 import org.osmdroid.util.GeoPoint
 
 object RunHelper {
@@ -10,16 +8,16 @@ object RunHelper {
         var numOfWayPoints : Int = wayPoints.size
         var newDistance : Float = 0f
 
+        // check if point is "way point"
         // CASE1: First location
         if(numOfWayPoints == 0) {
             previousLocation = null
-        } else { // CASE2: Another location
+        } else { // CASE2: "Middle" location
             previousLocation = wayPoints[numOfWayPoints-1]
             newDistance = distance + LocationHelper.calcDistance(previousLocation, location)
         }
 
         var point = GeoPoint(location.latitude, location.longitude)
-        Log.i("mytracker", "NEW WAYP POINT LAT: " + point.latitude + " LON: " + point.longitude)
         wayPoints.add(point)
 
         var result : Pair<Float, MutableList<GeoPoint>> = Pair(newDistance, wayPoints)

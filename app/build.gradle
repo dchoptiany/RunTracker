@@ -69,4 +69,7 @@ dependencies {
 
     // JSON Serialization
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0'
+
+    // OSM BonusPack
+    implementation 'com.github.MKergall:osmbonuspack:6.9.0'
 }

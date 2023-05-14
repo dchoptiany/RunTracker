@@ -2,14 +2,12 @@ package com.example.runtracker
 
 import android.location.Location
 import android.location.LocationManager
-import android.util.Log
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 object LocationHelper {
-    fun getLastKnownLocation(myLocationOverlay : MyLocationNewOverlay) : GeoPoint {
-        var location : GeoPoint = myLocationOverlay.myLocation
-        return location
+    fun getLastKnownLocation(myLocationOverlay: MyLocationNewOverlay): GeoPoint {
+        return myLocationOverlay.myLocation
     }
 
     fun calcDistance(previousLocation : GeoPoint, location : GeoPoint) : Float {
@@ -21,9 +19,8 @@ object LocationHelper {
         curr.latitude = location.latitude
         curr.longitude = location.longitude
 
-        Log.i("mytracker", "CALC PREV LAT:" + prev.latitude + " LON: " + prev.longitude + " CURR LAT: " + curr.latitude.toString() + " LON: " + curr.longitude.toString())
         var distance = prev.distanceTo(curr)
-        Log.i("mytracker", "CALC DIST: " + distance)
+
         return distance
     }
 }

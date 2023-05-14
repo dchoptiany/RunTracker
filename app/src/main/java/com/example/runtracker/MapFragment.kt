@@ -1,5 +1,6 @@
 package com.example.runtracker
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -7,6 +8,8 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,10 +22,14 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.github.clans.fab.FloatingActionButton
 import org.osmdroid.api.IMapController
+import org.osmdroid.bonuspack.routing.OSRMRoadManager
+import org.osmdroid.bonuspack.routing.Road
+import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.math.RoundingMode
@@ -31,6 +38,17 @@ import kotlin.math.roundToInt
 
 
 class MapFragment : Fragment() {
+    companion object {
+        const val ACTIVITY_STARTED = "activityStarted"
+        const val ACTIVITY_PAUSED = "activityPaused"
+        const val ACTIVITY_STOPPED = "activityStopped"
+        const val TIME_KEY = "time"
+        const val PACE_KEY = "pace"
+        const val DISTANCE_KEY = "distance"
+    }
+
+    var activityStatus : String = ""
+
     lateinit var addPhotoButton : FloatingActionButton
     lateinit var startButton : ImageButton
     lateinit var pauseButton : ImageButton
@@ -40,22 +58,32 @@ class MapFragment : Fragment() {
     lateinit var distanceTextView: TextView
     lateinit var paceTextView: TextView
 
-    var timerStarted = false
     lateinit var serviceIntent : Intent
     var time = 0.0
 
     lateinit var trackerIntent : Intent
     var distance : Float = 0f
 
+    var pace : Double = 0.0
+
     lateinit var mapController : IMapController
     lateinit var myGpsMyLocationProvider : GpsMyLocationProvider
     lateinit var myLocationOverlay : MyLocationNewOverlay
     lateinit var currentLocation : GeoPoint
+    lateinit var roadManager : OSRMRoadManager
+    lateinit var track : Road
+    var points : MutableList<GeoPoint> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i("mytracker", "CREATE VIEW")
+
+        // setup policy for threads
+        val policy = ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_map, container, false)
 
@@ -63,6 +91,7 @@ class MapFragment : Fragment() {
         timeTextView = view!!.findViewById(R.id.timeTextView) as TextView
         distanceTextView = view!!.findViewById(R.id.distanceTextView) as TextView
         paceTextView = view!!.findViewById(R.id.paceTextView) as TextView
+
 
         // button setup
         addPhotoButton = view!!.findViewById(R.id.addPhotoFAB) as FloatingActionButton
@@ -92,12 +121,14 @@ class MapFragment : Fragment() {
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
 
+        roadManager = OSRMRoadManager(context, BuildConfig.APPLICATION_ID)
+
         mapView.setUseDataConnection(true)
         mapView.setTileSource(TileSourceFactory.MAPNIK)
         mapView.setMultiTouchControls(true)
 
         mapController = mapView.controller
-        mapController.zoomTo(14, 1)
+        mapController.zoomTo(18, 1)
 
         var defaultLocation : GeoPoint = GeoPoint(51.1077,17.0625) // Wrocław University of Science and Technlogy
         mapController.animateTo(defaultLocation)
@@ -120,10 +151,8 @@ class MapFragment : Fragment() {
 
             myLocationOverlay.runOnFirstFix(Runnable {
                 val myLocation: GeoPoint = myLocationOverlay.getMyLocation()
-                if (myLocation != null) {
-                    requireActivity().runOnUiThread {
-                        mapView.getController().animateTo(myLocation)
-                    }
+                requireActivity().runOnUiThread {
+                    mapView.getController().animateTo(myLocation)
                 }
             })
         }
@@ -134,26 +163,135 @@ class MapFragment : Fragment() {
 
         // tracker service setup
         trackerIntent = Intent(requireContext(), TrackerService::class.java)
-        requireActivity().registerReceiver(updateDistance, IntentFilter(TrackerService.TRACKER_UPDATED))
+        requireActivity().registerReceiver(updateTrack, IntentFilter(TrackerService.TRACKER_UPDATED))
 
         return view
     }
 
     val updateTime : BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent : Intent) {
-            Log.i("mytracker", "UPDATE TIME")
             time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
             timeTextView.text = getTimeStringFromDouble(time)
         }
     }
 
-    val updateDistance : BroadcastReceiver = object : BroadcastReceiver() {
+    val updateTrack : BroadcastReceiver = object : BroadcastReceiver() {
+        @SuppressLint("UseCompatLoadingForDrawables")
         override fun onReceive(context: Context, intent: Intent) {
-            val df = DecimalFormat("#.###")
-            df.roundingMode = RoundingMode.CEILING
-            distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
-            Log.i("mytracker", "UPDATE DISTANCE: " + distance.toString())
-            distanceTextView.text = df.format(distance / 1000) + " km"
+            // read current location
+            var latitude = intent.getDoubleExtra(TrackerService.LAT_EXTRA, 0.0)
+            var longitude = intent.getDoubleExtra(TrackerService.LON_EXTRA, 0.0)
+            var location = GeoPoint(latitude, longitude)
+            points.add(location)
+
+            // update distance
+            if(activityStatus == ACTIVITY_STARTED) {
+                distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
+            }
+
+            if(distance != 0f) {
+                distanceTextView.text = getDistanceString(distance)
+            }
+
+            // update pace
+            pace = distance.toDouble() / time
+            paceTextView.text = getPaceString(pace)
+
+            // draw track
+            var pointsArrayList = ArrayList<GeoPoint>(points)
+            track = roadManager.getRoad(pointsArrayList) // WIFI REQUIRED!
+
+            var trackOverlay : Polyline = RoadManager.buildRoadOverlay(track)
+
+            mapView.overlays.add(trackOverlay)
+            mapView.invalidate()
+        }
+    }
+
+    fun startActivity() {
+        Toast.makeText(requireContext(), "Running started!", Toast.LENGTH_SHORT).show()
+
+        // change status
+        activityStatus = ACTIVITY_STARTED
+
+        // get current location
+        currentLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+        points.add(currentLocation)
+
+        startTimer()
+        startTracker()
+    }
+
+    fun startTracker() {
+        trackerIntent.putExtra(TrackerService.LAT_EXTRA, currentLocation.latitude)
+        trackerIntent.putExtra(TrackerService.LON_EXTRA, currentLocation.longitude)
+        trackerIntent.putExtra(TrackerService.DIST_EXTRA, distance)
+
+        requireActivity().startService(trackerIntent)
+    }
+    private fun startTimer() {
+        serviceIntent.putExtra(TimerService.TIME_EXTRA, time)
+
+        requireActivity().startService(serviceIntent)
+    }
+
+    fun pauseActivity() {
+        Toast.makeText(requireContext(), "Running paused!", Toast.LENGTH_SHORT).show()
+
+        // change status
+        activityStatus = ACTIVITY_PAUSED
+
+        pauseTimer()
+        pauseTracker()
+    }
+
+    fun pauseTracker() {
+        requireActivity().stopService(trackerIntent)
+
+        // clear pace
+        paceTextView.text = "0.000 m/s"
+    }
+
+    private fun pauseTimer() {
+        requireActivity().stopService(serviceIntent)
+    }
+
+    fun stopActivity() {
+        Toast.makeText(requireContext(), "Running stopped!", Toast.LENGTH_SHORT).show()
+
+        // change status
+        activityStatus = ACTIVITY_STOPPED
+
+        resetTimer()
+        stopTracker()
+    }
+
+    fun stopTracker() {
+        requireActivity().stopService(trackerIntent)
+
+        // clear live data variables
+        distance = 0f
+        distanceTextView.text = "0.000 km"
+        paceTextView.text = "0.000 m/s"
+    }
+    private fun resetTimer() {
+        pauseTimer()
+
+        // clear time
+        time = 0.0
+        timeTextView.text = getTimeStringFromDouble(time)
+    }
+
+    fun addPhoto() {
+        Toast.makeText(requireContext(), "Add Photo!", Toast.LENGTH_SHORT).show()
+    }
+
+    fun isLocationPermissionGranted() : Boolean {
+        if(ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), 1)
+            return false
+        } else {
+            return true
         }
     }
 
@@ -166,69 +304,21 @@ class MapFragment : Fragment() {
         return makeTimeString(hours, minutes, seconds)
     }
 
+    fun getDistanceString(distance : Float) : String {
+        val df = DecimalFormat("####.###")
+        df.roundingMode = RoundingMode.CEILING
+
+        return df.format(distance / 1000) + " km"
+    }
+
+    fun getPaceString(pace : Double) : String {
+        val df = DecimalFormat("####.###")
+        df.roundingMode = RoundingMode.CEILING
+
+        return df.format(pace) + " m/s"
+    }
+
     private fun makeTimeString(hours: Int, minutes: Int, seconds: Int): String {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
-    }
-
-    private fun startTimer() {
-        serviceIntent.putExtra(TimerService.TIME_EXTRA, time)
-        requireActivity().startService(serviceIntent)
-    }
-
-    private fun pauseTimer() {
-        requireActivity().stopService(serviceIntent)
-    }
-
-    private fun resetTimer() {
-        pauseTimer()
-        time = 0.0
-        timeTextView.text = getTimeStringFromDouble(time)
-    }
-
-    fun addPhoto() {
-        Toast.makeText(requireContext(), "Add Photo!", Toast.LENGTH_SHORT).show()
-    }
-
-    fun startActivity() {
-        Toast.makeText(requireContext(), "Start Running!", Toast.LENGTH_SHORT).show()
-
-        startTimer()
-
-        currentLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
-
-
-
-        trackerIntent.putExtra(TrackerService.LAT_EXTRA, currentLocation.latitude)
-        trackerIntent.putExtra(TrackerService.LON_EXTRA, currentLocation.longitude)
-        trackerIntent.putExtra(TrackerService.DIST_EXTRA, distance)
-        Log.i("mytracker", "FRAGMENT STARTS TRACKER SERVICE")
-        requireActivity().startService(trackerIntent)
-        Log.i("mytracker", "AFTER FRAGMENT STARTS TRACKER SERVICE")
-    }
-
-    fun pauseActivity() {
-        Toast.makeText(requireContext(), "Running paused!", Toast.LENGTH_SHORT).show()
-
-        pauseTimer()
-        requireActivity().stopService(trackerIntent)
-    }
-
-    fun stopActivity() {
-        Toast.makeText(requireContext(), "Running stopped!", Toast.LENGTH_SHORT).show()
-
-        resetTimer()
-        Log.i("mytracker", "FRAGMENT STOPS TRACKER SERVICE")
-        requireActivity().stopService(trackerIntent)
-
-        // reset map overlay
-    }
-
-    fun isLocationPermissionGranted() : Boolean {
-        if(ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), 1)
-            return false
-        } else {
-            return true
-        }
     }
 }

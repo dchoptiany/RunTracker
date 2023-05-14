@@ -57,7 +57,7 @@
             android:background="@drawable/border"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="Pace"
+            android:text="0.000 m/s"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold|italic"

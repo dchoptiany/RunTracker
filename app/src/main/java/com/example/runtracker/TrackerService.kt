@@ -10,7 +10,6 @@ import android.location.LocationManager
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import org.osmdroid.util.GeoPoint
 import java.sql.Date
@@ -35,15 +34,12 @@ class TrackerService() : Service() {
     var distance : Float = 0f
     var points : MutableList<GeoPoint> = mutableListOf()
 
-    lateinit var startingTime : java.sql.Date
-    lateinit var stoppedTime : java.sql.Date
-
-    val handler : Handler = Handler(Looper.getMainLooper())
+    lateinit var startingTime : Date
+    lateinit var stoppedTime : Date
 
     override fun onBind(p0: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i("mytracker", "ON START COMMAND")
         latitude = intent!!.getDoubleExtra(LAT_EXTRA, 0.0)
         longitude = intent!!.getDoubleExtra(LON_EXTRA, 0.0)
         currentLocation = GeoPoint(latitude, longitude)
@@ -56,90 +52,87 @@ class TrackerService() : Service() {
     }
 
     override fun onDestroy() {
-        Log.i("mytracker", "ON DESTROY")
         stopTracking()
         super.onDestroy()
     }
 
     fun startTracking() {
-        Log.i("mytracker", "START TRACKING")
-        // set up new run
+        // get "run start" time
         var starting = Calendar.getInstance().time
         startingTime = Date(starting.time)
 
         // start recording location changes
-        //handler.postDelayed(periodicTrackUpdate, 0)
         timer.scheduleAtFixedRate(DistanceTask(distance), 0, 1000)
     }
 
     fun stopTracking() {
-        Log.i("mytracker", "STOP TRACKING")
-
+        // get "run stop" time
         var stopped = Calendar.getInstance().time
         stoppedTime  = Date(stopped.time)
+
+        // calc "run duration"
         duration = (stoppedTime.time - startingTime.time).toInt()
 
-
         // create run object based on collected data
-        //run = Run(0, startingTime, distance, duration)
+        run = Run(0, startingTime, distance, duration, points)
 
         //TODO: save run object in database
 
         // stop recording location changes
-        //handler.removeCallbacks(periodicTrackUpdate)
         timer.cancel()
     }
 
     private inner class DistanceTask(private var distance : Float) : TimerTask() {
         override fun run() {
-            Log.i("mytracker", "RUNNABLE")
-
-            // UPDATE LOCATION
-
+            // add way point
             var runDataPair : Pair<Float, MutableList<GeoPoint>> = RunHelper.addWayPointToRun(points, distance, currentLocation)
             distance = runDataPair.first
             points = runDataPair.second
 
-            Log.i("mytracker", "SEND DISTANCE: " + distance.toString())
-            var intent = Intent(TRACKER_UPDATED)
-
-            intent.putExtra(DIST_EXTRA, distance)
-            sendBroadcast(intent)
-
+            // get curr location
             var newLocation = getLocation()
             currentLocation = GeoPoint(newLocation.latitude, newLocation.longitude)
+
+            // send data to MapFragment
+            var intent = Intent(TRACKER_UPDATED)
+            intent.putExtra(LAT_EXTRA, newLocation.latitude)
+            intent.putExtra(LON_EXTRA, newLocation.longitude)
+            intent.putExtra(DIST_EXTRA, distance)
+            sendBroadcast(intent)
         }
 
         fun getLocation() : Location {
-            var newLocation : Location = Location(LocationManager.GPS_PROVIDER)
+            var newLocation : Location = Location(LocationManager.NETWORK_PROVIDER)
             var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            var hasGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            val gpsLocationListener : LocationListener = object : LocationListener {
+            var hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+
+            var networkLocationListener : LocationListener = object : LocationListener {
                 override fun onLocationChanged(location: Location) {
                     newLocation = location
                 }
             }
 
-            if(hasGPS) {
+            if(hasNetwork) {
                 if(ActivityCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     Handler(Looper.getMainLooper()).post {
                         locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            5000,
+                            LocationManager.NETWORK_PROVIDER,
+                            1000,
                             0f,
-                            gpsLocationListener
+                            networkLocationListener
                         )
                     }
                 }
             }
 
-            var lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            var lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
             lastKnownLocation.let {
                 newLocation = lastKnownLocation!!
             }
 
-            Log.i("mytracker", "NEW LOCATION LAT:" + newLocation.latitude + " LON: " + newLocation.longitude )
             return newLocation
         }
     }
+
+
 }
