@@ -39,7 +39,7 @@
             android:background="@drawable/border"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="Distance"
+            android:text="0.000 km"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold|italic"

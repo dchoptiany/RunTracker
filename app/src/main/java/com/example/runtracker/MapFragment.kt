@@ -25,6 +25,8 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 
@@ -41,6 +43,14 @@ class MapFragment : Fragment() {
     var timerStarted = false
     lateinit var serviceIntent : Intent
     var time = 0.0
+
+    lateinit var trackerIntent : Intent
+    var distance : Float = 0f
+
+    lateinit var mapController : IMapController
+    lateinit var myGpsMyLocationProvider : GpsMyLocationProvider
+    lateinit var myLocationOverlay : MyLocationNewOverlay
+    lateinit var currentLocation : GeoPoint
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,7 +96,7 @@ class MapFragment : Fragment() {
         mapView.setTileSource(TileSourceFactory.MAPNIK)
         mapView.setMultiTouchControls(true)
 
-        val mapController : IMapController = mapView.controller
+        mapController = mapView.controller
         mapController.zoomTo(14, 1)
 
         var defaultLocation : GeoPoint = GeoPoint(51.1077,17.0625) // Wrocław University of Science and Technlogy
@@ -95,9 +105,8 @@ class MapFragment : Fragment() {
         // set current location
         if(isLocationPermissionGranted()) {
             Log.i("mymap", "Localization permission granted")
-
-            val myGpsMyLocationProvider = GpsMyLocationProvider(activity)
-            val myLocationOverlay = MyLocationNewOverlay(myGpsMyLocationProvider, mapView)
+            myGpsMyLocationProvider = GpsMyLocationProvider(activity)
+            myLocationOverlay = MyLocationNewOverlay(myGpsMyLocationProvider, mapView)
             myLocationOverlay.enableMyLocation()
             myLocationOverlay.enableFollowLocation()
             myLocationOverlay.isDrawAccuracyEnabled = true
@@ -123,13 +132,28 @@ class MapFragment : Fragment() {
         serviceIntent = Intent(requireContext(), TimerService::class.java)
         requireActivity().registerReceiver(updateTime, IntentFilter(TimerService.TIMER_UPDATED))
 
+        // tracker service setup
+        trackerIntent = Intent(requireContext(), TrackerService::class.java)
+        requireActivity().registerReceiver(updateDistance, IntentFilter(TrackerService.TRACKER_UPDATED))
+
         return view
     }
 
     val updateTime : BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent : Intent) {
+            Log.i("mytracker", "UPDATE TIME")
             time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
             timeTextView.text = getTimeStringFromDouble(time)
+        }
+    }
+
+    val updateDistance : BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val df = DecimalFormat("#.###")
+            df.roundingMode = RoundingMode.CEILING
+            distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
+            Log.i("mytracker", "UPDATE DISTANCE: " + distance.toString())
+            distanceTextView.text = df.format(distance / 1000) + " km"
         }
     }
 
@@ -169,18 +193,34 @@ class MapFragment : Fragment() {
         Toast.makeText(requireContext(), "Start Running!", Toast.LENGTH_SHORT).show()
 
         startTimer()
+
+        currentLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+
+
+
+        trackerIntent.putExtra(TrackerService.LAT_EXTRA, currentLocation.latitude)
+        trackerIntent.putExtra(TrackerService.LON_EXTRA, currentLocation.longitude)
+        trackerIntent.putExtra(TrackerService.DIST_EXTRA, distance)
+        Log.i("mytracker", "FRAGMENT STARTS TRACKER SERVICE")
+        requireActivity().startService(trackerIntent)
+        Log.i("mytracker", "AFTER FRAGMENT STARTS TRACKER SERVICE")
     }
 
     fun pauseActivity() {
         Toast.makeText(requireContext(), "Running paused!", Toast.LENGTH_SHORT).show()
 
         pauseTimer()
+        requireActivity().stopService(trackerIntent)
     }
 
     fun stopActivity() {
         Toast.makeText(requireContext(), "Running stopped!", Toast.LENGTH_SHORT).show()
 
         resetTimer()
+        Log.i("mytracker", "FRAGMENT STOPS TRACKER SERVICE")
+        requireActivity().stopService(trackerIntent)
+
+        // reset map overlay
     }
 
     fun isLocationPermissionGranted() : Boolean {
