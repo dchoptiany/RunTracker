@@ -36,11 +36,11 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     }
 
     fun addMenuItems(){
-        addtoMenuItemsList("ACTIVITIES",R.drawable.activites)
+        addtoMenuItemsList("START ACTIVITY",R.drawable.activites)
         addtoMenuItemsList("GALLERY",R.drawable.aparat)
         addtoMenuItemsList("STATISTICS",R.drawable.statistics)
         addtoMenuItemsList("MY ACCOUNT",R.drawable.account)
-        addtoMenuItemsList("ACHIEVEMENTS",R.drawable.achievements)
+        addtoMenuItemsList("HISTORY",R.drawable.history)
         addtoMenuItemsList("SETTINGS",R.drawable.settings)
     }
 
