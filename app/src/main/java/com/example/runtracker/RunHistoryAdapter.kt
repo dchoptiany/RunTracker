@@ -28,6 +28,6 @@ class RunHistoryAdapter(private val runItems: ArrayList<RunHistoryItem>, private
     }
 
     interface OnRunItemClickListener {
-        fun onClick(position: Int, ID: Int)
+        fun onClick(position: Int, runID: Int)
     }
 }
