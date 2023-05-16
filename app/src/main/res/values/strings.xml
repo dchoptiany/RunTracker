@@ -5,4 +5,5 @@
     <string name="sampleTime">02:04:09</string>
     <string name="samplePace">05:53 min/km</string>
     <string name="sampleRunName">Monday Afternoon run</string>
+    <string name="history">History</string>
 </resources>
