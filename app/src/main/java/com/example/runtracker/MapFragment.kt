@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -34,6 +36,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 
@@ -42,16 +45,12 @@ class MapFragment : Fragment() {
         const val ACTIVITY_STARTED = "activityStarted"
         const val ACTIVITY_PAUSED = "activityPaused"
         const val ACTIVITY_STOPPED = "activityStopped"
-        const val TIME_KEY = "time"
-        const val PACE_KEY = "pace"
-        const val DISTANCE_KEY = "distance"
     }
 
     var activityStatus : String = ""
 
     lateinit var addPhotoButton : FloatingActionButton
     lateinit var startButton : ImageButton
-    lateinit var pauseButton : ImageButton
     lateinit var stopButton : ImageButton
     lateinit var mapView : MapView
     lateinit var timeTextView: TextView
@@ -100,13 +99,18 @@ class MapFragment : Fragment() {
         }
 
         startButton = view!!.findViewById(R.id.startButton) as ImageButton
-        startButton.setOnClickListener {
-            startActivity()
-        }
+        startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#68A620"))
 
-        pauseButton = view!!.findViewById(R.id.pauseButton) as ImageButton
-        pauseButton.setOnClickListener {
-            pauseActivity()
+        startButton.setOnClickListener {
+            if(activityStatus != ACTIVITY_STARTED) {
+                startActivity()
+                startButton.setImageResource(R.drawable.pause_button_image)
+                startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFE338"))
+            } else { //ACTIVITY_STARTED
+                pauseActivity()
+                startButton.setImageResource(R.drawable.play_button_image)
+                startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#68A620"))
+            }
         }
 
         stopButton = view!!.findViewById(R.id.stopButton) as ImageButton
@@ -194,7 +198,7 @@ class MapFragment : Fragment() {
             }
 
             // update pace
-            pace = distance.toDouble() / time
+            pace = time / distance.toDouble()
             paceTextView.text = getPaceString(pace)
 
             // draw track
@@ -249,7 +253,7 @@ class MapFragment : Fragment() {
         requireActivity().stopService(trackerIntent)
 
         // clear pace
-        paceTextView.text = "0.000 m/s"
+        paceTextView.text = "00:00 min/km"
     }
 
     private fun pauseTimer() {
@@ -272,7 +276,7 @@ class MapFragment : Fragment() {
         // clear live data variables
         distance = 0f
         distanceTextView.text = "0.000 km"
-        paceTextView.text = "0.000 m/s"
+        paceTextView.text = "00:00 min/km"
     }
     private fun resetTimer() {
         pauseTimer()
@@ -312,10 +316,10 @@ class MapFragment : Fragment() {
     }
 
     fun getPaceString(pace : Double) : String {
-        val df = DecimalFormat("####.###")
-        df.roundingMode = RoundingMode.CEILING
+        var minutes : Int = pace.toInt() % 86400 % 3600 / 60
+        var seconds : Int = pace.toInt() % 86400 % 3600 % 60
 
-        return df.format(pace) + " m/s"
+        return String.format("%02d:%02d", minutes, seconds) + " min/km"
     }
 
     private fun makeTimeString(hours: Int, minutes: Int, seconds: Int): String {

@@ -57,7 +57,7 @@
             android:background="@drawable/border"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="0.000 m/s"
+            android:text="00:00 min/km"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold|italic"
@@ -86,21 +86,9 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:background="@drawable/border"
-                android:backgroundTint="#68A620"
                 android:scaleType="centerCrop"
-                android:src="@drawable/play_button_image" />
-
-            <ImageButton
-                android:id="@+id/pauseButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/border"
-                android:backgroundTint="#FFC107"
-                android:scaleType="centerCrop"
-                android:src="@drawable/pause_button_image"
-                tools:layout_editor_absoluteX="329dp"
-                tools:layout_editor_absoluteY="119dp" />
+                android:src="@drawable/play_button_image"/>
+            <!--android:backgroundTint="#68A620"-->
 
             <ImageButton
                 android:id="@+id/stopButton"

@@ -9,7 +9,6 @@ object LocationHelper {
     fun getLastKnownLocation(myLocationOverlay: MyLocationNewOverlay): GeoPoint {
         return myLocationOverlay.myLocation
     }
-
     fun calcDistance(previousLocation : GeoPoint, location : GeoPoint) : Float {
         var prev : Location = Location(LocationManager.GPS_PROVIDER)
         prev.latitude = previousLocation.latitude
