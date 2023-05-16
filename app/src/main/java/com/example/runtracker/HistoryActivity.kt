@@ -25,8 +25,11 @@ class HistoryActivity : AppCompatActivity(), RunHistoryAdapter.OnRunItemClickLis
     private fun getRunHistoryItems(): ArrayList<RunHistoryItem> {
         val runHistoryItems = ArrayList<RunHistoryItem>()
 
-        for(run in runViewModel.runs.value!!) {
-            runHistoryItems.add(RunHistoryItem(run.id, run.date, run.distance, run.duration))
+        if(runViewModel.runs.value != null)
+        {
+            for(run in runViewModel.runs.value!!) {
+                runHistoryItems.add(RunHistoryItem(run.id, run.date, run.distance, run.duration))
+            }
         }
 
         return runHistoryItems
