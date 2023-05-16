@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(entities = [Run::class], version = 1, exportSchema = false)
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, PointsListConverter::class)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runDao(): RunDao
 

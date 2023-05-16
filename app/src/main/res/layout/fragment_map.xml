@@ -15,13 +15,13 @@
         android:layout_height="189dp">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/timeTextView"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:background="@drawable/border"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="Time"
+            android:text="00:00:00"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold|italic"
@@ -33,13 +33,13 @@
             app:layout_constraintVertical_bias="0.135" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/distanceTextView"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:background="@drawable/border"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="Distance"
+            android:text="0.000 km"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold|italic"
@@ -47,24 +47,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.067"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/timeTextView"
             app:layout_constraintVertical_bias="0.392" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/paceTextView"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:background="@drawable/border"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="Pace"
+            android:text="00:00 min/km"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold|italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.54"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toEndOf="@+id/distanceTextView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.135" />
 
@@ -77,8 +77,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.54"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintStart_toEndOf="@+id/timeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/paceTextView"
             app:layout_constraintVertical_bias="0.446">
 
             <ImageButton
@@ -86,21 +86,9 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:background="@drawable/border"
-                android:backgroundTint="#68A620"
                 android:scaleType="centerCrop"
-                android:src="@drawable/play_button_image" />
-
-            <ImageButton
-                android:id="@+id/pauseButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/border"
-                android:backgroundTint="#FFC107"
-                android:scaleType="centerCrop"
-                android:src="@drawable/pause_button_image"
-                tools:layout_editor_absoluteX="329dp"
-                tools:layout_editor_absoluteY="119dp" />
+                android:src="@drawable/play_button_image"/>
+            <!--android:backgroundTint="#68A620"-->
 
             <ImageButton
                 android:id="@+id/stopButton"
