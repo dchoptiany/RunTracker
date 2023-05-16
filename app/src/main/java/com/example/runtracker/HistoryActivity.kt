@@ -33,7 +33,7 @@ class HistoryActivity : AppCompatActivity(), RunHistoryAdapter.OnRunItemClickLis
     }
 
     private fun updateRecyclerView() {
-        recyclerViewHistory.layoutManager = LinearLayoutManager(applicationContext)
+        recyclerViewHistory.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewHistory.adapter = RunHistoryAdapter(getRunHistoryItems(), this)
     }
 
