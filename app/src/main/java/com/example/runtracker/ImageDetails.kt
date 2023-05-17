@@ -2,14 +2,14 @@ package com.example.runtracker
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.squareup.picasso.Picasso
 import java.io.File
 import kotlin.math.abs
@@ -24,13 +24,20 @@ class ImageDetails : AppCompatActivity() {
     lateinit var leftButton : ImageButton
     lateinit var rightButton : ImageButton
 
+    lateinit var  sharedPreferences : SharedPreferences
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_details)
         imageView = findViewById(R.id.image)
+        sharedPreferences = getSharedPreferences("settings",Context.MODE_PRIVATE)
         latitude = intent.getDoubleExtra("latitude",0.0)
         longitude = intent.getDoubleExtra("longitude",0.0)
+        setAppAppearance()
+
         getPhotos()
+
         leftButton = findViewById(R.id.leftButton)
         rightButton = findViewById(R.id.rightButton)
         if(filesSize > 1){
@@ -44,6 +51,7 @@ class ImageDetails : AppCompatActivity() {
             currentPosition--;
             uploadPhoto()
         }
+
         uploadPhoto()
 
     }
@@ -82,6 +90,20 @@ class ImageDetails : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun setAppAppearance(){
+        val header = findViewById<LinearLayout>(R.id.linearLayout)
+        val background = findViewById<ConstraintLayout>(R.id.main)
+        if(sharedPreferences.getBoolean("darkMode", false)){
+
+            header.setBackgroundColor(Color.BLACK)
+            background.setBackgroundColor(Color.rgb(170,170,170))
+        }
+        else {
+            background.setBackgroundColor(Color.rgb(255,255,255))
+            header.setBackgroundColor(sharedPreferences.getInt("color", Color.BLACK))
+        }
     }
 
 }
