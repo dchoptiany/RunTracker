@@ -75,6 +75,8 @@ class MapFragment : Fragment() {
     lateinit var track : Road
     var points : MutableList<GeoPoint> = mutableListOf()
 
+    val pins: ArrayList<OverlayItem> = ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -162,31 +164,7 @@ class MapFragment : Fragment() {
         }
 
         addPhotoButton.setOnClickListener {
-            val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
-            val point = GeoPoint(currentPinLocation.latitude, currentPinLocation.longitude)
-            val overlayItem = OverlayItem("Pinezka", "Opis", point)
-            val items: ArrayList<OverlayItem> = ArrayList()
-            items.add(overlayItem)
-
-            val overlay = ItemizedIconOverlay<OverlayItem>(
-                items,
-                object : OnItemGestureListener<OverlayItem> {
-                    override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                        val intent = Intent(requireContext(),ImageDetails::class.java)
-                        intent.putExtra("latitude",currentPinLocation.latitude)
-                        intent.putExtra("longitude",currentPinLocation.longitude)
-                        startActivity(intent)
-                        return true
-                    }
-
-                    override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
-                        // Handle the long press event on the overlay item
-                        return false
-                    }
-                },
-                context
-            )
-            mapView.overlays.add(overlay);
+            createPin()
             addPhoto()
         }
 
@@ -199,6 +177,32 @@ class MapFragment : Fragment() {
         requireActivity().registerReceiver(updateTrack, IntentFilter(TrackerService.TRACKER_UPDATED))
 
         return view
+    }
+
+    private fun createPin() {
+        val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+        val point = GeoPoint(currentPinLocation.latitude, currentPinLocation.longitude)
+        val overlayItem = OverlayItem("Pin", "", point)
+        pins.add(overlayItem)
+
+        val overlay = ItemizedIconOverlay<OverlayItem>(
+            pins,
+            object : OnItemGestureListener<OverlayItem> {
+                override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                    val intent = Intent(requireContext(),ImageDetails::class.java)
+                    intent.putExtra("latitude",currentPinLocation.latitude)
+                    intent.putExtra("longitude",currentPinLocation.longitude)
+                    startActivity(intent)
+                    return true
+                }
+
+                override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                    return false
+                }
+            },
+            context
+        )
+        mapView.overlays.add(overlay);
     }
 
     val updateTime : BroadcastReceiver = object : BroadcastReceiver() {

@@ -2,10 +2,8 @@ package com.example.runtracker
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -15,8 +13,6 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.camera.lifecycle.ProcessCameraProvider
 import com.google.common.util.concurrent.ListenableFuture
-import android.provider.MediaStore
-import android.util.Log
 import android.view.Surface
 import android.widget.Button
 import android.widget.Toast
@@ -28,15 +24,10 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import com.example.runtracker.R
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Math.abs
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -48,25 +39,24 @@ class Camera : AppCompatActivity() {
     lateinit var addButton: Button
     private lateinit var cameraProvider: ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
-    var filename : String =""
+    var filename: String = ""
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
-        val latitude = intent.getDoubleExtra("latitude",0.0)
-        val longitude = intent.getDoubleExtra("longitude",0.0)
-        filename = (kotlin.math.abs(latitude) + kotlin.math.abs(longitude)).toString().replace(".","")
+        val latitude = intent.getDoubleExtra("latitude", 0.0)
+        val longitude = intent.getDoubleExtra("longitude", 0.0)
+        filename =
+            (kotlin.math.abs(latitude) + kotlin.math.abs(longitude)).toString().replace(".", "")
         filename += "${System.currentTimeMillis()}"
-        savedFilePath = getOutputDirectory().
-        absolutePath + File.separator + "${filename}.jpg"
+        savedFilePath = "${getExternalFilesDir(null)?.absolutePath}/${filename}.jpg"
         cameraExecutor = Executors.newSingleThreadExecutor()
         addButton = findViewById(R.id.add)
         previewView = findViewById(R.id.camera)
         cameraProvider = ProcessCameraProvider.getInstance(this)
         requestPermission()
     }
-
 
 
     private fun requestPermission() {
@@ -85,7 +75,7 @@ class Camera : AppCompatActivity() {
             runOnUiThread {
                 camera.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, imageCapture)
                 addButton.setOnClickListener {
-                    onClick(imageCapture)
+                    takePicture(imageCapture)
                 }
             }
         }, ContextCompat.getMainExecutor(this))
@@ -103,7 +93,7 @@ class Camera : AppCompatActivity() {
         cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview)
     }
 
-    fun onClick(imageCapture: ImageCapture) {
+    private fun takePicture(imageCapture: ImageCapture) {
         val outputFileOptions = ImageCapture.OutputFileOptions.Builder(File(savedFilePath)).build()
         imageCapture.takePicture(outputFileOptions, cameraExecutor,
             object : ImageCapture.OnImageSavedCallback {
@@ -128,19 +118,10 @@ class Camera : AppCompatActivity() {
     }
 
 
-    private fun getOutputDirectory(): File {
-        val mediaDirs = externalMediaDirs
-        val mediaDir = mediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
-    }
-
     private fun rotateBitmap(bitmap: Bitmap): Bitmap {
         val matrix = Matrix()
         val orientation = resources.configuration.orientation
-        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             matrix.postRotate(0F)
             return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
         }
@@ -151,8 +132,12 @@ class Camera : AppCompatActivity() {
 
     private fun saveImage(uri: Uri) {
         val bitmap =
-            rotateBitmap(BitmapFactory.decodeStream(applicationContext.contentResolver
-                .openInputStream(uri)))
+            rotateBitmap(
+                BitmapFactory.decodeStream(
+                    applicationContext.contentResolver
+                        .openInputStream(uri)
+                )
+            )
 
         val directory = ContextWrapper(this).getDir("imageDir", Context.MODE_PRIVATE)
         val fileName = "${filename}.jpg"
