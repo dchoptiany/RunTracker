@@ -72,4 +72,15 @@ dependencies {
 
     // OSM BonusPack
     implementation 'com.github.MKergall:osmbonuspack:6.9.0'
+
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //CameraX
+    def camerax_version = "1.1.0-alpha05"
+    implementation "androidx.camera:camera-core:$camerax_version"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:1.0.0-alpha31"
+
 }
