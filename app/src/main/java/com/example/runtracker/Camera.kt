@@ -1,4 +1,4 @@
-package com.example.gallery
+package com.example.runtracker
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -7,13 +7,16 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import androidx.camera.lifecycle.ProcessCameraProvider
 import com.google.common.util.concurrent.ListenableFuture
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Surface
 import android.widget.Button
 import android.widget.Toast
@@ -25,11 +28,15 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.example.runtracker.R
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.Math.abs
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -41,20 +48,26 @@ class Camera : AppCompatActivity() {
     lateinit var addButton: Button
     private lateinit var cameraProvider: ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
-
+    var filename : String =""
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
-        savedFilePath =
-            getOutputDirectory().absolutePath + File.separator + "${System.currentTimeMillis()}.jpg"
+        val latitude = intent.getDoubleExtra("latitude",0.0)
+        val longitude = intent.getDoubleExtra("longitude",0.0)
+        filename = (kotlin.math.abs(latitude) + kotlin.math.abs(longitude)).toString().replace(".","")
+        filename += "${System.currentTimeMillis()}"
+        savedFilePath = getOutputDirectory().
+        absolutePath + File.separator + "${filename}.jpg"
         cameraExecutor = Executors.newSingleThreadExecutor()
         addButton = findViewById(R.id.add)
         previewView = findViewById(R.id.camera)
         cameraProvider = ProcessCameraProvider.getInstance(this)
         requestPermission()
     }
+
+
 
     private fun requestPermission() {
         requestCameraPermissionIfMissing { granted ->
@@ -107,9 +120,6 @@ class Camera : AppCompatActivity() {
                     cameraExecutor.execute {
                         saveImage(savedUri)
                         runOnUiThread {
-                            val newIntent = Intent()
-                            newIntent.putExtra("imageUri", savedUri.toString())
-                            setResult(Activity.RESULT_OK, newIntent)
                             finish()
                         }
                     }
@@ -127,13 +137,25 @@ class Camera : AppCompatActivity() {
             mediaDir else filesDir
     }
 
+    private fun rotateBitmap(bitmap: Bitmap): Bitmap {
+        val matrix = Matrix()
+        val orientation = resources.configuration.orientation
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            matrix.postRotate(0F)
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        }
+        matrix.postRotate(90F)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
 
     private fun saveImage(uri: Uri) {
         val bitmap =
-            BitmapFactory.decodeStream(applicationContext.contentResolver.openInputStream(uri))
+            rotateBitmap(BitmapFactory.decodeStream(applicationContext.contentResolver
+                .openInputStream(uri)))
 
         val directory = ContextWrapper(this).getDir("imageDir", Context.MODE_PRIVATE)
-        val fileName = "${System.currentTimeMillis()}.jpg"
+        val fileName = "${filename}.jpg"
         val myImageFile = File(directory, fileName)
 
         FileOutputStream(myImageFile).use { outputStream ->

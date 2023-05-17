@@ -3,6 +3,7 @@ package com.example.runtracker
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -22,7 +23,8 @@ class Gallery : AppCompatActivity(), GalleryAdapter.OnImageClickListeren {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_gallery)
+        rv = findViewById(R.id.rv)
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         addUserPhoto()
@@ -51,12 +53,13 @@ class Gallery : AppCompatActivity(), GalleryAdapter.OnImageClickListeren {
             }
             if (!found) {
                 images.add(Images(fileName, ""))
-                rv.adapter?.notifyDataSetChanged()
             }
         }
     }
 
     override fun onImgClick(position: Int) {
-        TODO("Not yet implemented")
+        val intent = Intent(this,GalleryImageDetails::class.java)
+        intent.putExtra("path",images[position].path)
+        startActivity(intent)
     }
 }

@@ -31,12 +31,14 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 
@@ -94,9 +96,7 @@ class MapFragment : Fragment() {
 
         // button setup
         addPhotoButton = view!!.findViewById(R.id.addPhotoFAB) as FloatingActionButton
-        addPhotoButton.setOnClickListener {
-            addPhoto()
-        }
+
 
         startButton = view!!.findViewById(R.id.startButton) as ImageButton
         startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#68A620"))
@@ -159,6 +159,35 @@ class MapFragment : Fragment() {
                     mapView.getController().animateTo(myLocation)
                 }
             })
+        }
+
+        addPhotoButton.setOnClickListener {
+            val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+            val point = GeoPoint(currentPinLocation.latitude, currentPinLocation.longitude)
+            val overlayItem = OverlayItem("Pinezka", "Opis", point)
+            val items: ArrayList<OverlayItem> = ArrayList()
+            items.add(overlayItem)
+
+            val overlay = ItemizedIconOverlay<OverlayItem>(
+                items,
+                object : OnItemGestureListener<OverlayItem> {
+                    override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                        val intent = Intent(requireContext(),ImageDetails::class.java)
+                        intent.putExtra("latitude",currentPinLocation.latitude)
+                        intent.putExtra("longitude",currentPinLocation.longitude)
+                        startActivity(intent)
+                        return true
+                    }
+
+                    override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                        // Handle the long press event on the overlay item
+                        return false
+                    }
+                },
+                context
+            )
+            mapView.overlays.add(overlay);
+            addPhoto()
         }
 
         // timer service setup
@@ -287,7 +316,11 @@ class MapFragment : Fragment() {
     }
 
     fun addPhoto() {
-        Toast.makeText(requireContext(), "Add Photo!", Toast.LENGTH_SHORT).show()
+        val intent = Intent(requireContext(), Camera::class.java)
+        val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+        intent.putExtra("latitude",currentPinLocation.latitude)
+        intent.putExtra("longitude",currentPinLocation.longitude)
+        startActivity(intent)
     }
 
     fun isLocationPermissionGranted() : Boolean {
