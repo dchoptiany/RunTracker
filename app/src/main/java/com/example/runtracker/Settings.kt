@@ -72,6 +72,20 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
         }
     }
 
+    private fun setAppAppearance(){
+        val header = findViewById<LinearLayout>(R.id.linearLayout)
+        val background = findViewById<ConstraintLayout>(R.id.main)
+        if(sharedPreferences.getBoolean("darkMode", false)){
+
+            header.setBackgroundColor(Color.BLACK)
+            background.setBackgroundColor(Color.rgb(170,170,170))
+        }
+        else {
+            background.setBackgroundColor(Color.rgb(255,255,255))
+            header.setBackgroundColor(sharedPreferences.getInt("color", Color.BLACK))
+        }
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onBlockClick(position: Int) {
@@ -79,6 +93,7 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
             val colorIntent = Intent(this, ColorPicker::class.java)
             resultLauncher.launch(colorIntent)
         }
+        setAppAppearance()
         rv.adapter?.notifyDataSetChanged()
 
     }
