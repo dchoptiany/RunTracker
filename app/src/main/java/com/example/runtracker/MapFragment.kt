@@ -224,6 +224,7 @@ class MapFragment : Fragment() {
             // update distance
             if(activityStatus == ACTIVITY_STARTED) {
                 distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
+                distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
             }
 
             if(distance != 0f) {
