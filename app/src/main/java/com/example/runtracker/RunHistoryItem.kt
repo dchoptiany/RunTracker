@@ -44,7 +44,10 @@ class RunHistoryItem(private var runID: Int, private var date: Date, private var
         val hours = duration / 3600 // full hours
         val minutes = (duration - (hours * 3600)) / 60 // full minutes
         val seconds = duration % 60 // seconds
-        return "$hours:$minutes:$seconds"
+
+        return "${hours.toString().padStart(2, '0')}:" +
+                "${minutes.toString().padStart(2, '0')}:" +
+                seconds.toString().padStart(2, '0')
     }
 
     fun getRunID(): Int {
