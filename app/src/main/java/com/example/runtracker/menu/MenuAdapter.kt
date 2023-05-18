@@ -1,14 +1,11 @@
-package com.example.runtracker
+package com.example.runtracker.menu
 
-import android.content.Context
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
 
-class MenuAdapter(var menuItems : ArrayList<MenuItem>,var  onBlockListener : OnBlockClickListener): RecyclerView.Adapter<MenuViewHolder>()  {
+class MenuAdapter(var menuItems : ArrayList<MenuItem>, var  onBlockListener : OnBlockClickListener): RecyclerView.Adapter<MenuViewHolder>()  {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {

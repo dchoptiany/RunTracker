@@ -1,11 +1,10 @@
-package com.example.runtracker
+package com.example.runtracker.menu
 
-import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
 
 class MenuViewHolder(val view : View,var onBlockListener : MenuAdapter.OnBlockClickListener) : RecyclerView.ViewHolder(view),View.OnClickListener {
 
