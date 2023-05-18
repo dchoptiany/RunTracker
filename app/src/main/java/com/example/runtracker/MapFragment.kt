@@ -189,7 +189,7 @@ class MapFragment : Fragment() {
             pins,
             object : OnItemGestureListener<OverlayItem> {
                 override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                    val intent = Intent(requireContext(),ImageDetails::class.java)
+                    val intent = Intent(requireContext(),ImageDetailsActivity::class.java)
                     intent.putExtra("latitude",currentPinLocation.latitude)
                     intent.putExtra("longitude",currentPinLocation.longitude)
                     startActivity(intent)

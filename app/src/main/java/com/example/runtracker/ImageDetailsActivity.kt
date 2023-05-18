@@ -5,7 +5,6 @@ import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -14,33 +13,32 @@ import com.squareup.picasso.Picasso
 import java.io.File
 import kotlin.math.abs
 
-class ImageDetails : AppCompatActivity() {
-    var latitude : Double = 0.0
-    var longitude : Double = 0.0
-    var filesPath  = ArrayList<String>()
-    var filesSize = 0
-    var currentPosition = 0
-    lateinit var imageView : ImageView
-    lateinit var leftButton : ImageButton
-    lateinit var rightButton : ImageButton
-
-    lateinit var  sharedPreferences : SharedPreferences
-
+class ImageDetailsActivity : AppCompatActivity() {
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+    private var filesPath = ArrayList<String>()
+    private var filesSize = 0
+    private var currentPosition = 0
+    private lateinit var imageView: ImageView
+    private lateinit var leftButton: ImageButton
+    private lateinit var rightButton: ImageButton
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_details)
         imageView = findViewById(R.id.image)
-        sharedPreferences = getSharedPreferences("settings",Context.MODE_PRIVATE)
-        latitude = intent.getDoubleExtra("latitude",0.0)
-        longitude = intent.getDoubleExtra("longitude",0.0)
+        sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        latitude = intent.getDoubleExtra("latitude", 0.0)
+        longitude = intent.getDoubleExtra("longitude", 0.0)
         setAppAppearance()
 
         getPhotos()
 
         leftButton = findViewById(R.id.leftButton)
         rightButton = findViewById(R.id.rightButton)
-        if(filesSize > 1){
+
+        if (filesSize > 1) {
             rightButton.visibility = View.VISIBLE
         }
         rightButton.setOnClickListener {
@@ -53,7 +51,6 @@ class ImageDetails : AppCompatActivity() {
         }
 
         uploadPhoto()
-
     }
 
     private fun uploadPhoto() {
@@ -62,25 +59,19 @@ class ImageDetails : AppCompatActivity() {
         val myImageFile = File(directory, filesPath[currentPosition])
         setButtonsVisibility()
 
-        Picasso.get().load(myImageFile ).into(imageView)
+        Picasso.get().load(myImageFile).into(imageView)
     }
 
     private fun setButtonsVisibility() {
-        if(currentPosition>0) leftButton.visibility = View.VISIBLE
-        else leftButton.visibility = View.INVISIBLE
-
-        if(currentPosition<filesSize-1) rightButton.visibility = View.VISIBLE
-        else rightButton.visibility = View.INVISIBLE
-
-
+        leftButton.visibility = if(currentPosition > 0) View.INVISIBLE else View.VISIBLE
+        rightButton.visibility = if(currentPosition < filesSize-1) View.VISIBLE else View.INVISIBLE
     }
 
     private fun getPhotos() {
         val cw = ContextWrapper(this)
         val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
         val files = directory.listFiles { file ->
-
-            file.absolutePath.contains((abs(latitude)+abs(longitude)).toString().replace(".",""))
+            file.absolutePath.contains((abs(latitude) + abs(longitude)).toString().replace(".", ""))
         }
 
         if (files != null) {
@@ -89,21 +80,17 @@ class ImageDetails : AppCompatActivity() {
                 filesPath.add(file.name)
             }
         }
-
     }
 
-    private fun setAppAppearance(){
+    private fun setAppAppearance() {
         val header = findViewById<LinearLayout>(R.id.linearLayout)
         val background = findViewById<ConstraintLayout>(R.id.main)
-        if(sharedPreferences.getBoolean("darkMode", false)){
-
+        if (sharedPreferences.getBoolean("darkMode", false)) {
             header.setBackgroundColor(Color.BLACK)
-            background.setBackgroundColor(Color.rgb(170,170,170))
-        }
-        else {
-            background.setBackgroundColor(Color.rgb(255,255,255))
+            background.setBackgroundColor(Color.rgb(170, 170, 170))
+        } else {
+            background.setBackgroundColor(Color.rgb(255, 255, 255))
             header.setBackgroundColor(sharedPreferences.getInt("color", Color.BLACK))
         }
     }
-
 }
