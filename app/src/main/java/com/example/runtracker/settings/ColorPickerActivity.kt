@@ -12,7 +12,7 @@ class ColorPickerActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_color)
+        setContentView(R.layout.activity_color_picker)
         picker = findViewById(R.id.picker)
         val saturationBar =
             findViewById<com.larswerkman.holocolorpicker.SaturationBar>(R.id.saturationbar)
