@@ -15,6 +15,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import com.google.common.util.concurrent.ListenableFuture
 import android.view.Surface
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,7 @@ import java.util.concurrent.Executors
 class CameraActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var savedFilePath: String
-    private lateinit var addButton: Button
+    private lateinit var captureButton: ImageButton
     private lateinit var cameraProvider: ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
     private var filename: String = ""
@@ -51,7 +52,7 @@ class CameraActivity : AppCompatActivity() {
         filename += "${System.currentTimeMillis()}"
         savedFilePath = "${getExternalFilesDir(null)?.absolutePath}/${filename}.jpg"
         cameraExecutor = Executors.newSingleThreadExecutor()
-        addButton = findViewById(R.id.add)
+        captureButton = findViewById(R.id.imageButtonCapture)
         previewView = findViewById(R.id.camera)
         cameraProvider = ProcessCameraProvider.getInstance(this)
         requestPermission()
@@ -72,7 +73,7 @@ class CameraActivity : AppCompatActivity() {
             val imageCapture = ImageCapture.Builder().setTargetRotation(Surface.ROTATION_0).build()
             runOnUiThread {
                 camera.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, imageCapture)
-                addButton.setOnClickListener {
+                captureButton.setOnClickListener {
                     takePicture(imageCapture)
                 }
             }
