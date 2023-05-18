@@ -6,15 +6,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -23,10 +19,6 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     var menuItems : ArrayList<MenuItem> = ArrayList()
     lateinit var  sharedPreferences : SharedPreferences
     lateinit var editor: SharedPreferences.Editor
-
-    private val runViewModel: RunViewModel by viewModels {
-        RunModelFactory((application as RunApplication).repository)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +61,11 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 val myAccount = Intent(this, MyAccount::class.java)
                 resultLauncher.launch(myAccount)
             }
-            4-> Toast.makeText(this,"5",Toast.LENGTH_SHORT).show()
+            4-> {
+                Intent(this, HistoryActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
             5-> {
                 val settings = Intent(this, Settings::class.java)
                 resultLauncher.launch(settings)
