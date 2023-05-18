@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.Converters
 
 import androidx.room.TypeConverter
 import java.sql.Date

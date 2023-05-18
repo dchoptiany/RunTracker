@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.runtracker.Converters.DateConverter
+import com.example.runtracker.Converters.PointsListConverter
 
 @Database(entities = [Run::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class, PointsListConverter::class)
