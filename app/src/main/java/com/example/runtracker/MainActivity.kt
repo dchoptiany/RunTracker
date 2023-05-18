@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.gallery.GalleryActivity
 import com.example.runtracker.myAccount.MyAccountActivity
 import com.example.runtracker.settings.SettingsActivity
 
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 this.startActivity(mapIntent)
                 }
             1 -> {
-                val gallery = Intent(this,GalleryActivity::class.java)
+                val gallery = Intent(this, GalleryActivity::class.java)
                 resultLauncher.launch(gallery)
             }
             2-> Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()

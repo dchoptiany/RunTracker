@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.gallery
 
 import android.content.Context
 import android.content.ContextWrapper
@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.runtracker.R
 import com.squareup.picasso.Picasso
 import java.io.File
 import kotlin.math.abs

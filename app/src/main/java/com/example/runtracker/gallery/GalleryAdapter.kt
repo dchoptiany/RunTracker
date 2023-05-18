@@ -1,11 +1,10 @@
-package com.example.gallery
+package com.example.runtracker.gallery
 
 import android.content.Context
 import android.content.ContextWrapper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.runtracker.Images
 import com.example.runtracker.R
 import com.squareup.picasso.Picasso
 import java.io.File

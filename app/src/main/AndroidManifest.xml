@@ -35,14 +35,14 @@
             android:name=".settings.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".CameraActivity" />
+            android:name=".gallery.CameraActivity" />
         <activity
-            android:name=".ImageDetailsActivity"
+            android:name=".gallery.ImageDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".GalleryActivity" />
+            android:name=".gallery.GalleryActivity" />
         <activity
-            android:name=".GalleryImageDetailsActivity" />
+            android:name=".gallery.GalleryImageDetailsActivity" />
         <activity
             android:name=".myAccount.MyAccountActivity"
             android:exported="false" />

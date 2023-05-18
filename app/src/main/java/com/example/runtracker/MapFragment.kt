@@ -22,6 +22,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.example.runtracker.gallery.CameraActivity
+import com.example.runtracker.gallery.ImageDetailsActivity
 import com.github.clans.fab.FloatingActionButton
 import org.osmdroid.api.IMapController
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
@@ -189,7 +191,7 @@ class MapFragment : Fragment() {
             pins,
             object : OnItemGestureListener<OverlayItem> {
                 override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                    val intent = Intent(requireContext(),ImageDetailsActivity::class.java)
+                    val intent = Intent(requireContext(), ImageDetailsActivity::class.java)
                     intent.putExtra("latitude",currentPinLocation.latitude)
                     intent.putExtra("longitude",currentPinLocation.longitude)
                     startActivity(intent)

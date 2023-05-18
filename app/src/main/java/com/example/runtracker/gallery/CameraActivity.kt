@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.gallery
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -26,6 +26,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.example.runtracker.R
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.ExecutorService

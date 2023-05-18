@@ -1,9 +1,7 @@
-package com.example.gallery
+package com.example.runtracker.gallery
 
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
 

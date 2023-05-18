@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.gallery
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gallery.GalleryAdapter
+import com.example.runtracker.R
 
 class GalleryActivity : AppCompatActivity(), GalleryAdapter.OnImageClickListeren {
     lateinit var recyclerViewImages: RecyclerView
