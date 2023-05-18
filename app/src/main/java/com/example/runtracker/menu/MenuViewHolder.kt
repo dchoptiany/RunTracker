@@ -6,18 +6,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
 
-class MenuViewHolder(val view : View,var onBlockListener : MenuAdapter.OnBlockClickListener) : RecyclerView.ViewHolder(view),View.OnClickListener {
+class MenuViewHolder(val view: View, private var onBlockListener: MenuAdapter.OnBlockClickListener)
+    : RecyclerView.ViewHolder(view),View.OnClickListener {
 
-    var text  = view.findViewById<TextView>(R.id.text)
-    var image = view.findViewById<ImageView>(R.id.image)
+    var textView: TextView = view.findViewById(R.id.text)
+    var imageView: ImageView = view.findViewById(R.id.image)
 
-    init{
+    init {
         view.setOnClickListener(this)
     }
 
-
-
     override fun onClick(v: View?) {
-        onBlockListener.onBlockClick(adapterPosition,"")
+        onBlockListener.onBlockClick(adapterPosition, "")
     }
 }
