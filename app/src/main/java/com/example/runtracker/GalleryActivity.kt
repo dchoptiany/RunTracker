@@ -68,7 +68,7 @@ class GalleryActivity : AppCompatActivity(), GalleryAdapter.OnImageClickListeren
     }
 
     override fun onImgClick(position: Int) {
-        val intent = Intent(this, GalleryImageDetails::class.java)
+        val intent = Intent(this, GalleryImageDetailsActivity::class.java)
         intent.putExtra("path", images[position].path)
         startActivity(intent)
     }
