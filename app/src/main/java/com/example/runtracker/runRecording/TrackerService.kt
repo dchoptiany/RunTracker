@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.runRecording
 
 import android.app.Service
 import android.content.Context
@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.ActivityCompat
+import com.example.runtracker.Run
 import org.osmdroid.util.GeoPoint
 import java.sql.Date
 import java.util.*
@@ -85,7 +86,8 @@ class TrackerService() : Service() {
     private inner class DistanceTask(private var distance : Float) : TimerTask() {
         override fun run() {
             // add way point
-            var runDataPair : Pair<Float, MutableList<GeoPoint>> = RunHelper.addWayPointToRun(points, distance, currentLocation)
+            var runDataPair : Pair<Float, MutableList<GeoPoint>> =
+                RunHelper.addWayPointToRun(points, distance, currentLocation)
             distance = runDataPair.first
             points = runDataPair.second
 

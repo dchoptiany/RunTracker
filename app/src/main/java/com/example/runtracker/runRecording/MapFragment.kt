@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.runRecording
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -22,6 +22,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.example.runtracker.BuildConfig
+import com.example.runtracker.R
 import com.example.runtracker.gallery.CameraActivity
 import com.example.runtracker.gallery.ImageDetailsActivity
 import com.github.clans.fab.FloatingActionButton

@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.runRecording
 
 import android.app.Service
 import android.content.Intent

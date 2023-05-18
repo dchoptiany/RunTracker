@@ -1,5 +1,6 @@
-package com.example.runtracker
+package com.example.runtracker.runRecording
 
+import com.example.runtracker.runRecording.LocationHelper
 import org.osmdroid.util.GeoPoint
 
 object RunHelper {

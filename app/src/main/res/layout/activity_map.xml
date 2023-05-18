@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapActivity">
+    tools:context=".runRecording.MapActivity">
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.runtracker.MapFragment"
+        android:name="com.example.runtracker.runRecording.MapFragment"
         tools:layout="@layout/fragment_map"
         android:id="@+id/mapFragment"/>
 

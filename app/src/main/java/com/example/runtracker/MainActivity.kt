@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.gallery.GalleryActivity
 import com.example.runtracker.myAccount.MyAccountActivity
+import com.example.runtracker.runRecording.MapActivity
 import com.example.runtracker.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
