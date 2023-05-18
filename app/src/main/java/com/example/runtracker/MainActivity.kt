@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 }
             }
             5-> {
-                val settings = Intent(this, Settings::class.java)
+                val settings = Intent(this, SettingsActivity::class.java)
                 resultLauncher.launch(settings)
             }
         }
