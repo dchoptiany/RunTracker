@@ -321,7 +321,7 @@ class MapFragment : Fragment() {
     }
 
     fun addPhoto() {
-        val intent = Intent(requireContext(), Camera::class.java)
+        val intent = Intent(requireContext(), CameraActivity::class.java)
         val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
         intent.putExtra("latitude",currentPinLocation.latitude)
         intent.putExtra("longitude",currentPinLocation.longitude)

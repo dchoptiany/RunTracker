@@ -35,7 +35,7 @@
             android:name=".Settings"
             android:exported="false" />
         <activity
-            android:name=".Camera" />
+            android:name=".CameraActivity" />
         <activity
             android:name=".ImageDetails"
             android:exported="false" />

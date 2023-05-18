@@ -31,15 +31,13 @@ import java.io.FileOutputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class Camera : AppCompatActivity() {
-
-
+class CameraActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var savedFilePath: String
-    lateinit var addButton: Button
+    private lateinit var addButton: Button
     private lateinit var cameraProvider: ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
-    var filename: String = ""
+    private var filename: String = ""
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +56,6 @@ class Camera : AppCompatActivity() {
         requestPermission()
     }
 
-
     private fun requestPermission() {
         requestCameraPermissionIfMissing { granted ->
             if (granted) {
@@ -68,7 +65,7 @@ class Camera : AppCompatActivity() {
     }
 
     private fun startCamera() {
-        cameraProvider.addListener(Runnable {
+        cameraProvider.addListener({
             val camera = cameraProvider.get()
             bindPreview(camera)
             val imageCapture = ImageCapture.Builder().setTargetRotation(Surface.ROTATION_0).build()
@@ -81,9 +78,8 @@ class Camera : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    fun bindPreview(cameraProvider: ProcessCameraProvider) {
-        val preview: Preview = Preview.Builder()
-            .build()
+    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
+        val preview: Preview = Preview.Builder().build()
 
         val cameraSelector: CameraSelector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
@@ -117,7 +113,6 @@ class Camera : AppCompatActivity() {
             })
     }
 
-
     private fun rotateBitmap(bitmap: Bitmap): Bitmap {
         val matrix = Matrix()
         val orientation = resources.configuration.orientation
@@ -128,7 +123,6 @@ class Camera : AppCompatActivity() {
         matrix.postRotate(90F)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
-
 
     private fun saveImage(uri: Uri) {
         val bitmap =
@@ -148,7 +142,6 @@ class Camera : AppCompatActivity() {
             outputStream.flush()
         }
     }
-
 
     private fun requestCameraPermissionIfMissing(onResult: ((Boolean) -> Unit)) {
         if (ActivityCompat.checkSelfPermission(
