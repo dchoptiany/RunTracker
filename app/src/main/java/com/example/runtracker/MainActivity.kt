@@ -55,7 +55,10 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 val mapIntent = Intent(this, MapActivity::class.java)
                 this.startActivity(mapIntent)
                 }
-            1 -> Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
+            1 -> {
+                val gallery = Intent(this,Gallery::class.java)
+                resultLauncher.launch(gallery)
+            }
             2-> Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
             3-> {
                 val myAccount = Intent(this, MyAccount::class.java)

@@ -31,12 +31,14 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 
@@ -73,6 +75,8 @@ class MapFragment : Fragment() {
     lateinit var track : Road
     var points : MutableList<GeoPoint> = mutableListOf()
 
+    val pins: ArrayList<OverlayItem> = ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -94,9 +98,7 @@ class MapFragment : Fragment() {
 
         // button setup
         addPhotoButton = view!!.findViewById(R.id.addPhotoFAB) as FloatingActionButton
-        addPhotoButton.setOnClickListener {
-            addPhoto()
-        }
+
 
         startButton = view!!.findViewById(R.id.startButton) as ImageButton
         startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#68A620"))
@@ -161,6 +163,11 @@ class MapFragment : Fragment() {
             })
         }
 
+        addPhotoButton.setOnClickListener {
+            createPin()
+            addPhoto()
+        }
+
         // timer service setup
         serviceIntent = Intent(requireContext(), TimerService::class.java)
         requireActivity().registerReceiver(updateTime, IntentFilter(TimerService.TIMER_UPDATED))
@@ -170,6 +177,32 @@ class MapFragment : Fragment() {
         requireActivity().registerReceiver(updateTrack, IntentFilter(TrackerService.TRACKER_UPDATED))
 
         return view
+    }
+
+    private fun createPin() {
+        val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+        val point = GeoPoint(currentPinLocation.latitude, currentPinLocation.longitude)
+        val overlayItem = OverlayItem("Pin", "", point)
+        pins.add(overlayItem)
+
+        val overlay = ItemizedIconOverlay<OverlayItem>(
+            pins,
+            object : OnItemGestureListener<OverlayItem> {
+                override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                    val intent = Intent(requireContext(),ImageDetails::class.java)
+                    intent.putExtra("latitude",currentPinLocation.latitude)
+                    intent.putExtra("longitude",currentPinLocation.longitude)
+                    startActivity(intent)
+                    return true
+                }
+
+                override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                    return false
+                }
+            },
+            context
+        )
+        mapView.overlays.add(overlay);
     }
 
     val updateTime : BroadcastReceiver = object : BroadcastReceiver() {
@@ -190,6 +223,7 @@ class MapFragment : Fragment() {
 
             // update distance
             if(activityStatus == ACTIVITY_STARTED) {
+                distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
                 distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
             }
 
@@ -287,7 +321,11 @@ class MapFragment : Fragment() {
     }
 
     fun addPhoto() {
-        Toast.makeText(requireContext(), "Add Photo!", Toast.LENGTH_SHORT).show()
+        val intent = Intent(requireContext(), Camera::class.java)
+        val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+        intent.putExtra("latitude",currentPinLocation.latitude)
+        intent.putExtra("longitude",currentPinLocation.longitude)
+        startActivity(intent)
     }
 
     fun isLocationPermissionGranted() : Boolean {
