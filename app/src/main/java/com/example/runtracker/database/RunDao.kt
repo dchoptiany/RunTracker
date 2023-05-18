@@ -1,6 +1,7 @@
-package com.example.runtracker
+package com.example.runtracker.database
 
 import androidx.room.*
+import com.example.runtracker.database.Run
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 

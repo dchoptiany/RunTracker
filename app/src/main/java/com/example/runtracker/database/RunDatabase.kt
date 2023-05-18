@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.database
 
 import android.content.Context
 import androidx.room.Database

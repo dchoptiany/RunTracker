@@ -11,7 +11,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.ActivityCompat
-import com.example.runtracker.Run
+import com.example.runtracker.database.Run
 import org.osmdroid.util.GeoPoint
 import java.sql.Date
 import java.util.*

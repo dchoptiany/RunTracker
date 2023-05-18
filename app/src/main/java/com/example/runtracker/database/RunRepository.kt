@@ -1,6 +1,8 @@
-package com.example.runtracker
+package com.example.runtracker.database
 
 import androidx.annotation.WorkerThread
+import com.example.runtracker.database.Run
+import com.example.runtracker.database.RunDao
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
