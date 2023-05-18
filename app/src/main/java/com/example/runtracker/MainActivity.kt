@@ -6,15 +6,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -23,10 +19,6 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     var menuItems : ArrayList<MenuItem> = ArrayList()
     lateinit var  sharedPreferences : SharedPreferences
     lateinit var editor: SharedPreferences.Editor
-
-    private val runViewModel: RunViewModel by viewModels {
-        RunModelFactory((application as RunApplication).repository)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +36,11 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     }
 
     fun addMenuItems(){
-        addtoMenuItemsList("ACTIVITIES",R.drawable.activites)
+        addtoMenuItemsList("START ACTIVITY",R.drawable.activites)
         addtoMenuItemsList("GALLERY",R.drawable.aparat)
         addtoMenuItemsList("STATISTICS",R.drawable.statistics)
         addtoMenuItemsList("MY ACCOUNT",R.drawable.account)
-        addtoMenuItemsList("ACHIEVEMENTS",R.drawable.achievements)
+        addtoMenuItemsList("HISTORY",R.drawable.history)
         addtoMenuItemsList("SETTINGS",R.drawable.settings)
     }
 
@@ -63,13 +55,20 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 val mapIntent = Intent(this, MapActivity::class.java)
                 this.startActivity(mapIntent)
                 }
-            1 -> Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
+            1 -> {
+                val gallery = Intent(this,Gallery::class.java)
+                resultLauncher.launch(gallery)
+            }
             2-> Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
             3-> {
                 val myAccount = Intent(this, MyAccount::class.java)
                 resultLauncher.launch(myAccount)
             }
-            4-> Toast.makeText(this,"5",Toast.LENGTH_SHORT).show()
+            4-> {
+                Intent(this, HistoryActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
             5-> {
                 val settings = Intent(this, Settings::class.java)
                 resultLauncher.launch(settings)
