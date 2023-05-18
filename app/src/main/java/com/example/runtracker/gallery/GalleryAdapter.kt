@@ -9,26 +9,26 @@ import com.example.runtracker.R
 import com.squareup.picasso.Picasso
 import java.io.File
 
-class GalleryAdapter(var img: ArrayList<Images>, var onImgClickListener: OnImageClickListeren): RecyclerView.Adapter<GalleryViewHolder>() {
+class GalleryAdapter(private var images: ArrayList<Images>, private var onImageClickListener: OnImageClickListener): RecyclerView.Adapter<GalleryViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item, parent, false)
         view.layoutParams.height = parent.height / 4
-        return GalleryViewHolder(view,onImgClickListener)
+        return GalleryViewHolder(view, onImageClickListener)
     }
 
     override fun getItemCount(): Int {
-        return img.size
+        return images.size
     }
 
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
-        val cw = ContextWrapper(holder.view.context)
+        val cw = ContextWrapper(holder.itemView.context)
         val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
-        val myImageFile = File(directory, img[position].path)
+        val myImageFile = File(directory, images[position].path)
 
-        Picasso.get().load(myImageFile ).into(holder.imgView)
+        Picasso.get().load(myImageFile).into(holder.imageView)
     }
 
-    interface OnImageClickListeren{
-        fun onImgClick(position : Int)
+    interface OnImageClickListener {
+        fun onImageClick(position: Int)
     }
 }

@@ -5,16 +5,15 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
 
-class GalleryViewHolder(var itemView: View, var onImageClickListener: GalleryAdapter.OnImageClickListeren) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-    var imgView : ImageView
-    var view = itemView
+class GalleryViewHolder(itemView: View, private var onImageClickListener: GalleryAdapter.OnImageClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    var imageView: ImageView
 
     init {
-        imgView = itemView.findViewById(R.id.imageView2)
-        imgView.setOnClickListener(this)
+        imageView = itemView.findViewById(R.id.imageView2)
+        imageView.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        onImageClickListener.onImgClick(adapterPosition)
+        onImageClickListener.onImageClick(adapterPosition)
     }
 }

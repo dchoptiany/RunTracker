@@ -64,8 +64,9 @@ class ImageDetailsActivity : AppCompatActivity() {
     }
 
     private fun setButtonsVisibility() {
-        leftButton.visibility = if(currentPosition > 0) View.INVISIBLE else View.VISIBLE
-        rightButton.visibility = if(currentPosition < filesSize-1) View.VISIBLE else View.INVISIBLE
+        leftButton.visibility = if (currentPosition > 0) View.INVISIBLE else View.VISIBLE
+        rightButton.visibility =
+            if (currentPosition < filesSize - 1) View.VISIBLE else View.INVISIBLE
     }
 
     private fun getPhotos() {

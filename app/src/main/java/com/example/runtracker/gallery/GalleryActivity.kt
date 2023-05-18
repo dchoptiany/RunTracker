@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
 
-class GalleryActivity : AppCompatActivity(), GalleryAdapter.OnImageClickListeren {
-    lateinit var recyclerViewImages: RecyclerView
-    lateinit var sharedPreferencesSettings: SharedPreferences
+class GalleryActivity : AppCompatActivity(), GalleryAdapter.OnImageClickListener {
+    private lateinit var recyclerViewImages: RecyclerView
+    private lateinit var sharedPreferencesSettings: SharedPreferences
     private var images = ArrayList<Images>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class GalleryActivity : AppCompatActivity(), GalleryAdapter.OnImageClickListeren
         }
     }
 
-    override fun onImgClick(position: Int) {
+    override fun onImageClick(position: Int) {
         val intent = Intent(this, GalleryImageDetailsActivity::class.java)
         intent.putExtra("path", images[position].path)
         startActivity(intent)
