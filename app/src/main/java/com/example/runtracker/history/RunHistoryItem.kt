@@ -3,7 +3,8 @@ package com.example.runtracker.history
 import java.sql.Date
 import java.util.*
 
-class RunHistoryItem(private var runID: Int, private var date: Date, private var distance: Float, private var duration: Int) {
+class RunHistoryItem(private var runID: Int, private var date: Date, private var distance: Float,
+                     private var duration: Int) {
     fun getName(): String {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -45,9 +46,7 @@ class RunHistoryItem(private var runID: Int, private var date: Date, private var
         val minutes = (duration - (hours * 3600)) / 60 // full minutes
         val seconds = duration % 60 // seconds
 
-        return "${hours.toString().padStart(2, '0')}:" +
-                "${minutes.toString().padStart(2, '0')}:" +
-                seconds.toString().padStart(2, '0')
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     fun getRunID(): Int {

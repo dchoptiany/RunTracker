@@ -33,10 +33,7 @@ class SummaryActivity : AppCompatActivity() {
 
         if(intent != null) {
             val runID = intent.getIntExtra("runID", -1)
-            val run: Run? = viewModel.runByID(runID).value
-            if(run == null) {
-                return
-            }
+            val run: Run = viewModel.runByID(runID).value ?: return
 
             val distanceKilometers = run.distance
             val timeSeconds = run.duration
@@ -50,8 +47,8 @@ class SummaryActivity : AppCompatActivity() {
             val paceSeconds = round((paceMinPerKm - paceMinutes) * 60)  // pace seconds (decimal part converted from minutes to seconds)
 
             textViewDistance.text = "$distanceKilometers km"
-            textViewTime.text = "$hours:$minutes:$seconds"
-            textViewPace.text = "$paceMinutes:$paceSeconds min/km"
+            textViewTime.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            textViewPace.text = "${String.format("%02d:%02d", paceMinutes, paceSeconds)} min/km"
         }
     }
 }

@@ -5,7 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
 
-class RunHistoryAdapter(private val runItems: ArrayList<RunHistoryItem>, private var onRunItemClickListener: OnRunItemClickListener)
+class RunHistoryAdapter(private val runItems: ArrayList<RunHistoryItem>,
+                        private var onRunItemClickListener: OnRunItemClickListener)
     : RecyclerView.Adapter<RunHistoryItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunHistoryItemViewHolder {
