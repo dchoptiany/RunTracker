@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.settings
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.ColorPickerActivity
+import com.example.runtracker.R
+import com.example.runtracker.settingsItem
 
 class SettingsActivity :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListener {
     private lateinit var recyclerViewSettings: RecyclerView

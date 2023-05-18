@@ -1,17 +1,16 @@
-package com.example.runtracker
+package com.example.runtracker.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
+import com.example.runtracker.settingsItem
 
 
-class SettingsAdapter(var settingsItems : ArrayList<settingsItem>,var  onBlockListener : OnSettingsItemClickListener): RecyclerView.Adapter<SettingsViewHolder>()  {
+class SettingsAdapter(var settingsItems : ArrayList<settingsItem>, var  onBlockListener : OnSettingsItemClickListener): RecyclerView.Adapter<SettingsViewHolder>()  {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {

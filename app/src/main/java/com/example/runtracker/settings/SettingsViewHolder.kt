@@ -1,15 +1,11 @@
-package com.example.runtracker
+package com.example.runtracker.settings
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.larswerkman.holocolorpicker.ColorPicker
+import com.example.runtracker.R
 
 
 class SettingsViewHolder(val view : View,var onBlockListener : SettingsAdapter.OnSettingsItemClickListener) : RecyclerView.ViewHolder(view),View.OnClickListener {

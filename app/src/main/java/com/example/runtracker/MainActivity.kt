@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     lateinit var rv : RecyclerView
