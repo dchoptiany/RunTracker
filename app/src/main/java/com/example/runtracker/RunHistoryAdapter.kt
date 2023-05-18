@@ -8,9 +8,9 @@ class RunHistoryAdapter(private val runItems: ArrayList<RunHistoryItem>, private
     : RecyclerView.Adapter<RunHistoryItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunHistoryItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.menu_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.run_item, parent, false)
         val layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
         view.layoutParams = layoutParams
         return RunHistoryItemViewHolder(view, onRunItemClickListener)
