@@ -17,27 +17,25 @@ class HistoryActivity : AppCompatActivity(), RunHistoryAdapter.OnRunItemClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
-
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory)
-        updateRecyclerView()
+        runViewModel.runs.observe(this) {
+            updateRecyclerView(it)
+        }
     }
 
-    private fun getRunHistoryItems(): ArrayList<RunHistoryItem> {
+    private fun getRunHistoryItems(runs: List<Run>): ArrayList<RunHistoryItem> {
         val runHistoryItems = ArrayList<RunHistoryItem>()
 
-        if(runViewModel.runs.value != null)
-        {
-            for(run in runViewModel.runs.value!!) {
-                runHistoryItems.add(RunHistoryItem(run.id, run.date, run.distance, run.duration))
-            }
+        runs.forEach {
+            runHistoryItems.add(RunHistoryItem(it.id, it.date, it.distance, it.duration))
         }
 
         return runHistoryItems
     }
 
-    private fun updateRecyclerView() {
+    private fun updateRecyclerView(runs: List<Run>) {
         recyclerViewHistory.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerViewHistory.adapter = RunHistoryAdapter(getRunHistoryItems(), this)
+        recyclerViewHistory.adapter = RunHistoryAdapter(getRunHistoryItems(runs), this)
     }
 
     override fun onClick(position: Int, runID: Int) {
