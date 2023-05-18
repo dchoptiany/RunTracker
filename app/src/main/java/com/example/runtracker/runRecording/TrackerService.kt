@@ -16,7 +16,7 @@ import org.osmdroid.util.GeoPoint
 import java.sql.Date
 import java.util.*
 
-class TrackerService() : Service() {
+class TrackerService : Service() {
     companion object {
         const val TRACKER_UPDATED = "trackerUpdated"
         const val DIST_EXTRA = "distExtra"
@@ -26,17 +26,17 @@ class TrackerService() : Service() {
 
     private val timer = Timer()
 
-    lateinit var currentLocation : GeoPoint
-    var latitude = 0.0
-    var longitude = 0.0
+    private lateinit var currentLocation: GeoPoint
+    private var latitude = 0.0
+    private var longitude = 0.0
 
-    lateinit var run : Run
-    var duration : Int = 0
-    var distance : Float = 0f
-    var points : MutableList<GeoPoint> = mutableListOf()
+    private lateinit var run: Run
+    private var duration: Int = 0
+    private var distance: Float = 0f
+    private var points: MutableList<GeoPoint> = mutableListOf()
 
-    lateinit var startingTime : Date
-    lateinit var stoppedTime : Date
+    private lateinit var startingTime: Date
+    private lateinit var stoppedTime: Date
 
     override fun onBind(p0: Intent?): IBinder? = null
 
@@ -57,7 +57,7 @@ class TrackerService() : Service() {
         super.onDestroy()
     }
 
-    fun startTracking() {
+    private fun startTracking() {
         // get "run start" time
         var starting = Calendar.getInstance().time
         startingTime = Date(starting.time)
@@ -66,10 +66,10 @@ class TrackerService() : Service() {
         timer.scheduleAtFixedRate(DistanceTask(distance), 0, 1000)
     }
 
-    fun stopTracking() {
+    private fun stopTracking() {
         // get "run stop" time
-        var stopped = Calendar.getInstance().time
-        stoppedTime  = Date(stopped.time)
+        val stopped = Calendar.getInstance().time
+        stoppedTime = Date(stopped.time)
 
         // calc "run duration"
         duration = (stoppedTime.time - startingTime.time).toInt()
@@ -83,39 +83,42 @@ class TrackerService() : Service() {
         timer.cancel()
     }
 
-    private inner class DistanceTask(private var distance : Float) : TimerTask() {
+    private inner class DistanceTask(private var distance: Float) : TimerTask() {
         override fun run() {
             // add way point
-            var runDataPair : Pair<Float, MutableList<GeoPoint>> =
+            val runDataPair: Pair<Float, MutableList<GeoPoint>> =
                 RunHelper.addWayPointToRun(points, distance, currentLocation)
             distance = runDataPair.first
             points = runDataPair.second
 
             // get curr location
-            var newLocation = getLocation()
+            val newLocation = getLocation()
             currentLocation = GeoPoint(newLocation.latitude, newLocation.longitude)
 
             // send data to MapFragment
-            var intent = Intent(TRACKER_UPDATED)
+            val intent = Intent(TRACKER_UPDATED)
             intent.putExtra(LAT_EXTRA, newLocation.latitude)
             intent.putExtra(LON_EXTRA, newLocation.longitude)
             intent.putExtra(DIST_EXTRA, distance)
             sendBroadcast(intent)
         }
 
-        fun getLocation() : Location {
-            var newLocation : Location = Location(LocationManager.NETWORK_PROVIDER)
-            var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            var hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        fun getLocation(): Location {
+            var newLocation = Location(LocationManager.NETWORK_PROVIDER)
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-            var networkLocationListener : LocationListener = object : LocationListener {
-                override fun onLocationChanged(location: Location) {
-                    newLocation = location
-                }
-            }
+            val networkLocationListener = LocationListener { location -> newLocation = location }
 
-            if(hasNetwork) {
-                if(ActivityCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (hasNetwork) {
+                if (ActivityCompat.checkSelfPermission(
+                        applicationContext,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                        applicationContext,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
                     Handler(Looper.getMainLooper()).post {
                         locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
@@ -127,7 +130,8 @@ class TrackerService() : Service() {
                 }
             }
 
-            var lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            val lastKnownLocation =
+                locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
             lastKnownLocation.let {
                 newLocation = lastKnownLocation!!
             }
@@ -135,6 +139,4 @@ class TrackerService() : Service() {
             return newLocation
         }
     }
-
-
 }
