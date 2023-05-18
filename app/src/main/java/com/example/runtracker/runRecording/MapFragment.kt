@@ -241,11 +241,9 @@ class MapFragment : Fragment() {
 
             // draw track
             val pointsArrayList = ArrayList<GeoPoint>(points)
-            track = roadManager.getRoad(pointsArrayList) // WIFI REQUIRED!
-
-            val trackOverlay: Polyline = RoadManager.buildRoadOverlay(track)
-
-            mapView.overlays.add(trackOverlay)
+            val polylineTrack = Polyline()
+            polylineTrack.setPoints(pointsArrayList)
+            mapView.overlays.add(polylineTrack)
             mapView.invalidate()
         }
     }
