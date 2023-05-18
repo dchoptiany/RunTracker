@@ -26,8 +26,8 @@ class MenuAdapter(var menuItems : ArrayList<MenuItem>,var  onBlockListener : OnB
     }
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
-        holder.text.text = menuItems[position].menuItemData
-        holder.image.setImageResource(menuItems[position].menuItemDarwable)
+        holder.text.text = menuItems[position].data
+        holder.image.setImageResource(menuItems[position].drawable)
     }
 
     interface OnBlockClickListener {
