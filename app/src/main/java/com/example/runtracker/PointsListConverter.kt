@@ -4,16 +4,36 @@ import androidx.room.TypeConverter
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.osmdroid.bonuspack.routing.GoogleRoadManager
 import org.osmdroid.util.GeoPoint
 
 class PointsListConverter {
     @TypeConverter
-    fun toString(list: MutableList<GeoPoint>): String {
-        return Json.encodeToString(list)
+    fun mutableListToString(list: MutableList<GeoPoint>): String {
+        val listOfSerializedPoints: ArrayList<String> = ArrayList()
+        for(point in list) {
+            listOfSerializedPoints.add(geoPointToString(point))
+        }
+        return Json.encodeToString(listOfSerializedPoints)
     }
 
     @TypeConverter
     fun toMutableList(value: String): MutableList<GeoPoint> {
-        return Json.decodeFromString(value)
+        val listOfSerializedPoints: List<String> = Json.decodeFromString(value)
+        val list: MutableList<GeoPoint> = ArrayList()
+        for(serializedPoint in listOfSerializedPoints) {
+            list.add(toGeoPoint(serializedPoint))
+        }
+        return list
+    }
+
+    @TypeConverter
+    fun toGeoPoint(pointString: String): GeoPoint {
+        return GeoPoint.fromDoubleString(pointString, ',')
+    }
+
+    @TypeConverter
+    fun geoPointToString(point: GeoPoint): String {
+        return point.toDoubleString()
     }
 }
