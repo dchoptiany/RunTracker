@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.runtracker.ColorPickerActivity
+import com.example.runtracker.settings.ColorPickerActivity
 import com.example.runtracker.R
 import com.example.runtracker.settingsItem
 

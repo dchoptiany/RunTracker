@@ -47,7 +47,7 @@
             android:name=".myAccount.MyAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".ColorPickerActivity"
+            android:name=".settings.ColorPickerActivity"
             android:exported="false" />
         <activity
             android:name=".SummaryActivity"

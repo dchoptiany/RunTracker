@@ -1,10 +1,11 @@
-package com.example.runtracker
+package com.example.runtracker.settings
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.runtracker.R
 
 class ColorPickerActivity: AppCompatActivity() {
     private lateinit var picker: com.larswerkman.holocolorpicker.ColorPicker
