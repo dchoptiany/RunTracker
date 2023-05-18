@@ -1,8 +1,9 @@
-package com.example.runtracker
+package com.example.runtracker.history
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
 
 class RunHistoryItemViewHolder(view: View, private val onRunItemClickListener: RunHistoryAdapter.OnRunItemClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
     var runID: Int = -1

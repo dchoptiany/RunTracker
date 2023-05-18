@@ -50,9 +50,9 @@
             android:name=".settings.ColorPickerActivity"
             android:exported="false" />
         <activity
-            android:name=".SummaryActivity"
+            android:name=".history.SummaryActivity"
             android:exported="false" />
-        <activity android:name=".HistoryActivity"
+        <activity android:name=".history.HistoryActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

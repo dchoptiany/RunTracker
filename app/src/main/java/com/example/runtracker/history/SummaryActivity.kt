@@ -1,9 +1,11 @@
-package com.example.runtracker
+package com.example.runtracker.history
 
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.runtracker.R
+import com.example.runtracker.RunApplication
 import com.example.runtracker.database.Run
 import kotlin.math.floor
 import kotlin.math.round

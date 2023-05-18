@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.history
 
 import java.sql.Date
 import java.util.*

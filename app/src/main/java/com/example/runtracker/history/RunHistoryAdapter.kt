@@ -1,8 +1,9 @@
-package com.example.runtracker
+package com.example.runtracker.history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
 
 class RunHistoryAdapter(private val runItems: ArrayList<RunHistoryItem>, private var onRunItemClickListener: OnRunItemClickListener)
     : RecyclerView.Adapter<RunHistoryItemViewHolder>() {
