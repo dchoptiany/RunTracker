@@ -60,7 +60,7 @@ class TrackerService : Service() {
 
     private fun startTracking() {
         // get "run start" time
-        var starting = Calendar.getInstance().time
+        val starting = Calendar.getInstance().time
         startingTime = Date(starting.time)
 
         // start recording location changes
@@ -104,27 +104,20 @@ class TrackerService : Service() {
             sendBroadcast(intent)
         }
 
-        fun getLocation() : Location {
+        fun getLocation(): Location {
 
-            var newLocationNetwork : Location? = null
-            var newLocationGPS : Location? = null
-            var locationManagerGPS = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            var locationManagerNetwork = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            var hasNetwork = locationManagerNetwork.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-            var hasGPS = locationManagerNetwork.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            var lastKnownLocationNetwork: Location? = null
+            var lastKnownLocationGPS: Location? = null
+            val locationManagerGPS = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManagerNetwork =
+                getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val hasNetwork =
+                locationManagerNetwork.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            val hasGPS = locationManagerNetwork.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
-
-            var networkLocationListener : LocationListener = object : LocationListener {
-                override fun onLocationChanged(location: Location) {
-                    newLocationNetwork = location
-                }
-            }
-
-            var GPSLocationListener : LocationListener = object : LocationListener {
-                override fun onLocationChanged(location: Location) {
-                    newLocationGPS = location
-                }
-            }
+            val networkLocationListener =
+                LocationListener { location -> lastKnownLocationNetwork = location }
+            val GPSLocationListener = LocationListener { location -> lastKnownLocationGPS = location }
 
             if (hasNetwork) {
                 if (ActivityCompat.checkSelfPermission(
@@ -146,8 +139,15 @@ class TrackerService : Service() {
                 }
             }
 
-            if(hasGPS) {
-                if(ActivityCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (hasGPS) {
+                if (ActivityCompat.checkSelfPermission(
+                        applicationContext,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                        applicationContext,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
                     Handler(Looper.getMainLooper()).post {
                         locationManagerGPS.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
@@ -159,30 +159,33 @@ class TrackerService : Service() {
                 }
             }
 
-            var lastKnownLocationNetwork = locationManagerNetwork.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-            var lastKnownLocationGPS = locationManagerNetwork.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            var lastKnownLocation : Location? = null
-            when (isBetterLocation(lastKnownLocationGPS, lastKnownLocationNetwork)) {
-                true -> lastKnownLocation = lastKnownLocationGPS
-                false -> lastKnownLocation = lastKnownLocationNetwork
-            }
+            lastKnownLocationNetwork =
+                locationManagerNetwork.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            lastKnownLocationGPS =
+                locationManagerNetwork.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            var lastKnownLocation: Location? = null
+            lastKnownLocation =
+                when (isBetterLocation(lastKnownLocationGPS, lastKnownLocationNetwork)) {
+                    true -> lastKnownLocationGPS
+                    false -> lastKnownLocationNetwork
+                }
 
             return lastKnownLocation!!
         }
 
-        fun isBetterLocation(location : Location?, currBestLocation : Location?) : Boolean{
-            if(currBestLocation == null) {
+        fun isBetterLocation(location: Location?, currBestLocation: Location?): Boolean {
+            if (currBestLocation == null) {
                 return true
             }
 
-            if(location == null) {
+            if (location == null) {
                 return false
             }
 
             // check whether the new location fix is newer or older
-            val timeDelta : Long = location.time - currBestLocation.time
+            val timeDelta: Long = location.time - currBestLocation.time
             val isSignificantlyNewer: Boolean = timeDelta > SIGNIFICANT_TIME_DIFFERENCE
-            val isSignificantlyOlder:Boolean = timeDelta < -SIGNIFICANT_TIME_DIFFERENCE
+            val isSignificantlyOlder: Boolean = timeDelta < -SIGNIFICANT_TIME_DIFFERENCE
 
             when {
                 // if it's been more than two minutes since the current location, use the new location because the user has likely moved
