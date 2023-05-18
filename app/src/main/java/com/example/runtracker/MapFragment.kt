@@ -237,11 +237,9 @@ class MapFragment : Fragment() {
 
             // draw track
             var pointsArrayList = ArrayList<GeoPoint>(points)
-            track = roadManager.getRoad(pointsArrayList) // WIFI REQUIRED!
-
-            var trackOverlay : Polyline = RoadManager.buildRoadOverlay(track)
-
-            mapView.overlays.add(trackOverlay)
+            var polylineTrack = Polyline()
+            polylineTrack.setPoints(pointsArrayList)
+            mapView.overlays.add(polylineTrack)
             mapView.invalidate()
         }
     }
