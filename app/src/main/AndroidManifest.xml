@@ -44,7 +44,7 @@
         <activity
             android:name=".GalleryImageDetailsActivity" />
         <activity
-            android:name=".MyAccountActivity"
+            android:name=".myAccount.MyAccountActivity"
             android:exported="false" />
         <activity
             android:name=".ColorPickerActivity"

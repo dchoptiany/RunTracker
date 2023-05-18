@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.myAccount
 
 import android.app.AlertDialog
 import android.content.Context
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
 import java.text.SimpleDateFormat
 import java.util.*
 

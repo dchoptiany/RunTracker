@@ -1,10 +1,11 @@
-package com.example.runtracker
+package com.example.runtracker.myAccount
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
 
 class MyAccountAdapter(private val menuItem : ArrayList<MyAccountItem>, var  onBlockListener : OnMyAccountClickListener) : RecyclerView.Adapter<MyAccountViewHolder>(){
 

@@ -1,4 +1,4 @@
-package com.example.runtracker
+package com.example.runtracker.myAccount
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.R
 
 class MyAccountActivity : AppCompatActivity(), MyAccountAdapter.OnMyAccountClickListener {
     private lateinit var sharedPreferences: SharedPreferences
