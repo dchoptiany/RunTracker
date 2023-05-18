@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 this.startActivity(mapIntent)
                 }
             1 -> {
-                val gallery = Intent(this,Gallery::class.java)
+                val gallery = Intent(this,GalleryActivity::class.java)
                 resultLauncher.launch(gallery)
             }
             2-> Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()

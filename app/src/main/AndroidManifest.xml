@@ -40,7 +40,7 @@
             android:name=".ImageDetails"
             android:exported="false" />
         <activity
-            android:name=".Gallery" />
+            android:name=".GalleryActivity" />
         <activity
             android:name=".GalleryImageDetails" />
         <activity
