@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -90,7 +89,7 @@ class Settings :  AppCompatActivity() , SettingsAdapter.OnSettingsItemClickListe
     @SuppressLint("NotifyDataSetChanged")
     override fun onBlockClick(position: Int) {
         if(position==0) {
-            val colorIntent = Intent(this, ColorPicker::class.java)
+            val colorIntent = Intent(this, ColorPickerActivity::class.java)
             resultLauncher.launch(colorIntent)
         }
         setAppAppearance()
