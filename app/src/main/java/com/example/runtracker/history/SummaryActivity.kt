@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.runtracker.R
 import com.example.runtracker.RunApplication
 import com.example.runtracker.database.Run
+import com.example.runtracker.database.RunModelFactory
+import com.example.runtracker.database.RunViewModel
 import kotlin.math.floor
 import kotlin.math.round
 

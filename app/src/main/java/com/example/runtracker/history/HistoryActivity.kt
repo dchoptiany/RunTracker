@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.*
 import com.example.runtracker.database.Run
+import com.example.runtracker.database.RunModelFactory
+import com.example.runtracker.database.RunViewModel
 
 class HistoryActivity : AppCompatActivity(), RunHistoryAdapter.OnRunItemClickListener {
     private lateinit var recyclerViewHistory: RecyclerView
