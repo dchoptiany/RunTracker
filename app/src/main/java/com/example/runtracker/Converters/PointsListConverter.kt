@@ -1,10 +1,9 @@
-package com.example.runtracker.Converters
+package com.example.runtracker.converters
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.osmdroid.bonuspack.routing.GoogleRoadManager
 import org.osmdroid.util.GeoPoint
 
 class PointsListConverter {
