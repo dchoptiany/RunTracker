@@ -25,23 +25,23 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
         return run as LiveData<Run>
     }
 
-    fun insertRun(run: Run) = viewModelScope.launch {
+    fun insertRun(run: Run) {
         repository.insertRun(run)
     }
 
-    fun insertRuns(vararg runs: Run) = viewModelScope.launch {
+    fun insertRuns(vararg runs: Run) {
         repository.insertRuns(*runs)
     }
 
-    fun deleteRun(run: Run) = viewModelScope.launch {
+    fun deleteRun(run: Run) {
         repository.delete(run)
     }
 
-    fun deleteAllRuns() = viewModelScope.launch {
+    fun deleteAllRuns() {
         repository.deleteAll()
     }
 
-    fun updateRun(run: Run) = viewModelScope.launch {
+    fun updateRun(run: Run) {
         repository.updateRun(run)
     }
 }
