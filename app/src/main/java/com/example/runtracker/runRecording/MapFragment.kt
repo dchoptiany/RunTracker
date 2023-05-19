@@ -29,8 +29,6 @@ import com.example.runtracker.gallery.ImageDetailsActivity
 import com.github.clans.fab.FloatingActionButton
 import org.osmdroid.api.IMapController
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
-import org.osmdroid.bonuspack.routing.Road
-import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -75,7 +73,6 @@ class MapFragment : Fragment() {
     private lateinit var myLocationOverlay: MyLocationNewOverlay
     private lateinit var currentLocation: GeoPoint
     private lateinit var roadManager: OSRMRoadManager
-    private lateinit var track: Road
     private var points: MutableList<GeoPoint> = mutableListOf()
     private val pins: ArrayList<OverlayItem> = ArrayList()
 
@@ -241,11 +238,9 @@ class MapFragment : Fragment() {
 
             // draw track
             val pointsArrayList = ArrayList<GeoPoint>(points)
-            track = roadManager.getRoad(pointsArrayList) // WIFI REQUIRED!
-
-            val trackOverlay: Polyline = RoadManager.buildRoadOverlay(track)
-
-            mapView.overlays.add(trackOverlay)
+            val polylineTrack = Polyline()
+            polylineTrack.setPoints(pointsArrayList)
+            mapView.overlays.add(polylineTrack)
             mapView.invalidate()
         }
     }
