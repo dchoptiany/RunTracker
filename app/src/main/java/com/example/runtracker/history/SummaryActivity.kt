@@ -1,6 +1,8 @@
 package com.example.runtracker.history
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -8,12 +10,17 @@ import com.example.runtracker.R
 import com.example.runtracker.RunApplication
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import kotlin.math.floor
 import kotlin.math.round
 
 class SummaryActivity : AppCompatActivity() {
+    private var runID: Int = -1
+
     private val viewModel: RunViewModel by viewModels {
         RunModelFactory((application as RunApplication).repository)
     }
@@ -33,8 +40,12 @@ class SummaryActivity : AppCompatActivity() {
         textViewPace = findViewById(R.id.textViewPace)
 
         if(intent != null) {
-            val runID = intent.getIntExtra("runID", -1)
+            runID = intent.getIntExtra("runID", -1)
             viewModel.runByID(runID).observe(this) {
+                if(it == null) {
+                    return@observe
+                }
+
                 val timeSeconds = it.duration
                 val distanceKilometers = it.distance
                 val hours: Int = timeSeconds / 3600 // full hours
@@ -55,6 +66,18 @@ class SummaryActivity : AppCompatActivity() {
                 textViewTime.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
                 textViewPace.text = "${String.format("%02d:%02d", paceMinutes, paceSeconds)} min/km"
             }
+        }
+
+        findViewById<Button>(R.id.buttonDeleteRun).setOnClickListener {
+            buttonDeleteClicked(it)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun buttonDeleteClicked(view: View) {
+        GlobalScope.launch {
+            viewModel.deleteByID(runID)
+            finish()
         }
     }
 }

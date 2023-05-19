@@ -32,6 +32,11 @@ class RunRepository(private val runDao: RunDao) {
     }
 
     @WorkerThread
+    fun deleteByID(runID: Int) {
+        runDao.deleteByID(runID)
+    }
+
+    @WorkerThread
     fun delete(run: Run) {
         runDao.delete(run)
     }

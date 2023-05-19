@@ -24,6 +24,10 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
         repository.insertRuns(*runs)
     }
 
+    fun deleteByID(runID: Int) {
+        repository.deleteByID(runID)
+    }
+
     fun deleteRun(run: Run) {
         repository.delete(run)
     }
