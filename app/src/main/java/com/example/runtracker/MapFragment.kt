@@ -39,6 +39,8 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import kotlin.math.floor
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 
@@ -84,8 +86,8 @@ class MapFragment : Fragment() {
         Log.i("mytracker", "CREATE VIEW")
 
         // setup policy for threads
-        val policy = ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+        //val policy = ThreadPolicy.Builder().permitAll().build()
+        //StrictMode.setThreadPolicy(policy)
 
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_map, container, false)
@@ -209,6 +211,14 @@ class MapFragment : Fragment() {
         override fun onReceive(context: Context, intent : Intent) {
             time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
             timeTextView.text = getTimeStringFromDouble(time)
+
+            // update pace
+            if(time != 0.0 && distance > 0) {
+                var timeInMinutes = time / 60f
+                var distanceInKm = distance / 1000f
+                pace = timeInMinutes / distanceInKm.toDouble() // paceMinPerKm
+                paceTextView.text = getPaceString(pace)
+            }
         }
     }
 
@@ -230,10 +240,6 @@ class MapFragment : Fragment() {
             if(distance != 0f) {
                 distanceTextView.text = getDistanceString(distance)
             }
-
-            // update pace
-            pace = time / distance.toDouble()
-            paceTextView.text = getPaceString(pace)
 
             // draw track
             var pointsArrayList = ArrayList<GeoPoint>(points)
@@ -283,9 +289,6 @@ class MapFragment : Fragment() {
 
     fun pauseTracker() {
         requireActivity().stopService(trackerIntent)
-
-        // clear pace
-        paceTextView.text = "00:00 min/km"
     }
 
     private fun pauseTimer() {
@@ -351,11 +354,11 @@ class MapFragment : Fragment() {
         return df.format(distance / 1000) + " km"
     }
 
-    fun getPaceString(pace : Double) : String {
-        var minutes : Int = pace.toInt() % 86400 % 3600 / 60
-        var seconds : Int = pace.toInt() % 86400 % 3600 % 60
+    fun getPaceString(paceMinPerKm : Double) : String {
+        var paceMin : Int = floor(paceMinPerKm).toInt() // pace full minutes
+        var paceSec : Int = round((paceMinPerKm - paceMin)*60).toInt()
 
-        return String.format("%02d:%02d", minutes, seconds) + " min/km"
+        return String.format("%02d:%02d", paceMin, paceSec) + " min/km"
     }
 
     private fun makeTimeString(hours: Int, minutes: Int, seconds: Int): String {
