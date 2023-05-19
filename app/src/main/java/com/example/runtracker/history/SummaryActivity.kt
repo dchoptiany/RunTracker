@@ -8,6 +8,8 @@ import com.example.runtracker.R
 import com.example.runtracker.RunApplication
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import kotlin.math.floor
 import kotlin.math.round
 
@@ -46,7 +48,10 @@ class SummaryActivity : AppCompatActivity() {
                 val paceSeconds: Int =
                     round((paceMinPerKm - paceMinutes) * 60).toInt()  // pace seconds (decimal part converted from minutes to seconds)
 
-                textViewDistance.text = "$distanceKilometers km"
+                val distanceDecimalFormat = DecimalFormat("####.###").apply {
+                    roundingMode = RoundingMode.CEILING
+                }
+                textViewDistance.text = "${distanceDecimalFormat.format(distanceKilometers)} km"
                 textViewTime.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
                 textViewPace.text = "${String.format("%02d:%02d", paceMinutes, paceSeconds)} min/km"
             }
