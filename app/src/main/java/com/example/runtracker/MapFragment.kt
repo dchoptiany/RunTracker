@@ -86,8 +86,8 @@ class MapFragment : Fragment() {
         Log.i("mytracker", "CREATE VIEW")
 
         // setup policy for threads
-        val policy = ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+        //val policy = ThreadPolicy.Builder().permitAll().build()
+        //StrictMode.setThreadPolicy(policy)
 
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_map, container, false)
