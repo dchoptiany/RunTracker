@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.runtracker.R
 import com.example.runtracker.RunApplication
-import com.example.runtracker.database.Run
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
 import kotlin.math.floor
@@ -33,22 +32,24 @@ class SummaryActivity : AppCompatActivity() {
 
         if(intent != null) {
             val runID = intent.getIntExtra("runID", -1)
-            val run: Run = viewModel.runByID(runID).value ?: return
+            viewModel.runByID(runID).observe(this) {
+                val timeSeconds = it.duration
+                val distanceKilometers = it.distance
+                val hours: Int = timeSeconds / 3600 // full hours
+                val minutes: Int = (timeSeconds - (hours * 3600)) / 60 // full minutes
+                val seconds: Int = timeSeconds % 60 // seconds
 
-            val distanceKilometers = run.distance
-            val timeSeconds = run.duration
-            val hours = timeSeconds / 3600 // full hours
-            val minutes = (timeSeconds - (hours * 3600)) / 60 // full minutes
-            val seconds = timeSeconds % 60 // seconds
+                val timeMinutes: Float = timeSeconds / 60f // exact minutes
+                val paceMinPerKm: Float =
+                    timeMinutes / distanceKilometers // pace in minutes per kilometer
+                val paceMinutes: Int = floor(paceMinPerKm).toInt() // pace full minutes
+                val paceSeconds: Int =
+                    round((paceMinPerKm - paceMinutes) * 60).toInt()  // pace seconds (decimal part converted from minutes to seconds)
 
-            val timeMinutes: Float = timeSeconds / 60f // exact minutes
-            val paceMinPerKm: Float = timeMinutes / distanceKilometers // pace in minutes per kilometer
-            val paceMinutes = floor(paceMinPerKm) // pace full minutes
-            val paceSeconds = round((paceMinPerKm - paceMinutes) * 60)  // pace seconds (decimal part converted from minutes to seconds)
-
-            textViewDistance.text = "$distanceKilometers km"
-            textViewTime.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-            textViewPace.text = "${String.format("%02d:%02d", paceMinutes, paceSeconds)} min/km"
+                textViewDistance.text = "$distanceKilometers km"
+                textViewTime.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                textViewPace.text = "${String.format("%02d:%02d", paceMinutes, paceSeconds)} min/km"
+            }
         }
     }
 }
