@@ -52,17 +52,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintBottom_toTopOf="@id/rv"
-
-        >
-
-
-
-
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewAccount">
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv"
+        android:id="@+id/recyclerViewAccount"
         android:layout_width="409dp"
         android:layout_height="500dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +76,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewAccount"
         app:layout_constraintVertical_bias="0.724">
 
     </Button>

@@ -29,30 +29,30 @@
         android:theme="@style/Theme.RunTracker"
         tools:targetApi="31">
         <activity
-            android:name=".MapActivity"
+            android:name=".runRecording.MapActivity"
             android:exported="false" />
         <activity
-            android:name=".Settings"
+            android:name=".settings.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".Camera" />
+            android:name=".gallery.CameraActivity" />
         <activity
-            android:name=".ImageDetails"
+            android:name=".gallery.ImageDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Gallery" />
+            android:name=".gallery.GalleryActivity" />
         <activity
-            android:name=".GalleryImageDetails" />
+            android:name=".gallery.GalleryImageDetailsActivity" />
         <activity
-            android:name=".MyAccount"
+            android:name=".myAccount.MyAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".ColorPicker"
+            android:name=".settings.ColorPickerActivity"
             android:exported="false" />
         <activity
-            android:name=".SummaryActivity"
+            android:name=".history.SummaryActivity"
             android:exported="false" />
-        <activity android:name=".HistoryActivity"
+        <activity android:name=".history.HistoryActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -64,8 +64,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".TimerService"/>
-        <service android:name=".TrackerService"/>
+        <service android:name=".runRecording.TimerService"/>
+        <service android:name=".runRecording.TrackerService"/>
     </application>
 
 </manifest>
