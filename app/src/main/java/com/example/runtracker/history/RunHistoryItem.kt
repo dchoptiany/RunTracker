@@ -1,6 +1,8 @@
 package com.example.runtracker.history
 
+import java.math.RoundingMode
 import java.sql.Date
+import java.text.DecimalFormat
 import java.util.*
 
 class RunHistoryItem(private var runID: Int, private var date: Date, private var distance: Float,
@@ -38,7 +40,11 @@ class RunHistoryItem(private var runID: Int, private var date: Date, private var
     }
 
     fun getDistance(): String {
-        return "$distance km"
+        val decimalFormat = DecimalFormat("####.###").apply {
+            roundingMode = RoundingMode.CEILING
+        }
+
+        return "${decimalFormat.format(distance)} km"
     }
 
     fun getDuration(): String {

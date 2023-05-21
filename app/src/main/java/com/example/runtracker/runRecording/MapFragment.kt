@@ -1,17 +1,12 @@
 package com.example.runtracker.runRecording
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,11 +17,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.runtracker.BuildConfig
 import com.example.runtracker.R
+import com.example.runtracker.RunApplication
+import com.example.runtracker.database.Run
+import com.example.runtracker.database.RunModelFactory
+import com.example.runtracker.database.RunViewModel
 import com.example.runtracker.gallery.CameraActivity
 import com.example.runtracker.gallery.ImageDetailsActivity
 import com.github.clans.fab.FloatingActionButton
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.config.Configuration
@@ -40,7 +43,9 @@ import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.math.RoundingMode
+import java.sql.Date
 import java.text.DecimalFormat
+import java.util.Calendar
 import kotlin.math.floor
 import kotlin.math.round
 import kotlin.math.roundToInt
@@ -51,6 +56,10 @@ class MapFragment : Fragment() {
         const val ACTIVITY_STARTED = "activityStarted"
         const val ACTIVITY_PAUSED = "activityPaused"
         const val ACTIVITY_STOPPED = "activityStopped"
+    }
+
+    private val runViewModel: RunViewModel by viewModels {
+        RunModelFactory((requireActivity().application as RunApplication).repository)
     }
 
     private var activityStatus: String = ""
@@ -199,7 +208,7 @@ class MapFragment : Fragment() {
             },
             context
         )
-        mapView.overlays.add(overlay);
+        mapView.overlays.add(overlay)
     }
 
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
@@ -208,9 +217,9 @@ class MapFragment : Fragment() {
             timeTextView.text = getTimeStringFromDouble(time)
 
             // update pace
-            if(time != 0.0 && distance > 0) {
-                var timeInMinutes = time / 60f
-                var distanceInKm = distance / 1000f
+            if (time != 0.0 && distance > 0) {
+                val timeInMinutes = time / 60f
+                val distanceInKm = distance / 1000f
                 pace = timeInMinutes / distanceInKm.toDouble() // paceMinPerKm
                 paceTextView.text = getPaceString(pace)
             }
@@ -290,11 +299,22 @@ class MapFragment : Fragment() {
         requireActivity().stopService(serviceIntent)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun stopActivity() {
         Toast.makeText(requireContext(), "Running stopped!", Toast.LENGTH_SHORT).show()
 
         // change status
         activityStatus = ACTIVITY_STOPPED
+
+        // saving recorded run in database
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val run = Run(0, Date.valueOf("$year-$month-$day"), distance / 1000, time.toInt(), points)
+        GlobalScope.launch {
+            runViewModel.insertRun(run)
+        }
 
         resetTimer()
         stopTracker()
@@ -364,9 +384,9 @@ class MapFragment : Fragment() {
         return df.format(distance / 1000) + " km"
     }
 
-    fun getPaceString(paceMinPerKm : Double) : String {
-        var paceMin : Int = floor(paceMinPerKm).toInt() // pace full minutes
-        var paceSec : Int = round((paceMinPerKm - paceMin)*60).toInt()
+    fun getPaceString(paceMinPerKm: Double): String {
+        val paceMin: Int = floor(paceMinPerKm).toInt() // pace full minutes
+        val paceSec: Int = round((paceMinPerKm - paceMin) * 60).toInt()
 
         return String.format("%02d:%02d", paceMin, paceSec) + " min/km"
     }

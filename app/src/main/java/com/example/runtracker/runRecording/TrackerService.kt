@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.ActivityCompat
-import com.example.runtracker.database.Run
 import org.osmdroid.util.GeoPoint
 import java.sql.Date
 import java.util.*
@@ -31,7 +30,6 @@ class TrackerService : Service() {
     private var latitude = 0.0
     private var longitude = 0.0
 
-    private lateinit var run: Run
     private var duration: Int = 0
     private var distance: Float = 0f
     private var points: MutableList<GeoPoint> = mutableListOf()
@@ -74,11 +72,6 @@ class TrackerService : Service() {
 
         // calc "run duration"
         duration = (stoppedTime.time - startingTime.time).toInt()
-
-        // create run object based on collected data
-        run = Run(0, startingTime, distance, duration, points)
-
-        //TODO: save run object in database
 
         // stop recording location changes
         timer.cancel()

@@ -1,7 +1,6 @@
 package com.example.runtracker.database
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.launch
 import java.sql.Date
 
 class RunViewModel(private val repository: RunRepository): ViewModel() {
@@ -10,19 +9,11 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
     var totalDistance: LiveData<Float> = repository.totalDistance.asLiveData()
 
     fun runsByDate(date: Date): LiveData<List<Run>> {
-        var runs: LiveData<List<Run>>? = null
-        viewModelScope.launch {
-            runs = repository.getByDate(date).asLiveData()
-        }
-        return runs as LiveData<List<Run>>
+        return repository.getByDate(date).asLiveData()
     }
 
     fun runByID(ID: Int): LiveData<Run> {
-        var run: LiveData<Run>? = null
-        viewModelScope.launch {
-            run = repository.getByID(ID).asLiveData()
-        }
-        return run as LiveData<Run>
+        return repository.getByID(ID).asLiveData()
     }
 
     fun insertRun(run: Run) {
@@ -31,6 +22,10 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
 
     fun insertRuns(vararg runs: Run) {
         repository.insertRuns(*runs)
+    }
+
+    fun deleteByID(runID: Int) {
+        repository.deleteByID(runID)
     }
 
     fun deleteRun(run: Run) {
