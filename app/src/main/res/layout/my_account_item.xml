@@ -18,15 +18,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
             android:layout_margin="10dp"
-
             android:gravity="center"
             android:text="data"
             android:textSize="16sp"
@@ -34,13 +32,13 @@
 
 
         <TextView
-            android:id="@+id/data"
+            android:id="@+id/textViewData"
             android:layout_width="match_parent"
-            android:text = "text"
+            android:text="text"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="16sp"
-            android:layout_marginRight="25dp"
+            android:layout_marginEnd="25dp"
             android:textAlignment="textEnd"
             tools:ignore="RtlCompat,UseSwitchCompatOrMaterialXml" />
 
