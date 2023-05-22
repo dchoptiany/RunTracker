@@ -19,35 +19,38 @@ class StatisticsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_statistics)
 
         viewModel.numberOfRuns.observe(this) {
-            findViewById<TextView>(R.id.textViewTotalRuns).text = it.toString()
+            findViewById<TextView>(R.id.textViewTotalRuns).text =
+                "Total runs: $it"
         }
 
         viewModel.totalDistance.observe(this) {
             findViewById<TextView>(R.id.textViewTotalDistance).text =
-                StringFormatter.getInstance().formatDistance(it)
+                "Total distance: ${StringFormatter.getInstance().formatDistance(it)}"
         }
 
         viewModel.totalDuration.observe(this) {
             findViewById<TextView>(R.id.textViewTotalDuration).text =
-                StringFormatter.getInstance().formatTime(it)
+                "Total duration: ${StringFormatter.getInstance().formatTime(it)}"
         }
 
         /*viewModel.totalPhotos.observe(this) {
-            findViewById<TextView>(R.id.textViewTotalPhotos).text = it.toString()
+            findViewById<TextView>(R.id.textViewTotalPhotos).text =
+            "Total photos: $it"
         }*/
 
         viewModel.longestDistance.observe(this) {
             findViewById<TextView>(R.id.textViewLongestDistance).text =
-                StringFormatter.getInstance().formatDistance(it)
+                "Longest distance: ${StringFormatter.getInstance().formatDistance(it)}"
         }
 
         viewModel.longestDuration.observe(this) {
             findViewById<TextView>(R.id.textViewLongestDuration).text =
-                StringFormatter.getInstance().formatTime(it)
+                "Longest duration: ${StringFormatter.getInstance().formatTime(it)}"
         }
 
         /*viewModel.mostPhotosInRun.observe(this) {
-            findViewById<TextView>(R.id.textViewMostPhotos).text = it.toString()
+            findViewById<TextView>(R.id.textViewMostPhotos).text =
+             "Most photos in run: $it"
         }*/
     }
 }
