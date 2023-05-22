@@ -13,12 +13,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.runtracker.gallery.GalleryActivity
+import com.example.runtracker.history.HistoryActivity
+import com.example.runtracker.menu.MenuAdapter
+import com.example.runtracker.menu.MenuItem
+import com.example.runtracker.myAccount.MyAccountActivity
+import com.example.runtracker.runRecording.MapActivity
+import com.example.runtracker.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
-    lateinit var rv : RecyclerView
-    var menuItems : ArrayList<MenuItem> = ArrayList()
-    lateinit var  sharedPreferences : SharedPreferences
-    lateinit var editor: SharedPreferences.Editor
+    private lateinit var recyclerViewMenuItems: RecyclerView
+    private var menuItems: ArrayList<MenuItem> = ArrayList()
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,52 +36,54 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         setView()
     }
 
-    fun setView(){
-        rv = findViewById(R.id.rv)
-        rv.layoutManager = GridLayoutManager(applicationContext,2)
-        rv.adapter = MenuAdapter(menuItems,this)
+    private fun setView() {
+        recyclerViewMenuItems = findViewById(R.id.recyclerViewMenuItems)
+        recyclerViewMenuItems.layoutManager = GridLayoutManager(applicationContext, 2)
+        recyclerViewMenuItems.adapter = MenuAdapter(menuItems, this)
     }
 
-    fun addMenuItems(){
-        addtoMenuItemsList("START ACTIVITY",R.drawable.activites)
-        addtoMenuItemsList("GALLERY",R.drawable.aparat)
-        addtoMenuItemsList("STATISTICS",R.drawable.statistics)
-        addtoMenuItemsList("MY ACCOUNT",R.drawable.account)
-        addtoMenuItemsList("HISTORY",R.drawable.history)
-        addtoMenuItemsList("SETTINGS",R.drawable.settings)
+    private fun addMenuItems() {
+        addToMenuItemsList("START ACTIVITY", R.drawable.activites)
+        addToMenuItemsList("GALLERY", R.drawable.camera)
+        addToMenuItemsList("STATISTICS", R.drawable.statistics)
+        addToMenuItemsList("MY ACCOUNT", R.drawable.account)
+        addToMenuItemsList("HISTORY", R.drawable.history)
+        addToMenuItemsList("SETTINGS", R.drawable.settings)
     }
 
-    fun addtoMenuItemsList(data : String, drawable : Int){
-        val menuItem = MenuItem(data,drawable)
-        menuItems.add(menuItem)
+    private fun addToMenuItemsList(data: String, drawable: Int) {
+        menuItems.add(MenuItem(data, drawable))
     }
 
     override fun onBlockClick(position: Int, date: String) {
-        when(position) {
+        when (position) {
             0 -> {
-                val mapIntent = Intent(this, MapActivity::class.java)
-                this.startActivity(mapIntent)
+                Intent(this, MapActivity::class.java).also {
+                    startActivity(it)
                 }
+            }
             1 -> {
-                val gallery = Intent(this,Gallery::class.java)
-                resultLauncher.launch(gallery)
+                Intent(this, GalleryActivity::class.java).also {
+                    resultLauncher.launch(it)
+                }
             }
-            2-> Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
-            3-> {
-                val myAccount = Intent(this, MyAccount::class.java)
-                resultLauncher.launch(myAccount)
+            2 -> Toast.makeText(this, "3", Toast.LENGTH_SHORT).show()
+            3 -> {
+                Intent(this, MyAccountActivity::class.java).also {
+                    resultLauncher.launch(it)
+                }
             }
-            4-> {
+            4 -> {
                 Intent(this, HistoryActivity::class.java).also {
                     startActivity(it)
                 }
             }
-            5-> {
-                val settings = Intent(this, Settings::class.java)
-                resultLauncher.launch(settings)
+            5 -> {
+                Intent(this, SettingsActivity::class.java).also {
+                    resultLauncher.launch(it)
+                }
             }
         }
-
     }
 
     @SuppressLint("ResourceAsColor")
@@ -82,31 +91,32 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         super.onResume()
         val background = findViewById<ConstraintLayout>(R.id.constraint)
         val header = findViewById<LinearLayout>(R.id.linearLayout)
-        if(sharedPreferences.getBoolean("darkMode",false)){
-            var newColor = Color.rgb(170,170,170)
+        if (sharedPreferences.getBoolean("darkMode", false)) {
+            val newColor = Color.rgb(170, 170, 170)
             background.setBackgroundColor(newColor)
             header.setBackgroundColor(Color.BLACK)
-
-        }
-        else{
-            header.setBackgroundColor(sharedPreferences.getInt("color",Color.BLACK))
+        } else {
+            header.setBackgroundColor(sharedPreferences.getInt("color", Color.BLACK))
             background.setBackgroundColor(Color.WHITE)
         }
-
     }
 
-
-    var resultLauncher =registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result-> val data = result.data
-        if (data != null) {
-            data.getBooleanExtra("darkMode",false).let { editor.putBoolean("darkMode",it)
-            editor.apply()
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            if (data != null) {
+                data.getBooleanExtra("darkMode", false).let {
+                    editor.putBoolean("darkMode", it)
+                    editor.apply()
+                }
+                data.getBooleanExtra("notifications", false).let {
+                    editor.putBoolean("notifications", it)
+                    editor.apply()
+                }
+                data.getIntExtra("color", Color.BLACK).let {
+                    editor.putInt("color", it)
+                    editor.apply()
+                }
             }
-            data.getBooleanExtra("notifications",false).let { editor.putBoolean("notifications",it)
-            editor.apply()}
-            data.getIntExtra("color",Color.BLACK).let { editor.putInt("color",it)
-            editor.apply()}
         }
-    }
-
 }
