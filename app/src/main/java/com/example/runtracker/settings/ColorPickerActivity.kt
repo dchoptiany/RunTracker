@@ -45,7 +45,7 @@ class ColorPickerActivity: AppCompatActivity() {
 
     private fun setAppAppearance() {
         val header = findViewById<LinearLayout>(R.id.linearLayout)
-        val background = findViewById<ConstraintLayout>(R.id.main)
+        val background = findViewById<LinearLayout>(R.id.main)
         if (sharedPreferences.getBoolean("darkMode", false)) {
             header.setBackgroundColor(Color.BLACK)
             background.setBackgroundColor(Color.rgb(170, 170, 170))
