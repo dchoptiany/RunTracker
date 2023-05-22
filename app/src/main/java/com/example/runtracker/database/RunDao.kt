@@ -22,7 +22,7 @@ interface RunDao {
     fun getTotalDistance(): Flow<Float>
 
     @Query("SELECT SUM(duration) FROM run")
-    fun getTotalDuration(): Flow<Long>
+    fun getTotalDuration(): Flow<Int>
 
     @Query("SELECT MAX(distance) FROM run")
     fun getLongestDistance(): Flow<Float>
