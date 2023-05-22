@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
+import com.example.runtracker.statistics.StringFormatter
 
 class RunHistoryAdapter(private val runItems: ArrayList<RunHistoryItem>,
                         private var onRunItemClickListener: OnRunItemClickListener)
@@ -25,8 +26,8 @@ class RunHistoryAdapter(private val runItems: ArrayList<RunHistoryItem>,
     override fun onBindViewHolder(holder: RunHistoryItemViewHolder, position: Int) {
         holder.runID = runItems[position].getRunID()
         holder.textViewName.text = runItems[position].getName()
-        holder.textViewDistance.text = runItems[position].getDistance()
-        holder.textViewDuration.text = runItems[position].getDuration()
+        holder.textViewDistance.text =  StringFormatter.getInstance().formatDistance(runItems[position].distance)
+        holder.textViewDuration.text =  StringFormatter.getInstance().formatTime(runItems[position].duration)
     }
 
     interface OnRunItemClickListener {

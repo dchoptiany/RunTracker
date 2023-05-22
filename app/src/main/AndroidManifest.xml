@@ -54,6 +54,8 @@
             android:exported="false" />
         <activity android:name=".history.HistoryActivity"
             android:exported="false" />
+        <activity android:name=".statistics.StatisticsActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
