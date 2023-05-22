@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,6 +27,8 @@ class MyAccountActivity : AppCompatActivity(), MyAccountAdapter.OnMyAccountClick
         sharedPreferences = getSharedPreferences("my_account", Context.MODE_PRIVATE)
         sharedPreferencesSettings = getSharedPreferences("settings", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
+        val title = findViewById<TextView>(R.id.text)
+        title.text = "My Account"
         addMenuItems()
         setView()
         setAppAppearance()
