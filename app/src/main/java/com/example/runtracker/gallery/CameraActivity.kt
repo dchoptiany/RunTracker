@@ -47,8 +47,7 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
-        filename =
-            (kotlin.math.abs(latitude) + kotlin.math.abs(longitude)).toString().replace(".", "")
+        filename = (kotlin.math.abs(latitude) + kotlin.math.abs(longitude)).toString().replace(".", "")
         filename += "${System.currentTimeMillis()}"
         savedFilePath = "${getExternalFilesDir(null)?.absolutePath}/${filename}.jpg"
         cameraExecutor = Executors.newSingleThreadExecutor()

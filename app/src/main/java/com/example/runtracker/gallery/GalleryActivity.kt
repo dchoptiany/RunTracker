@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +23,8 @@ class GalleryActivity : AppCompatActivity(), GalleryAdapter.OnImageClickListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
+        val title = findViewById<TextView>(R.id.text)
+        title.text = "Gallery"
         recyclerViewImages = findViewById(R.id.recyclerViewImages)
         sharedPreferencesSettings = getSharedPreferences("settings", Context.MODE_PRIVATE)
         setAppAppearance()

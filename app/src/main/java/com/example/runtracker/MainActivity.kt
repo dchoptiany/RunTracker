@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         setContentView(R.layout.activity_main)
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
+        val title = findViewById<TextView>(R.id.text)
+        title.text = "Main menu"
         addMenuItems()
         setView()
     }
@@ -119,4 +122,6 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 }
             }
         }
+
+
 }
