@@ -10,6 +10,7 @@ import com.example.runtracker.R
 import com.example.runtracker.RunApplication
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
+import com.example.runtracker.statistics.StringFormatter
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,23 +49,14 @@ class SummaryActivity : AppCompatActivity() {
 
                 val timeSeconds = it.duration
                 val distanceKilometers = it.distance
-                val hours: Int = timeSeconds / 3600 // full hours
-                val minutes: Int = (timeSeconds - (hours * 3600)) / 60 // full minutes
-                val seconds: Int = timeSeconds % 60 // seconds
 
                 val timeMinutes: Float = timeSeconds / 60f // exact minutes
                 val paceMinPerKm: Float =
                     timeMinutes / distanceKilometers // pace in minutes per kilometer
-                val paceMinutes: Int = floor(paceMinPerKm).toInt() // pace full minutes
-                val paceSeconds: Int =
-                    round((paceMinPerKm - paceMinutes) * 60).toInt()  // pace seconds (decimal part converted from minutes to seconds)
 
-                val distanceDecimalFormat = DecimalFormat("####.###").apply {
-                    roundingMode = RoundingMode.CEILING
-                }
-                textViewDistance.text = "${distanceDecimalFormat.format(distanceKilometers)} km"
-                textViewTime.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                textViewPace.text = "${String.format("%02d:%02d", paceMinutes, paceSeconds)} min/km"
+                textViewDistance.text = StringFormatter.getInstance().formatDistance(distanceKilometers)
+                textViewTime.text = StringFormatter.getInstance().formatTime(timeSeconds)
+                textViewPace.text = StringFormatter.getInstance().formatPace(paceMinPerKm)
             }
         }
 

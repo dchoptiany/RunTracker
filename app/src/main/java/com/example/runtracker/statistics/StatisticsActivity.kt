@@ -23,11 +23,13 @@ class StatisticsActivity : AppCompatActivity() {
         }
 
         viewModel.totalDistance.observe(this) {
-            findViewById<TextView>(R.id.textViewTotalDistance).text = it.toString()
+            findViewById<TextView>(R.id.textViewTotalDistance).text =
+                StringFormatter.getInstance().formatDistance(it)
         }
 
         viewModel.totalDuration.observe(this) {
-            findViewById<TextView>(R.id.textViewTotalDuration).text = it.toString()
+            findViewById<TextView>(R.id.textViewTotalDuration).text =
+                StringFormatter.getInstance().formatTime(it)
         }
 
         /*viewModel.totalPhotos.observe(this) {
@@ -35,11 +37,13 @@ class StatisticsActivity : AppCompatActivity() {
         }*/
 
         viewModel.longestDistance.observe(this) {
-            findViewById<TextView>(R.id.textViewLongestDistance).text = it.toString()
+            findViewById<TextView>(R.id.textViewLongestDistance).text =
+                StringFormatter.getInstance().formatDistance(it)
         }
 
         viewModel.longestDuration.observe(this) {
-            findViewById<TextView>(R.id.textViewLongestDuration).text = it.toString()
+            findViewById<TextView>(R.id.textViewLongestDuration).text =
+                StringFormatter.getInstance().formatTime(it)
         }
 
         /*viewModel.mostPhotosInRun.observe(this) {
