@@ -32,7 +32,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
-import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -43,14 +42,8 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import java.math.RoundingMode
 import java.sql.Date
-import java.text.DecimalFormat
 import java.util.Calendar
-import kotlin.math.floor
-import kotlin.math.round
-import kotlin.math.roundToInt
-
 
 class MapFragment : Fragment() {
     companion object {
@@ -84,7 +77,6 @@ class MapFragment : Fragment() {
     private lateinit var myGpsMyLocationProvider: GpsMyLocationProvider
     private lateinit var myLocationOverlay: MyLocationNewOverlay
     private lateinit var currentLocation: GeoPoint
-    private lateinit var roadManager: OSRMRoadManager
     private var points: MutableList<GeoPoint> = mutableListOf()
     private val pins: ArrayList<OverlayItem> = ArrayList()
 
@@ -129,8 +121,6 @@ class MapFragment : Fragment() {
         Configuration.getInstance()
             .load(context, PreferenceManager.getDefaultSharedPreferences(context))
         Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
-
-        roadManager = OSRMRoadManager(context, BuildConfig.APPLICATION_ID)
 
         mapView.setUseDataConnection(true)
         mapView.setTileSource(TileSourceFactory.MAPNIK)
