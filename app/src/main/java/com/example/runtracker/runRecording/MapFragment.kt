@@ -391,32 +391,7 @@ class MapFragment : Fragment() {
         }
     }
 
-    fun getTimeStringFromDouble(time: Double): String {
-        val resultInt = time.roundToInt()
-        val hours = resultInt % 84600 / 3600
-        val minutes = resultInt % 86400 % 3600 / 60
-        val seconds = resultInt % 84600 % 3600 % 60
-
-        return makeTimeString(hours, minutes, seconds)
-    }
-
-    fun getDistanceString(distance: Float): String {
-        val df = DecimalFormat("####.###")
-        df.roundingMode = RoundingMode.CEILING
-
-        return df.format(distance / 1000) + " km"
-    }
-
-    fun getPaceString(paceMinPerKm: Double): String {
-        val paceMin: Int = floor(paceMinPerKm).toInt() // pace full minutes
-        val paceSec: Int = round((paceMinPerKm - paceMin) * 60).toInt()
-
-        return String.format("%02d:%02d", paceMin, paceSec) + " min/km"
-    }
-
-    private fun makeTimeString(hours: Int, minutes: Int, seconds: Int): String {
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
-    }
+ 
 
 
     var resultLauncher =
