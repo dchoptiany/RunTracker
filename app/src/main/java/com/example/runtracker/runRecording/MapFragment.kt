@@ -29,6 +29,7 @@ import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
 import com.example.runtracker.gallery.CameraActivity
 import com.example.runtracker.gallery.ImageDetailsActivity
+import com.example.runtracker.statistics.StringFormatter
 import com.github.clans.fab.FloatingActionButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -80,7 +81,7 @@ class MapFragment : Fragment() {
 
     private lateinit var trackerIntent: Intent
     private var distance: Float = 0f
-    private var pace: Double = 0.0
+    private var pace: Float = 0f
 
     private lateinit var mapController: IMapController
     private lateinit var myGpsMyLocationProvider: GpsMyLocationProvider
@@ -236,14 +237,14 @@ class MapFragment : Fragment() {
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             time = intent.getDoubleExtra(TimerService.TIME_EXTRA, 0.0)
-            timeTextView.text = getTimeStringFromDouble(time)
+            timeTextView.text = StringFormatter.getInstance().formatTime(time)
 
             // update pace
             if (time != 0.0 && distance > 0) {
-                val timeInMinutes = time / 60f
+                val timeInMinutes = time / 60.0
                 val distanceInKm = distance / 1000f
-                pace = timeInMinutes / distanceInKm.toDouble() // paceMinPerKm
-                paceTextView.text = getPaceString(pace)
+                pace = timeInMinutes.toFloat() / distanceInKm // paceMinPerKm
+                paceTextView.text = StringFormatter.getInstance().formatPace(pace)
             }
         }
     }
@@ -260,11 +261,10 @@ class MapFragment : Fragment() {
             // update distance
             if (activityStatus == ACTIVITY_STARTED) {
                 distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
-                distance = intent.getFloatExtra(TrackerService.DIST_EXTRA, 0f) // distance in meters
             }
 
             if (distance != 0f) {
-                distanceTextView.text = getDistanceString(distance)
+                distanceTextView.text = StringFormatter.getInstance().formatDistance(distance / 1000f)
             }
 
             // draw track
@@ -356,7 +356,7 @@ class MapFragment : Fragment() {
 
         // clear time
         time = 0.0
-        timeTextView.text = getTimeStringFromDouble(time)
+        timeTextView.text = StringFormatter.getInstance().formatTime(time)
     }
 
     private fun addPhoto() {
@@ -432,4 +432,5 @@ class MapFragment : Fragment() {
 
             }
         }
+
 }

@@ -5,8 +5,7 @@ import java.sql.Date
 import java.text.DecimalFormat
 import java.util.*
 
-class RunHistoryItem(private var runID: Int, private var date: Date, private var distance: Float,
-                     private var duration: Int) {
+class RunHistoryItem(private var runID: Int, private var date: Date, var distance: Float, var duration: Int) {
     fun getName(): String {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -37,22 +36,6 @@ class RunHistoryItem(private var runID: Int, private var date: Date, private var
             Calendar.FRIDAY -> return "Friday"
         }
         return "Saturday"
-    }
-
-    fun getDistance(): String {
-        val decimalFormat = DecimalFormat("####.###").apply {
-            roundingMode = RoundingMode.CEILING
-        }
-
-        return "${decimalFormat.format(distance)} km"
-    }
-
-    fun getDuration(): String {
-        val hours = duration / 3600 // full hours
-        val minutes = (duration - (hours * 3600)) / 60 // full minutes
-        val seconds = duration % 60 // seconds
-
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     fun getRunID(): Int {
