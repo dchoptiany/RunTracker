@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.example.runtracker.menu.MenuItem
 import com.example.runtracker.myAccount.MyAccountActivity
 import com.example.runtracker.runRecording.MapActivity
 import com.example.runtracker.settings.SettingsActivity
+import com.example.runtracker.statistics.StatisticsActivity
 
 class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     private lateinit var recyclerViewMenuItems: RecyclerView
@@ -32,6 +34,8 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         setContentView(R.layout.activity_main)
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
+        val title = findViewById<TextView>(R.id.text)
+        title.text = "Main menu"
         addMenuItems()
         setView()
     }
@@ -67,7 +71,11 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                     resultLauncher.launch(it)
                 }
             }
-            2 -> Toast.makeText(this, "3", Toast.LENGTH_SHORT).show()
+            2 -> {
+                Intent(this, StatisticsActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
             3 -> {
                 Intent(this, MyAccountActivity::class.java).also {
                     resultLauncher.launch(it)
@@ -119,4 +127,6 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
                 }
             }
         }
+
+
 }

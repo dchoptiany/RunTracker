@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +29,8 @@ class SettingsActivity :  AppCompatActivity() , SettingsAdapter.OnSettingsItemCl
         setContentView(R.layout.activity_settings)
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
+        val title = findViewById<TextView>(R.id.text)
+        title.text = "Settings"
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener {
             rememberContent()
