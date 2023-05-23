@@ -9,6 +9,6 @@ data class GeoPointsEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "latitude") val latitude: Double,
     @ColumnInfo(name = "longitude") val longitude: Double,
-    @ColumnInfo(name = "isPinned") val isPinned: Boolean,
+    @ColumnInfo(name = "image_path") val image_path: String,
     @ColumnInfo(name = "runId") val runId: Int
 )

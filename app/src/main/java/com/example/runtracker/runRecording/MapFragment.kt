@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -189,8 +190,8 @@ class MapFragment : Fragment() {
         )
 
 
-        val currentRunId = runViewModel.numberOfRuns.observe(viewLifecycleOwner) { numberOfRuns ->
-            currentRunID = numberOfRuns ?: 0
+        runViewModel.numberOfRuns.observe(viewLifecycleOwner) { numberOfRuns ->
+            currentRunID = (numberOfRuns ?: 0) + 1
 
         }
 
@@ -202,7 +203,6 @@ class MapFragment : Fragment() {
         val point = GeoPoint(currentPinLocation.latitude, currentPinLocation.longitude)
         val overlayItem = OverlayItem("Pin", "", point)
         pins.add(overlayItem)
-        addGeoPointToDataBase(point, true)
         val overlay = ItemizedIconOverlay(
             pins,
             object : OnItemGestureListener<OverlayItem> {
@@ -210,6 +210,7 @@ class MapFragment : Fragment() {
                     val intent = Intent(requireContext(), ImageDetailsActivity::class.java)
                     intent.putExtra("latitude", item.point.latitude)
                     intent.putExtra("longitude", item.point.longitude)
+                    intent.putExtra("runID",currentRunID)
                     startActivity(intent)
                     return true
                 }
@@ -224,9 +225,9 @@ class MapFragment : Fragment() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun addGeoPointToDataBase(geoPoint: GeoPoint, isPinned: Boolean) {
+    private fun addGeoPointToDataBase(latitude : Double,longitude: Double, path : String) {
         val geoPointData =
-            GeoPointsEntity(0, geoPoint.latitude, geoPoint.longitude, isPinned, currentRunID)
+            GeoPointsEntity(0, latitude,longitude,path,currentRunID)
         GlobalScope.launch {
             runViewModel.insertGeoPoint(geoPointData)
         }
@@ -284,7 +285,6 @@ class MapFragment : Fragment() {
         // get current location
         currentLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
         points.add(currentLocation)
-        addGeoPointToDataBase(currentLocation, false)
 
         startTimer()
         startTracker()
@@ -364,7 +364,8 @@ class MapFragment : Fragment() {
         val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
         intent.putExtra("latitude", currentPinLocation.latitude)
         intent.putExtra("longitude", currentPinLocation.longitude)
-        startActivity(intent)
+        intent.putExtra("runID",currentRunID)
+        resultLauncher.launch(intent)
     }
 
     private fun isLocationPermissionGranted(): Boolean {
@@ -416,4 +417,19 @@ class MapFragment : Fragment() {
     private fun makeTimeString(hours: Int, minutes: Int, seconds: Int): String {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
+
+
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            if (data != null) {
+                val path = data.getStringExtra("image_path")
+                val latitude = data.getDoubleExtra("latitude",0.0)
+                val longitude = data.getDoubleExtra("longitude",0.0)
+                if (path != null) {
+                    addGeoPointToDataBase(latitude, longitude ,path)
+                }
+
+            }
+        }
 }

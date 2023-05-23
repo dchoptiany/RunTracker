@@ -64,11 +64,6 @@ class RunRepository(private val runDao: RunDao) {
     }
 
     @WorkerThread
-    fun getGeoPoints(runID : Int) : Flow<List<GeoPointsEntity>>{
-        return runDao.getRunGeoPoints(runID)
-    }
-
-    @WorkerThread
     fun getAllGeoPoints() : Flow<List<GeoPointsEntity>>{
         return runDao.getAllPins()
     }

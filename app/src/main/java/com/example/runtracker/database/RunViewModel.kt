@@ -52,11 +52,6 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
         return repository.getPins(runID).asLiveData()
     }
 
-
-    fun getGeoPoints(runID : Int): LiveData<List<GeoPointsEntity>>{
-        return repository.getGeoPoints(runID).asLiveData()
-    }
-
     fun getAllGeoPoints(): LiveData<List<GeoPointsEntity>>{
        return  repository.getAllGeoPoints().asLiveData()
     }

@@ -30,9 +30,21 @@ class GalleryImageDetailsActivity: AppCompatActivity() {
     private fun uploadPhoto() {
         val cw = ContextWrapper(this)
         val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
-        val myImageFile = File(directory, imagePath)
+        val subDirectories = directory.listFiles()
 
-        Picasso.get().load(myImageFile).into(imageView)
+        for (subDirectory in subDirectories!!) {
+            if (subDirectory.isDirectory) {
+                val files = subDirectory.listFiles()
+                for(file in files!!){
+                    if(file.name ==imagePath){
+                        val myImageFile = File(subDirectory, imagePath)
+                        Picasso.get().load(myImageFile).into(imageView)
+                        break
+                    }
+                }
+            }
+        }
+
     }
 
     private fun setAppAppearance() {
