@@ -50,4 +50,20 @@ class RunRepository(private val runDao: RunDao) {
     fun updateRun(run: Run) {
         runDao.update(run)
     }
+
+
+    @WorkerThread
+    fun insertGeoPoint(geoPointsEntity: GeoPointsEntity){
+        runDao.insertGeoPoints(geoPointsEntity)
+    }
+
+    @WorkerThread
+    fun getPins(geoPointsEntity: GeoPointsEntity){
+        runDao.getPins()
+    }
+
+    @WorkerThread
+    fun getGeoPoints(geoPointsEntity: GeoPointsEntity){
+        runDao.getRunGeoPoints()
+    }
 }

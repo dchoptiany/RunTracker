@@ -38,4 +38,13 @@ interface RunDao {
 
     @Update
     fun update(run: Run)
+
+    @Insert
+    fun insertGeoPoints(geoPoints: GeoPointsEntity)
+
+    @Query("SELECT * FROM GeoPointsEntity WHERE isPinned == false")
+    fun getRunGeoPoints(): Flow<List<GeoPointsEntity>>
+
+    @Query("SELECT * FROM GeoPointsEntity WHERE isPinned == true")
+    fun getPins(): Flow<List<GeoPointsEntity>>
 }

@@ -8,10 +8,11 @@ import androidx.room.TypeConverters
 import com.example.runtracker.converters.DateConverter
 import com.example.runtracker.converters.PointsListConverter
 
-@Database(entities = [Run::class], version = 1, exportSchema = false)
+@Database(entities = [Run::class],[GeoPointsEntity::class], version = 2, exportSchema = false)
 @TypeConverters(DateConverter::class, PointsListConverter::class)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runDao(): RunDao
+    abstract fun geoPointsDao(): GeoPointsDao
 
     companion object {
         @Volatile
