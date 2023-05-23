@@ -5,14 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.runtracker.converters.DateConverter
 import com.example.runtracker.converters.PointsListConverter
 
-@Database(entities = [Run::class],[GeoPointsEntity::class], version = 2, exportSchema = false)
+@Database(entities = [Run::class, GeoPointsEntity::class], version = 2, exportSchema = false)
 @TypeConverters(DateConverter::class, PointsListConverter::class)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runDao(): RunDao
-    abstract fun geoPointsDao(): GeoPointsDao
 
     companion object {
         @Volatile
@@ -24,7 +25,8 @@ abstract class RunDatabase : RoomDatabase() {
                     context.applicationContext,
                     RunDatabase::class.java,
                     "database"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

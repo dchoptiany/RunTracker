@@ -20,7 +20,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.runtracker.BuildConfig
 import com.example.runtracker.R
+
 import com.example.runtracker.RunApplication
+import com.example.runtracker.database.GeoPointsEntity
 import com.example.runtracker.database.Run
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
@@ -86,6 +88,7 @@ class MapFragment : Fragment() {
     private lateinit var roadManager: OSRMRoadManager
     private var points: MutableList<GeoPoint> = mutableListOf()
     private val pins: ArrayList<OverlayItem> = ArrayList()
+    var currentRunID: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -167,8 +170,11 @@ class MapFragment : Fragment() {
         }
 
         addPhotoButton.setOnClickListener {
-            createPin()
-            addPhoto()
+            if (activityStatus == ACTIVITY_STARTED) {
+
+                createPin()
+                addPhoto()
+            }
         }
 
         // timer service setup
@@ -182,6 +188,12 @@ class MapFragment : Fragment() {
             IntentFilter(TrackerService.TRACKER_UPDATED)
         )
 
+
+        val currentRunId = runViewModel.numberOfRuns.observe(viewLifecycleOwner) { numberOfRuns ->
+            currentRunID = numberOfRuns ?: 0
+
+        }
+
         return view
     }
 
@@ -190,7 +202,7 @@ class MapFragment : Fragment() {
         val point = GeoPoint(currentPinLocation.latitude, currentPinLocation.longitude)
         val overlayItem = OverlayItem("Pin", "", point)
         pins.add(overlayItem)
-
+        addGeoPointToDataBase(point, true)
         val overlay = ItemizedIconOverlay(
             pins,
             object : OnItemGestureListener<OverlayItem> {
@@ -209,6 +221,15 @@ class MapFragment : Fragment() {
             context
         )
         mapView.overlays.add(overlay)
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun addGeoPointToDataBase(geoPoint: GeoPoint, isPinned: Boolean) {
+        val geoPointData =
+            GeoPointsEntity(0, geoPoint.latitude, geoPoint.longitude, isPinned, currentRunID)
+        GlobalScope.launch {
+            runViewModel.insertGeoPoint(geoPointData)
+        }
     }
 
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
@@ -263,6 +284,7 @@ class MapFragment : Fragment() {
         // get current location
         currentLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
         points.add(currentLocation)
+        addGeoPointToDataBase(currentLocation, false)
 
         startTimer()
         startTracker()

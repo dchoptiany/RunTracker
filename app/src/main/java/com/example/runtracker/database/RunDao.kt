@@ -42,9 +42,12 @@ interface RunDao {
     @Insert
     fun insertGeoPoints(geoPoints: GeoPointsEntity)
 
-    @Query("SELECT * FROM GeoPointsEntity WHERE isPinned == false")
-    fun getRunGeoPoints(): Flow<List<GeoPointsEntity>>
+    @Query("SELECT * FROM GeoPointsEntity WHERE isPinned == false AND runId ==:runID")
+    fun getRunGeoPoints(runID: Int): Flow<List<GeoPointsEntity>>
 
-    @Query("SELECT * FROM GeoPointsEntity WHERE isPinned == true")
-    fun getPins(): Flow<List<GeoPointsEntity>>
+    @Query("SELECT * FROM GeoPointsEntity WHERE isPinned == true AND runId ==:runID")
+    fun getPins(runID: Int): Flow<List<GeoPointsEntity>>
+
+    @Query("SELECT * FROM GeoPointsEntity")
+    fun getAllPins(): Flow<List<GeoPointsEntity>>
 }

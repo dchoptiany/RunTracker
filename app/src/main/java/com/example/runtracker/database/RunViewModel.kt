@@ -1,6 +1,8 @@
 package com.example.runtracker.database
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.*
+import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 class RunViewModel(private val repository: RunRepository): ViewModel() {
@@ -38,6 +40,25 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
 
     fun updateRun(run: Run) {
         repository.updateRun(run)
+    }
+
+
+    fun insertGeoPoint(geoPointsEntity: GeoPointsEntity){
+        repository.insertGeoPoint(geoPointsEntity)
+    }
+
+
+    fun getPins(runID : Int): LiveData<List<GeoPointsEntity>>{
+        return repository.getPins(runID).asLiveData()
+    }
+
+
+    fun getGeoPoints(runID : Int): LiveData<List<GeoPointsEntity>>{
+        return repository.getGeoPoints(runID).asLiveData()
+    }
+
+    fun getAllGeoPoints(): LiveData<List<GeoPointsEntity>>{
+       return  repository.getAllGeoPoints().asLiveData()
     }
 }
 
