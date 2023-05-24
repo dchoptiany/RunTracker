@@ -23,7 +23,7 @@ import com.example.runtracker.BuildConfig
 import com.example.runtracker.R
 
 import com.example.runtracker.RunApplication
-import com.example.runtracker.database.GeoPointsEntity
+import com.example.runtracker.database.Pin
 import com.example.runtracker.database.Run
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
@@ -190,7 +190,7 @@ class MapFragment : Fragment() {
         )
 
 
-        runViewModel.numberOfRuns.observe(viewLifecycleOwner) { numberOfRuns ->
+        runViewModel.maxRunID.observe(viewLifecycleOwner) { numberOfRuns ->
             currentRunID = (numberOfRuns ?: 0) + 1
 
         }
@@ -225,11 +225,11 @@ class MapFragment : Fragment() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun addGeoPointToDataBase(latitude : Double,longitude: Double, path : String) {
+    private fun addGeoPointToDataBase(geoPoint : GeoPoint, path : String) {
         val geoPointData =
-            GeoPointsEntity(0, latitude,longitude,path,currentRunID)
+            Pin(0, geoPoint,path,currentRunID)
         GlobalScope.launch {
-            runViewModel.insertGeoPoint(geoPointData)
+            runViewModel.insertPin(geoPointData)
         }
     }
 
@@ -426,8 +426,9 @@ class MapFragment : Fragment() {
                 val path = data.getStringExtra("image_path")
                 val latitude = data.getDoubleExtra("latitude",0.0)
                 val longitude = data.getDoubleExtra("longitude",0.0)
+                val geoPoint = GeoPoint(latitude,longitude)
                 if (path != null) {
-                    addGeoPointToDataBase(latitude, longitude ,path)
+                    addGeoPointToDataBase(geoPoint ,path)
                 }
 
             }

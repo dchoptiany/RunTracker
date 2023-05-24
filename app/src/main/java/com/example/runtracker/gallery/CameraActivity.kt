@@ -16,7 +16,6 @@ import android.os.Bundle
 import androidx.camera.lifecycle.ProcessCameraProvider
 import com.google.common.util.concurrent.ListenableFuture
 import android.view.Surface
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,11 +29,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.example.runtracker.R
-import com.example.runtracker.database.GeoPointsEntity
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.osmdroid.util.GeoPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.ExecutorService

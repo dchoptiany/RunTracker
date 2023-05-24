@@ -39,13 +39,16 @@ interface RunDao {
     @Update
     fun update(run: Run)
 
+    @Query("SELECT MAX(id) FROM run")
+    fun getMAxRundID(): Flow<Int>
+
     @Insert
-    fun insertGeoPoints(geoPoints: GeoPointsEntity)
+    fun insertPin(pin: Pin)
 
 
-    @Query("SELECT * FROM GeoPointsEntity WHERE runId ==:runID")
-    fun getPins(runID: Int): Flow<List<GeoPointsEntity>>
+    @Query("SELECT * FROM Pin WHERE runId ==:runID")
+    fun getPins(runID: Int): Flow<List<Pin>>
 
-    @Query("SELECT * FROM GeoPointsEntity")
-    fun getAllPins(): Flow<List<GeoPointsEntity>>
+    @Query("SELECT * FROM Pin")
+    fun getAllPins(): Flow<List<Pin>>
 }

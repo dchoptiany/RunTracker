@@ -1,14 +1,13 @@
 package com.example.runtracker.database
 
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.*
-import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 class RunViewModel(private val repository: RunRepository): ViewModel() {
     var runs: LiveData<List<Run>> = repository.allRuns.asLiveData()
     var numberOfRuns: LiveData<Int> = repository.numberOfRuns.asLiveData()
     var totalDistance: LiveData<Float> = repository.totalDistance.asLiveData()
+    var maxRunID : LiveData<Int> = repository.maxRunID.asLiveData()
 
     fun runsByDate(date: Date): LiveData<List<Run>> {
         return repository.getByDate(date).asLiveData()
@@ -43,17 +42,17 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
     }
 
 
-    fun insertGeoPoint(geoPointsEntity: GeoPointsEntity){
-        repository.insertGeoPoint(geoPointsEntity)
+    fun insertPin(pin: Pin){
+        repository.insertPin(pin)
     }
 
 
-    fun getPins(runID : Int): LiveData<List<GeoPointsEntity>>{
+    fun getPins(runID : Int): LiveData<List<Pin>>{
         return repository.getPins(runID).asLiveData()
     }
 
-    fun getAllGeoPoints(): LiveData<List<GeoPointsEntity>>{
-       return  repository.getAllGeoPoints().asLiveData()
+    fun getAllPins(): LiveData<List<Pin>>{
+       return  repository.getAllPins().asLiveData()
     }
 }
 

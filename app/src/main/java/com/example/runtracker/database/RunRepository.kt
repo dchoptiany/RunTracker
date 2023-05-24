@@ -1,9 +1,6 @@
 package com.example.runtracker.database
 
 import androidx.annotation.WorkerThread
-import androidx.room.Query
-import com.example.runtracker.database.Run
-import com.example.runtracker.database.RunDao
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -11,6 +8,7 @@ class RunRepository(private val runDao: RunDao) {
     val allRuns: Flow<List<Run>> = runDao.getAll()
     val numberOfRuns: Flow<Int> = runDao.getNumberOfRuns()
     val totalDistance: Flow<Float> = runDao.getTotalDistance()
+    val maxRunID : Flow<Int> = runDao.getMAxRundID()
 
     @WorkerThread
     fun getByDate(date: Date): Flow<List<Run>> {
@@ -54,17 +52,17 @@ class RunRepository(private val runDao: RunDao) {
 
 
     @WorkerThread
-    fun insertGeoPoint(geoPointsEntity: GeoPointsEntity){
-        runDao.insertGeoPoints(geoPointsEntity)
+    fun insertPin(pin: Pin){
+        runDao.insertPin(pin)
     }
 
     @WorkerThread
-    fun getPins(runID : Int) : Flow<List<GeoPointsEntity>>{
+    fun getPins(runID : Int) : Flow<List<Pin>>{
         return runDao.getPins(runID)
     }
 
     @WorkerThread
-    fun getAllGeoPoints() : Flow<List<GeoPointsEntity>>{
+    fun getAllPins() : Flow<List<Pin>>{
         return runDao.getAllPins()
     }
 }

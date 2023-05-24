@@ -5,12 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.runtracker.converters.DateConverter
 import com.example.runtracker.converters.PointsListConverter
 
-@Database(entities = [Run::class, GeoPointsEntity::class], version = 3, exportSchema = false)
+@Database(entities = [Run::class, Pin::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class, PointsListConverter::class)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runDao(): RunDao
