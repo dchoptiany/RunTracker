@@ -10,6 +10,13 @@ class RunRepository(private val runDao: RunDao) {
     val totalDistance: Flow<Float> = runDao.getTotalDistance()
     val maxRunID : Flow<Int> = runDao.getMAxRundID()
 
+    val totalDuration: Flow<Int> = runDao.getTotalDuration()
+    // val totalPhotos: Flow<Int> = runDao.getTotalPhotos()
+    val longestDistance: Flow<Float> = runDao.getLongestDistance()
+    val longestDuration: Flow<Int> = runDao.getLongestDuration()
+    // val mostPhotosInRun: Flow<Int> = runDao.getMostPhotosInRun()
+
+
     @WorkerThread
     fun getByDate(date: Date): Flow<List<Run>> {
         return runDao.getByDate(date)

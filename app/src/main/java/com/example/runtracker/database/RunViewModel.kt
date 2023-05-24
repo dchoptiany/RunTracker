@@ -9,6 +9,12 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
     var totalDistance: LiveData<Float> = repository.totalDistance.asLiveData()
     var maxRunID : LiveData<Int> = repository.maxRunID.asLiveData()
 
+    var totalDuration: LiveData<Int> = repository.totalDuration.asLiveData()
+    //var totalPhotos: LiveData<Int> = repository.totalPhotos.asLiveData()
+    var longestDistance: LiveData<Float> = repository.longestDistance.asLiveData()
+    var longestDuration: LiveData<Int> = repository.longestDuration.asLiveData()
+
+
     fun runsByDate(date: Date): LiveData<List<Run>> {
         return repository.getByDate(date).asLiveData()
     }
