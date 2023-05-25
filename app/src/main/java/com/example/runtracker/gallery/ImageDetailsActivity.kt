@@ -17,6 +17,7 @@ import kotlin.math.abs
 class ImageDetailsActivity : AppCompatActivity() {
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
+    private var runID : Int = 0
     private var filesPath = ArrayList<String>()
     private var filesSize = 0
     private var currentPosition = 0
@@ -32,6 +33,7 @@ class ImageDetailsActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
         latitude = intent.getDoubleExtra("latitude", 0.0)
         longitude = intent.getDoubleExtra("longitude", 0.0)
+        runID = intent.getIntExtra("runID",0)
         setAppAppearance()
 
         getPhotos()
@@ -57,7 +59,8 @@ class ImageDetailsActivity : AppCompatActivity() {
     private fun uploadPhoto() {
         val cw = ContextWrapper(this)
         val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
-        val myImageFile = File(directory, filesPath[currentPosition])
+        val subDirectory = File(directory, "$runID")
+        val myImageFile = File(subDirectory, filesPath[currentPosition])
         setButtonsVisibility()
 
         Picasso.get().load(myImageFile).into(imageView)
@@ -76,7 +79,8 @@ class ImageDetailsActivity : AppCompatActivity() {
     private fun getPhotos() {
         val cw = ContextWrapper(this)
         val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
-        val files = directory.listFiles { file ->
+        val subDirectory = File(directory, "$runID")
+        val files = subDirectory.listFiles { file ->
             file.absolutePath.contains((abs(latitude) + abs(longitude)).toString().replace(".", ""))
         }
 

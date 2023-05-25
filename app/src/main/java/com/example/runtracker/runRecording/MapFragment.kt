@@ -15,12 +15,15 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.runtracker.BuildConfig
 import com.example.runtracker.R
+
 import com.example.runtracker.RunApplication
+import com.example.runtracker.database.Pin
 import com.example.runtracker.database.Run
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
@@ -87,6 +90,7 @@ class MapFragment : Fragment() {
     private lateinit var roadManager: OSRMRoadManager
     private var points: MutableList<GeoPoint> = mutableListOf()
     private val pins: ArrayList<OverlayItem> = ArrayList()
+    var currentRunID: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -168,8 +172,11 @@ class MapFragment : Fragment() {
         }
 
         addPhotoButton.setOnClickListener {
-            createPin()
-            addPhoto()
+            if (activityStatus == ACTIVITY_STARTED) {
+
+                createPin()
+                addPhoto()
+            }
         }
 
         // timer service setup
@@ -183,6 +190,12 @@ class MapFragment : Fragment() {
             IntentFilter(TrackerService.TRACKER_UPDATED)
         )
 
+
+        runViewModel.maxRunID.observe(viewLifecycleOwner) { numberOfRuns ->
+            currentRunID = (numberOfRuns ?: 0) + 1
+
+        }
+
         return view
     }
 
@@ -191,7 +204,6 @@ class MapFragment : Fragment() {
         val point = GeoPoint(currentPinLocation.latitude, currentPinLocation.longitude)
         val overlayItem = OverlayItem("Pin", "", point)
         pins.add(overlayItem)
-
         val overlay = ItemizedIconOverlay(
             pins,
             object : OnItemGestureListener<OverlayItem> {
@@ -199,6 +211,7 @@ class MapFragment : Fragment() {
                     val intent = Intent(requireContext(), ImageDetailsActivity::class.java)
                     intent.putExtra("latitude", item.point.latitude)
                     intent.putExtra("longitude", item.point.longitude)
+                    intent.putExtra("runID",currentRunID)
                     startActivity(intent)
                     return true
                 }
@@ -210,6 +223,15 @@ class MapFragment : Fragment() {
             context
         )
         mapView.overlays.add(overlay)
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun addGeoPointToDataBase(geoPoint : GeoPoint, path : String) {
+        val geoPointData =
+            Pin(0, geoPoint,path,currentRunID)
+        GlobalScope.launch {
+            runViewModel.insertPin(geoPointData)
+        }
     }
 
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
@@ -342,7 +364,8 @@ class MapFragment : Fragment() {
         val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
         intent.putExtra("latitude", currentPinLocation.latitude)
         intent.putExtra("longitude", currentPinLocation.longitude)
-        startActivity(intent)
+        intent.putExtra("runID",currentRunID)
+        resultLauncher.launch(intent)
     }
 
     private fun isLocationPermissionGranted(): Boolean {
@@ -367,4 +390,23 @@ class MapFragment : Fragment() {
             return true
         }
     }
+
+ 
+
+
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            if (data != null) {
+                val path = data.getStringExtra("image_path")
+                val latitude = data.getDoubleExtra("latitude",0.0)
+                val longitude = data.getDoubleExtra("longitude",0.0)
+                val geoPoint = GeoPoint(latitude,longitude)
+                if (path != null) {
+                    addGeoPointToDataBase(geoPoint ,path)
+                }
+
+            }
+        }
+
 }
