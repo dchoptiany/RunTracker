@@ -39,12 +39,12 @@ class StatisticsActivity : AppCompatActivity() {
             }
         }
 
-        /*viewModel.totalPhotos.observe(this) {
+        viewModel.numberOfPins.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewTotalPhotos).text =
                     "Total photos: $it"
             }
-        }*/
+        }
 
         viewModel.longestDistance.observe(this) {
             if (it != null) {
@@ -59,12 +59,5 @@ class StatisticsActivity : AppCompatActivity() {
                     "Longest duration: ${StringFormatter.getInstance().formatTime(it)}"
             }
         }
-
-        /*viewModel.mostPhotosInRun.observe(this) {
-            if (it != null) {
-                findViewById<TextView>(R.id.textViewMostPhotos).text =
-                    "Most photos in run: $it"
-            }
-        }*/
     }
 }

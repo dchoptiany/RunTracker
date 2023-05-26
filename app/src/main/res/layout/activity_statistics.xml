@@ -90,16 +90,5 @@
             android:text="@string/longest_duration_00_00_00"
             android:textSize="26sp" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="20dp" />
-
-        <TextView
-            android:id="@+id/textViewMostPhotos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/most_photos_in_run_0"
-            android:textSize="26sp" />
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

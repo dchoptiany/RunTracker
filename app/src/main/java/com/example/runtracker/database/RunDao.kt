@@ -54,10 +54,12 @@ interface RunDao {
     @Insert
     fun insertPin(pin: Pin)
 
-
     @Query("SELECT * FROM Pin WHERE runId ==:runID")
     fun getPins(runID: Int): Flow<List<Pin>>
 
     @Query("SELECT * FROM Pin")
     fun getAllPins(): Flow<List<Pin>>
+
+    @Query("SELECT COUNT(*) FROM Pin")
+    fun getNumberOfPins(): Flow<Int>
 }
