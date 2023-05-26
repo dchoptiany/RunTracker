@@ -100,6 +100,27 @@
             android:layout_height="wrap_content"
             android:text="@string/most_photos_in_run_0"
             android:textSize="26sp" />
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:id="@+id/textViewTotalCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Burned calories: "
+            android:textSize="26sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:id="@+id/textViewMaxCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Max calories: "
+            android:textSize="26sp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.runtracker.statistics
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -14,6 +15,7 @@ class StatisticsActivity : AppCompatActivity() {
         RunModelFactory((application as RunApplication).repository)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
@@ -66,5 +68,17 @@ class StatisticsActivity : AppCompatActivity() {
                     "Most photos in run: $it"
             }
         }*/
+
+        viewModel.sumBurnedCalories.observe(this){
+            if(it!=null){
+                findViewById<TextView>(R.id.textViewTotalCalories).text = "Total burned calories: $it kcal"
+            }
+        }
+
+        viewModel.maxBurnedCalories.observe(this){
+            if(it!=null){
+                findViewById<TextView>(R.id.textViewMaxCalories).text = "Max burned calories: $it kcal"
+            }
+        }
     }
 }
