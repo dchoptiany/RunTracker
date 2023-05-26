@@ -8,7 +8,7 @@ class RunRepository(private val runDao: RunDao) {
     val allRuns: Flow<List<Run>> = runDao.getAll()
     val numberOfRuns: Flow<Int> = runDao.getNumberOfRuns()
     val totalDistance: Flow<Float> = runDao.getTotalDistance()
-    val maxRunID : Flow<Int> = runDao.getMAxRundID()
+    val maxRunID : Flow<Int> = runDao.getMaxRunID()
 
     val totalDuration: Flow<Int> = runDao.getTotalDuration()
     // val totalPhotos: Flow<Int> = runDao.getTotalPhotos()

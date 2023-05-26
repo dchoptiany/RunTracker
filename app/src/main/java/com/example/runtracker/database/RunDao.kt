@@ -49,7 +49,7 @@ interface RunDao {
     fun update(run: Run)
 
     @Query("SELECT MAX(id) FROM run")
-    fun getMAxRundID(): Flow<Int>
+    fun getMaxRunID(): Flow<Int>
 
     @Insert
     fun insertPin(pin: Pin)
