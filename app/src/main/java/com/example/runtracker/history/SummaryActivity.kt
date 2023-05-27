@@ -1,5 +1,6 @@
 package com.example.runtracker.history
 
+import android.content.Intent
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
@@ -15,6 +16,8 @@ import com.example.runtracker.R
 import com.example.runtracker.RunApplication
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
+import com.example.runtracker.gallery.ImageDetailsActivity
+import com.example.runtracker.runRecording.MapFragment
 import com.example.runtracker.statistics.StringFormatter
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -24,6 +27,8 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import java.io.File
 
