@@ -225,12 +225,6 @@ class MapFragment : Fragment() {
         GlobalScope.launch {
             runViewModel.insertPin(geoPointData)
         }
-
-        val pins = runViewModel.getPins(currentRunID).observe(this) { pins ->
-            for (i in pins) {
-                Log.e("t", i.geoPoint.toString())
-            }
-        }
     }
 
 
