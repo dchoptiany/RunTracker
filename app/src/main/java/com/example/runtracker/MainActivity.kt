@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
             }
             1 -> {
                 Intent(this, GalleryActivity::class.java).also {
-                    resultLauncher.launch(it)
+                    startActivity(it)
                 }
             }
             2 -> {
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
             }
             3 -> {
                 Intent(this, MyAccountActivity::class.java).also {
-                    resultLauncher.launch(it)
+                    startActivity(it)
                 }
             }
             4 -> {
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
             }
             5 -> {
                 Intent(this, SettingsActivity::class.java).also {
-                    resultLauncher.launch(it)
+                    startActivity(it)
                 }
             }
         }
@@ -110,24 +110,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         }
     }
 
-    var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data = result.data
-            if (data != null) {
-                data.getBooleanExtra("darkMode", false).let {
-                    editor.putBoolean("darkMode", it)
-                    editor.apply()
-                }
-                data.getBooleanExtra("notifications", false).let {
-                    editor.putBoolean("notifications", it)
-                    editor.apply()
-                }
-                data.getIntExtra("color", Color.BLACK).let {
-                    editor.putInt("color", it)
-                    editor.apply()
-                }
-            }
-        }
+
 
 
 }

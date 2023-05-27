@@ -54,6 +54,12 @@ interface RunDao {
     @Insert
     fun insertPin(pin: Pin)
 
+    @Query("SELECT MAX(calories) FROM run")
+    fun getMaxCalories() : Flow<Float>
+
+    @Query("SELECT SUM(calories) FROM run")
+    fun getSumCalories() : Flow<Float>
+
 
     @Query("SELECT * FROM Pin WHERE runId ==:runID")
     fun getPins(runID: Int): Flow<List<Pin>>

@@ -32,10 +32,6 @@ class MyAccountActivity : AppCompatActivity(), MyAccountAdapter.OnMyAccountClick
         addMenuItems()
         setView()
         setAppAppearance()
-        val backButton = findViewById<Button>(R.id.button)
-        backButton.setOnClickListener {
-            finish()
-        }
     }
 
     private fun setView() {
@@ -63,6 +59,7 @@ class MyAccountActivity : AppCompatActivity(), MyAccountAdapter.OnMyAccountClick
         addToAccountItemsList("Date of birth", "calendar")
         addToAccountItemsList("Weight", "input")
         addToAccountItemsList("Height", "input")
+        addToAccountItemsList("BMI","text")
     }
 
     private fun addToAccountItemsList(data: String, appWidget: String) {
