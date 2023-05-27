@@ -142,28 +142,26 @@ class MapFragment : Fragment() {
         mapController.animateTo(defaultLocation)
 
         // set current location
-        if (isLocationPermissionGranted()) {
-            Log.i("mymap", "Localization permission granted")
-            myGpsMyLocationProvider = GpsMyLocationProvider(activity)
-            myLocationOverlay = MyLocationNewOverlay(myGpsMyLocationProvider, mapView)
-            myLocationOverlay.enableMyLocation()
-            myLocationOverlay.enableFollowLocation()
-            myLocationOverlay.isDrawAccuracyEnabled = true
+        myGpsMyLocationProvider = GpsMyLocationProvider(activity)
+        myLocationOverlay = MyLocationNewOverlay(myGpsMyLocationProvider, mapView)
+        myLocationOverlay.enableMyLocation()
+        myLocationOverlay.enableFollowLocation()
+        myLocationOverlay.isDrawAccuracyEnabled = true
 
-            val icon = BitmapFactory.decodeResource(
-                resources,
-                org.osmdroid.library.R.drawable.ic_menu_compass
-            )
-            myLocationOverlay.setPersonIcon(icon)
-            mapView.overlays.add(myLocationOverlay)
+        val icon = BitmapFactory.decodeResource(
+            resources,
+            org.osmdroid.library.R.drawable.ic_menu_compass
+        )
+        myLocationOverlay.setPersonIcon(icon)
+        mapView.overlays.add(myLocationOverlay)
 
-            myLocationOverlay.runOnFirstFix {
-                val myLocation: GeoPoint = myLocationOverlay.myLocation
-                requireActivity().runOnUiThread {
-                    mapView.controller.animateTo(myLocation)
-                }
+        myLocationOverlay.runOnFirstFix {
+            val myLocation: GeoPoint = myLocationOverlay.myLocation
+            requireActivity().runOnUiThread {
+                mapView.controller.animateTo(myLocation)
             }
         }
+
 
         addPhotoButton.setOnClickListener {
             if (activityStatus == ACTIVITY_STARTED) {
@@ -367,32 +365,6 @@ class MapFragment : Fragment() {
         intent.putExtra("runID",currentRunID)
         resultLauncher.launch(intent)
     }
-
-    private fun isLocationPermissionGranted(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                1
-            )
-            return false
-        } else {
-            return true
-        }
-    }
-
- 
-
 
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

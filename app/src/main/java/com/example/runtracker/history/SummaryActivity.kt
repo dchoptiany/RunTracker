@@ -1,5 +1,6 @@
 package com.example.runtracker.history
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
@@ -12,6 +13,8 @@ import com.example.runtracker.R
 import com.example.runtracker.RunApplication
 import com.example.runtracker.database.RunModelFactory
 import com.example.runtracker.database.RunViewModel
+import com.example.runtracker.gallery.ImageDetailsActivity
+import com.example.runtracker.runRecording.MapFragment
 import com.example.runtracker.statistics.StringFormatter
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -21,6 +24,8 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 
 class SummaryActivity : AppCompatActivity() {
@@ -92,6 +97,36 @@ class SummaryActivity : AppCompatActivity() {
                 // set map's starting location
                 val defaultLocation = points.get(0)
                 mapController.animateTo(defaultLocation)
+            }
+
+            val pins: ArrayList<OverlayItem> = ArrayList()
+
+            viewModel.getPins(runID).observe(this) {
+                for(pin in it) {
+                    val overlayItem = OverlayItem("Pin", "", pin.geoPoint)
+                    pins.add(overlayItem)
+                    val overlay = ItemizedIconOverlay(
+                        pins,
+                        object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+                            override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                                val intent = Intent(context, ImageDetailsActivity::class.java)
+                                intent.putExtra("latitude", item.point.latitude)
+                                intent.putExtra("longitude", item.point.longitude)
+                                intent.putExtra("runID", runID)
+
+                                startActivity(intent)
+                                return true
+                            }
+
+                            override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                                return false
+                            }
+                        },
+                        context
+                    )
+                    mapView.overlays.add(overlay)
+                }
+                mapView.invalidate()
             }
         }
 
