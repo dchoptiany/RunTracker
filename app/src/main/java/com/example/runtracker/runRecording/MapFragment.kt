@@ -205,7 +205,12 @@ class MapFragment : Fragment() {
                     val intent = Intent(requireContext(), ImageDetailsActivity::class.java)
                     intent.putExtra("latitude", item.point.latitude)
                     intent.putExtra("longitude", item.point.longitude)
-                    intent.putExtra("runID",currentRunID)
+                    if(activityStatus== ACTIVITY_STOPPED){
+                        intent.putExtra("runID",currentRunID-1)
+                    }
+                    else {
+                        intent.putExtra("runID", currentRunID)
+                    }
                     startActivity(intent)
                     return true
                 }
