@@ -7,11 +7,13 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
     var runs: LiveData<List<Run>> = repository.allRuns.asLiveData()
     var numberOfRuns: LiveData<Int> = repository.numberOfRuns.asLiveData()
     var totalDistance: LiveData<Float> = repository.totalDistance.asLiveData()
+    var maxRunID : LiveData<Int> = repository.maxRunID.asLiveData()
+
     var totalDuration: LiveData<Int> = repository.totalDuration.asLiveData()
     //var totalPhotos: LiveData<Int> = repository.totalPhotos.asLiveData()
     var longestDistance: LiveData<Float> = repository.longestDistance.asLiveData()
     var longestDuration: LiveData<Int> = repository.longestDuration.asLiveData()
-    //var mostPhotosInRun: LiveData<Int> = repository.mostPhotosInRun.asLiveData()
+
 
     fun runsByDate(date: Date): LiveData<List<Run>> {
         return repository.getByDate(date).asLiveData()
@@ -43,6 +45,20 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
 
     fun updateRun(run: Run) {
         repository.updateRun(run)
+    }
+
+
+    fun insertPin(pin: Pin){
+        repository.insertPin(pin)
+    }
+
+
+    fun getPins(runID : Int): LiveData<List<Pin>>{
+        return repository.getPins(runID).asLiveData()
+    }
+
+    fun getAllPins(): LiveData<List<Pin>>{
+       return  repository.getAllPins().asLiveData()
     }
 }
 

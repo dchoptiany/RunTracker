@@ -1,8 +1,6 @@
 package com.example.runtracker.database
 
 import androidx.annotation.WorkerThread
-import com.example.runtracker.database.Run
-import com.example.runtracker.database.RunDao
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -10,11 +8,14 @@ class RunRepository(private val runDao: RunDao) {
     val allRuns: Flow<List<Run>> = runDao.getAll()
     val numberOfRuns: Flow<Int> = runDao.getNumberOfRuns()
     val totalDistance: Flow<Float> = runDao.getTotalDistance()
+    val maxRunID : Flow<Int> = runDao.getMAxRundID()
+
     val totalDuration: Flow<Int> = runDao.getTotalDuration()
     // val totalPhotos: Flow<Int> = runDao.getTotalPhotos()
     val longestDistance: Flow<Float> = runDao.getLongestDistance()
     val longestDuration: Flow<Int> = runDao.getLongestDuration()
     // val mostPhotosInRun: Flow<Int> = runDao.getMostPhotosInRun()
+
 
     @WorkerThread
     fun getByDate(date: Date): Flow<List<Run>> {
@@ -54,5 +55,21 @@ class RunRepository(private val runDao: RunDao) {
     @WorkerThread
     fun updateRun(run: Run) {
         runDao.update(run)
+    }
+
+
+    @WorkerThread
+    fun insertPin(pin: Pin){
+        runDao.insertPin(pin)
+    }
+
+    @WorkerThread
+    fun getPins(runID : Int) : Flow<List<Pin>>{
+        return runDao.getPins(runID)
+    }
+
+    @WorkerThread
+    fun getAllPins() : Flow<List<Pin>>{
+        return runDao.getAllPins()
     }
 }

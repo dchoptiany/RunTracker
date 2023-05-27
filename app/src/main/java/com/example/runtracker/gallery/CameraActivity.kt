@@ -2,8 +2,10 @@ package com.example.runtracker.gallery
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -14,7 +16,6 @@ import android.os.Bundle
 import androidx.camera.lifecycle.ProcessCameraProvider
 import com.google.common.util.concurrent.ListenableFuture
 import android.view.Surface
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,11 +41,13 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraProvider: ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
     private var filename: String = ""
+    var runID : Int = 0
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
+        runID = intent.getIntExtra("runID",0)
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
         filename = (kotlin.math.abs(latitude) + kotlin.math.abs(longitude)).toString().replace(".", "")
@@ -107,6 +110,9 @@ class CameraActivity : AppCompatActivity() {
                     cameraExecutor.execute {
                         saveImage(savedUri)
                         runOnUiThread {
+                            val intent = Intent()
+                            intent.putExtra("image_path","${filename}.jpg")
+                            setResult(Activity.RESULT_OK, intent)
                             finish()
                         }
                     }
@@ -135,8 +141,11 @@ class CameraActivity : AppCompatActivity() {
             )
 
         val directory = ContextWrapper(this).getDir("imageDir", Context.MODE_PRIVATE)
+        val subDirectory = File(directory, "$runID")
+        subDirectory.mkdirs()
+
         val fileName = "${filename}.jpg"
-        val myImageFile = File(directory, fileName)
+        val myImageFile = File(subDirectory, fileName)
 
         FileOutputStream(myImageFile).use { outputStream ->
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)

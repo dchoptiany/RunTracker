@@ -55,17 +55,17 @@ class GalleryActivity : AppCompatActivity(), GalleryAdapter.OnImageClickListener
     private fun addUserPhoto() {
         val cw = ContextWrapper(this)
         val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
-        val files = directory.list()
-        for (fileName in files!!) {
-            var found = false
-            for (i in images) {
-                if (i.path == fileName) {
-                    found = true
-                    break
+        val subDirectories = directory.listFiles { file -> file.isDirectory }
+
+        for (subDirectory in subDirectories!!) {
+            val files = subDirectory.listFiles { file -> file.isFile } ?: continue
+
+            for (file in files) {
+                val fileName = file.name
+                val found = images.any { image -> image.path == fileName }
+                if (!found) {
+                    images.add(Images(fileName, ""))
                 }
-            }
-            if (!found) {
-                images.add(Images(fileName, ""))
             }
         }
     }
