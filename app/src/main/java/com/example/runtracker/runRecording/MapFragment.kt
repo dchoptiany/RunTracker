@@ -221,12 +221,18 @@ class MapFragment : Fragment() {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun addGeoPointToDataBase(geoPoint : GeoPoint, path : String) {
-        val geoPointData =
-            Pin(0, geoPoint,path,currentRunID)
+        val geoPointData = Pin(0, geoPoint, path, currentRunID)
         GlobalScope.launch {
             runViewModel.insertPin(geoPointData)
         }
+
+        val pins = runViewModel.getPins(currentRunID).observe(this) { pins ->
+            for (i in pins) {
+                Log.e("t", i.geoPoint.toString())
+            }
+        }
     }
+
 
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
