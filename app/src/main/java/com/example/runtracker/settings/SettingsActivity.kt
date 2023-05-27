@@ -31,22 +31,10 @@ class SettingsActivity :  AppCompatActivity() , SettingsAdapter.OnSettingsItemCl
         editor = sharedPreferences.edit()
         val title = findViewById<TextView>(R.id.text)
         title.text = "Settings"
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener {
-            rememberContent()
-        }
         addToSettingsItems()
         initRecyclerView()
     }
 
-    private fun rememberContent() {
-        val newIntent = Intent()
-        newIntent.putExtra("color", sharedPreferences.getInt("color", Color.BLACK))
-        newIntent.putExtra("notifications", sharedPreferences.getBoolean("notifications", false))
-        newIntent.putExtra("darkMode", sharedPreferences.getBoolean("darkMode", false))
-        setResult(Activity.RESULT_OK, newIntent)
-        finish()
-    }
 
     private fun initRecyclerView() {
         recyclerViewSettings = findViewById(R.id.recyclerViewSettings)

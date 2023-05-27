@@ -40,6 +40,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var captureButton: ImageButton
     private lateinit var cameraProvider: ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
+    var latitude = 0.0
+    var longitude =0.0
     private var filename: String = ""
     var runID : Int = 0
 
@@ -48,8 +50,8 @@ class CameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         runID = intent.getIntExtra("runID",0)
-        val latitude = intent.getDoubleExtra("latitude", 0.0)
-        val longitude = intent.getDoubleExtra("longitude", 0.0)
+        latitude = intent.getDoubleExtra("latitude", 0.0)
+        longitude = intent.getDoubleExtra("longitude", 0.0)
         filename = (kotlin.math.abs(latitude) + kotlin.math.abs(longitude)).toString().replace(".", "")
         filename += "${System.currentTimeMillis()}"
         savedFilePath = "${getExternalFilesDir(null)?.absolutePath}/${filename}.jpg"
@@ -111,6 +113,8 @@ class CameraActivity : AppCompatActivity() {
                         saveImage(savedUri)
                         runOnUiThread {
                             val intent = Intent()
+                            intent.putExtra("latitude",latitude)
+                            intent.putExtra("longitude",longitude)
                             intent.putExtra("image_path","${filename}.jpg")
                             setResult(Activity.RESULT_OK, intent)
                             finish()

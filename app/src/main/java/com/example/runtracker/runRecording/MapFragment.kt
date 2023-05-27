@@ -61,6 +61,9 @@ class MapFragment : Fragment() {
 
     private var activityStatus: String = ""
 
+    private lateinit var sharedPreferences: SharedPreferences
+
+
     private lateinit var addPhotoButton: FloatingActionButton
     private lateinit var startButton: ImageButton
     private lateinit var stopButton: ImageButton
@@ -88,6 +91,7 @@ class MapFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        sharedPreferences = requireActivity().getSharedPreferences("my_account", Context.MODE_PRIVATE)
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
@@ -217,12 +221,12 @@ class MapFragment : Fragment() {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun addGeoPointToDataBase(geoPoint : GeoPoint, path : String) {
-        val geoPointData =
-            Pin(0, geoPoint,path,currentRunID)
+        val geoPointData = Pin(0, geoPoint, path, currentRunID)
         GlobalScope.launch {
             runViewModel.insertPin(geoPointData)
         }
     }
+
 
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -323,7 +327,8 @@ class MapFragment : Fragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val run = Run(0, Date.valueOf("$year-$month-$day"), distance / 1000, time.toInt(), points)
+        val calories = sharedPreferences.getString("Weight","")!!.toFloat() * distance / 1000
+        val run = Run(0, Date.valueOf("$year-$month-$day"), distance / 1000, time.toInt(), points,calories)
         GlobalScope.launch {
             runViewModel.insertRun(run)
         }
