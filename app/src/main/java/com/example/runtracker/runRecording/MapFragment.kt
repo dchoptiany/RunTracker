@@ -330,7 +330,8 @@ class MapFragment : Fragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val calories = sharedPreferences.getString("Weight","")!!.toFloat() * distance / 1000
+        val weight = sharedPreferences.getString("Weight", "0")?.takeIf { it.isNotBlank() } ?: "0"
+        val calories = weight.toFloat() * distance / 1000
         val run = Run(0, Date.valueOf("$year-$month-$day"), distance / 1000, time.toInt(), points,calories)
         GlobalScope.launch {
             runViewModel.insertRun(run)
