@@ -99,13 +99,21 @@ class MapFragment : Fragment() {
         // button setup
         addPhotoButton = view.findViewById(R.id.addPhotoFAB) as FloatingActionButton
         startButton = view.findViewById(R.id.startButton) as ImageButton
+        stopButton = view.findViewById(R.id.stopButton) as ImageButton
+
+        startButton.isClickable = false
+        stopButton.isClickable = false
+
         startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#68A620"))
 
         startButton.setOnClickListener {
             if (activityStatus != ACTIVITY_STARTED) {
                 startActivity()
-                startButton.setImageResource(R.drawable.pause_button_image)
-                startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFE338"))
+                if(activityStatus == ACTIVITY_STARTED) {
+                    startButton.setImageResource(R.drawable.pause_button_image)
+                    startButton.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor("#FFE338"))
+                }
             } else { //ACTIVITY_STARTED
                 pauseActivity()
                 startButton.setImageResource(R.drawable.play_button_image)
@@ -180,11 +188,12 @@ class MapFragment : Fragment() {
             IntentFilter(TrackerService.TRACKER_UPDATED)
         )
 
-
         runViewModel.maxRunID.observe(viewLifecycleOwner) { numberOfRuns ->
             currentRunID = (numberOfRuns ?: 0) + 1
-
         }
+
+        startButton.isClickable = true
+        stopButton.isClickable= true
 
         return view
     }
@@ -267,17 +276,19 @@ class MapFragment : Fragment() {
     }
 
     private fun startActivity() {
-        Toast.makeText(requireContext(), "Running started!", Toast.LENGTH_SHORT).show()
+        if(myLocationOverlay.myLocation != null) {
+            Toast.makeText(requireContext(), "Running started!", Toast.LENGTH_SHORT).show()
 
-        // change status
-        activityStatus = ACTIVITY_STARTED
+            // change status
+            activityStatus = ACTIVITY_STARTED
 
-        // get current location
-        currentLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
-        points.add(currentLocation)
+            // get current location
+            currentLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
+            points.add(currentLocation)
 
-        startTimer()
-        startTracker()
+            startTimer()
+            startTracker()
+        }
     }
 
     private fun startTracker() {
@@ -313,23 +324,26 @@ class MapFragment : Fragment() {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun stopActivity() {
-        Toast.makeText(requireContext(), "Running stopped!", Toast.LENGTH_SHORT).show()
+        if(myLocationOverlay.myLocation != null) {
+            Toast.makeText(requireContext(), "Running stopped!", Toast.LENGTH_SHORT).show()
 
-        // change status
-        activityStatus = ACTIVITY_STOPPED
+            // change status
+            activityStatus = ACTIVITY_STOPPED
 
-        // saving recorded run in database
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val run = Run(0, Date.valueOf("$year-$month-$day"), distance / 1000, time.toInt(), points)
-        GlobalScope.launch {
-            runViewModel.insertRun(run)
+            // saving recorded run in database
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val run =
+                Run(0, Date.valueOf("$year-$month-$day"), distance / 1000, time.toInt(), points)
+            GlobalScope.launch {
+                runViewModel.insertRun(run)
+            }
+
+            resetTimer()
+            stopTracker()
         }
-
-        resetTimer()
-        stopTracker()
     }
 
     private fun stopTracker() {
