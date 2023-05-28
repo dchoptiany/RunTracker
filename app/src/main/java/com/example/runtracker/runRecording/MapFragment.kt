@@ -167,8 +167,6 @@ class MapFragment : Fragment() {
 
         addPhotoButton.setOnClickListener {
             if (activityStatus == ACTIVITY_STARTED) {
-
-                createPin()
                 addPhoto()
             }
         }
@@ -403,7 +401,9 @@ class MapFragment : Fragment() {
                 val longitude = data.getDoubleExtra("longitude", 0.0)
                 val geoPoint = GeoPoint(latitude, longitude)
                 if (path != null) {
-                    addGeoPointToDataBase(geoPoint, path)
+                    addGeoPointToDataBase(geoPoint ,path)
+                    createPin()
+
                 }
 
             }

@@ -62,8 +62,19 @@ class StatisticsActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.totalBurnedCalories.observe(this) {
-            if (it != null) {
+
+        viewModel.totalBurnedCalories.observe(this){
+            if(it!=null){
+                val calories = String.format("%.1f",it)
+                findViewById<TextView>(R.id.textViewTotalCalories).text = "Total calories burnt: $calories kcal"
+            }
+        }
+
+
+        viewModel.maxBurnedCalories.observe(this){
+            if(it!=null){
+                val calories = String.format("%.1f",it)
+                findViewById<TextView>(R.id.textViewMaxCalories).text = "Most calories burnt: $calories kcal"
                 findViewById<TextView>(R.id.textViewTotalCalories).text =
                     "Total burned calories:\n$it kcal"
             }

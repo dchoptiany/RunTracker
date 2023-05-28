@@ -119,10 +119,14 @@ class MyAccountViewHolder(var view : View, private var onBlockClickListener: MyA
             .setPositiveButton("OK") { dialog, which ->
 
                 val text = inputText.text.toString()
-                editor.putString(input, text)
-                editor.apply()
-                calculateBMI()
-                onBlockClickListener.onBlockClick(adapterPosition)
+                if (text.toDoubleOrNull() != null) {
+                    editor.putString(input, text)
+                    editor.apply()
+                    calculateBMI()
+                    onBlockClickListener.onBlockClick(adapterPosition)
+                } else {
+                    Toast.makeText(view.context, "Enter valid data!", Toast.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton("Cancel") { dialog, which -> }
             .create()

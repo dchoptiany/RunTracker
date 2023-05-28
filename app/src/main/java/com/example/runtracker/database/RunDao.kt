@@ -42,6 +42,9 @@ interface RunDao {
     @Query("DELETE FROM run WHERE id = :runID")
     fun deleteByID(runID: Int)
 
+    @Query("DELETE FROM pin WHERE id = :runID")
+    fun deletePinByID(runID: Int)
+
     @Query("DELETE FROM run")
     fun deleteAll()
 
