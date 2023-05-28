@@ -1,5 +1,8 @@
 package com.example.runtracker.history
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
@@ -22,6 +25,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polyline
+import java.io.File
 
 class SummaryActivity : AppCompatActivity() {
     private var runID: Int = -1
@@ -33,12 +37,14 @@ class SummaryActivity : AppCompatActivity() {
     private lateinit var textViewDistance: TextView
     private lateinit var textViewTime: TextView
     private lateinit var textViewPace: TextView
+    private lateinit var textCalories: TextView
     // TODO: add 'photo markers' to map
     private lateinit var mapView: MapView
     // TODO: add gallery of photos from run
 
     private lateinit var mapController: IMapController
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_summary)
@@ -47,6 +53,7 @@ class SummaryActivity : AppCompatActivity() {
         textViewTime = findViewById(R.id.textViewTime)
         textViewPace = findViewById(R.id.textViewPace)
         mapView = findViewById(R.id.mapView)
+        textCalories = findViewById(R.id.textCalories)
 
         // map setup
         val context = applicationContext
@@ -77,10 +84,12 @@ class SummaryActivity : AppCompatActivity() {
                     timeMinutes / distanceKilometers // pace in minutes per kilometer
 
                 val points = it.points
+                val calories = String.format("%.2f",it.calories)
 
                 textViewDistance.text = StringFormatter.getInstance().formatDistance(distanceKilometers)
                 textViewTime.text = StringFormatter.getInstance().formatTime(timeSeconds)
                 textViewPace.text = StringFormatter.getInstance().formatPace(paceMinPerKm)
+                textCalories.text = "Calories burnt: $calories kcal"
 
                 // draw track
                 val pointsArrayList = ArrayList<GeoPoint>(points)
@@ -103,8 +112,17 @@ class SummaryActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     fun buttonDeleteClicked(view: View) {
         GlobalScope.launch {
+            deletePhotos(runID)
             viewModel.deleteByID(runID)
             finish()
         }
+    }
+
+    private fun deletePhotos(runID: Int) {
+        val cw = ContextWrapper(this)
+        val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
+        val subDirectory = File(directory, "$runID")
+
+        subDirectory.deleteRecursively()
     }
 }
