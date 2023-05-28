@@ -116,7 +116,11 @@ class MapFragment : Fragment() {
 
         stopButton = view.findViewById(R.id.stopButton) as ImageButton
         stopButton.setOnClickListener {
-            stopActivity()
+            if(activityStatus != ACTIVITY_STOPPED) {
+                stopActivity()
+                startButton.setImageResource(R.drawable.play_button_image)
+                startButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#68A620"))
+            }
         }
 
         // map setup
