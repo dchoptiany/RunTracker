@@ -2,13 +2,11 @@ package com.example.runtracker.runRecording
 
 import android.annotation.SuppressLint
 import android.content.*
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.runtracker.BuildConfig
@@ -142,28 +139,26 @@ class MapFragment : Fragment() {
         mapController.animateTo(defaultLocation)
 
         // set current location
-        if (isLocationPermissionGranted()) {
-            Log.i("mymap", "Localization permission granted")
-            myGpsMyLocationProvider = GpsMyLocationProvider(activity)
-            myLocationOverlay = MyLocationNewOverlay(myGpsMyLocationProvider, mapView)
-            myLocationOverlay.enableMyLocation()
-            myLocationOverlay.enableFollowLocation()
-            myLocationOverlay.isDrawAccuracyEnabled = true
+        myGpsMyLocationProvider = GpsMyLocationProvider(activity)
+        myLocationOverlay = MyLocationNewOverlay(myGpsMyLocationProvider, mapView)
+        myLocationOverlay.enableMyLocation()
+        myLocationOverlay.enableFollowLocation()
+        myLocationOverlay.isDrawAccuracyEnabled = true
 
-            val icon = BitmapFactory.decodeResource(
-                resources,
-                org.osmdroid.library.R.drawable.ic_menu_compass
-            )
-            myLocationOverlay.setPersonIcon(icon)
-            mapView.overlays.add(myLocationOverlay)
+        val icon = BitmapFactory.decodeResource(
+            resources,
+            org.osmdroid.library.R.drawable.ic_menu_compass
+        )
+        myLocationOverlay.setPersonIcon(icon)
+        mapView.overlays.add(myLocationOverlay)
 
-            myLocationOverlay.runOnFirstFix {
-                val myLocation: GeoPoint = myLocationOverlay.myLocation
-                requireActivity().runOnUiThread {
-                    mapView.controller.animateTo(myLocation)
-                }
+        myLocationOverlay.runOnFirstFix {
+            val myLocation: GeoPoint = myLocationOverlay.myLocation
+            requireActivity().runOnUiThread {
+                mapView.controller.animateTo(myLocation)
             }
         }
+
 
         addPhotoButton.setOnClickListener {
             if (activityStatus == ACTIVITY_STARTED) {
@@ -367,30 +362,6 @@ class MapFragment : Fragment() {
         intent.putExtra("runID", currentRunID)
         resultLauncher.launch(intent)
     }
-
-    private fun isLocationPermissionGranted(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                1
-            )
-            return false
-        } else {
-            return true
-        }
-    }
-
 
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
