@@ -8,13 +8,13 @@ class RunRepository(private val runDao: RunDao) {
     val allRuns: Flow<List<Run>> = runDao.getAll()
     val numberOfRuns: Flow<Int> = runDao.getNumberOfRuns()
     val totalDistance: Flow<Float> = runDao.getTotalDistance()
-    val maxRunID : Flow<Int> = runDao.getMaxRunID()
+    val maxRunID: Flow<Int> = runDao.getMaxRunID()
     val totalDuration: Flow<Int> = runDao.getTotalDuration()
     val numberOfPins: Flow<Int> = runDao.getNumberOfPins()
     val longestDistance: Flow<Float> = runDao.getLongestDistance()
     val longestDuration: Flow<Int> = runDao.getLongestDuration()
-    val maxBurnedCalories : Flow<Float> = runDao.getMaxCalories()
-    val totalCaloriesBurned : Flow<Float> = runDao.getTotalCalories()
+    val maxBurnedCalories: Flow<Float> = runDao.getMaxCalories()
+    val totalCaloriesBurned: Flow<Float> = runDao.getTotalCalories()
 
 
     @WorkerThread
@@ -59,17 +59,17 @@ class RunRepository(private val runDao: RunDao) {
 
 
     @WorkerThread
-    fun insertPin(pin: Pin){
+    fun insertPin(pin: Pin) {
         runDao.insertPin(pin)
     }
 
     @WorkerThread
-    fun getPins(runID : Int) : Flow<List<Pin>>{
+    fun getPins(runID: Int): Flow<List<Pin>> {
         return runDao.getPins(runID)
     }
 
     @WorkerThread
-    fun getAllPins() : Flow<List<Pin>>{
+    fun getAllPins(): Flow<List<Pin>> {
         return runDao.getAllPins()
     }
 }

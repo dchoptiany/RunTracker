@@ -61,17 +61,17 @@ class StatisticsActivity : AppCompatActivity() {
                     "Longest duration: ${StringFormatter.getInstance().formatTime(it)}"
             }
         }
-        
-        viewModel.totalBurnedCalories.observe(this){
-            if(it != null) {
-                findViewById<TextView>(R.id.textViewTotalCalories).text = 
+
+        viewModel.totalBurnedCalories.observe(this) {
+            if (it != null) {
+                findViewById<TextView>(R.id.textViewTotalCalories).text =
                     "Total burned calories: $it kcal"
             }
         }
 
-        viewModel.maxBurnedCalories.observe(this){
-            if(it != null) {
-                findViewById<TextView>(R.id.textViewMaxCalories).text = 
+        viewModel.maxBurnedCalories.observe(this) {
+            if (it != null) {
+                findViewById<TextView>(R.id.textViewMaxCalories).text =
                     "Most burned calories:  $it kcal"
             }
         }
