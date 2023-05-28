@@ -185,8 +185,8 @@ class MapFragment : Fragment() {
         )
 
 
-        runViewModel.maxRunID.observe(viewLifecycleOwner) { numberOfRuns ->
-            currentRunID = (numberOfRuns ?: 0) + 1
+        runViewModel.maxRunID.observe(viewLifecycleOwner) { maxRunID ->
+            currentRunID = (maxRunID ?: 0) + 1
 
         }
 
@@ -205,7 +205,7 @@ class MapFragment : Fragment() {
                     val intent = Intent(requireContext(), ImageDetailsActivity::class.java)
                     intent.putExtra("latitude", item.point.latitude)
                     intent.putExtra("longitude", item.point.longitude)
-                    if(activityStatus== ACTIVITY_STOPPED){
+                    if(activityStatus == ACTIVITY_STOPPED) {
                         intent.putExtra("runID",currentRunID-1)
                     }
                     else {
@@ -225,7 +225,7 @@ class MapFragment : Fragment() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun addGeoPointToDataBase(geoPoint : GeoPoint, path : String) {
+    private fun addGeoPointToDataBase(geoPoint: GeoPoint, path: String) {
         val geoPointData = Pin(0, geoPoint, path, currentRunID)
         GlobalScope.launch {
             runViewModel.insertPin(geoPointData)
@@ -263,7 +263,8 @@ class MapFragment : Fragment() {
             }
 
             if (distance != 0f) {
-                distanceTextView.text = StringFormatter.getInstance().formatDistance(distance / 1000f)
+                distanceTextView.text =
+                    StringFormatter.getInstance().formatDistance(distance / 1000f)
             }
 
             // draw track
@@ -365,7 +366,7 @@ class MapFragment : Fragment() {
         val currentPinLocation = LocationHelper.getLastKnownLocation(myLocationOverlay)
         intent.putExtra("latitude", currentPinLocation.latitude)
         intent.putExtra("longitude", currentPinLocation.longitude)
-        intent.putExtra("runID",currentRunID)
+        intent.putExtra("runID", currentRunID)
         resultLauncher.launch(intent)
     }
 
@@ -392,19 +393,17 @@ class MapFragment : Fragment() {
         }
     }
 
- 
-
 
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val data = result.data
             if (data != null) {
                 val path = data.getStringExtra("image_path")
-                val latitude = data.getDoubleExtra("latitude",0.0)
-                val longitude = data.getDoubleExtra("longitude",0.0)
-                val geoPoint = GeoPoint(latitude,longitude)
+                val latitude = data.getDoubleExtra("latitude", 0.0)
+                val longitude = data.getDoubleExtra("longitude", 0.0)
+                val geoPoint = GeoPoint(latitude, longitude)
                 if (path != null) {
-                    addGeoPointToDataBase(geoPoint ,path)
+                    addGeoPointToDataBase(geoPoint, path)
                 }
 
             }
