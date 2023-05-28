@@ -107,6 +107,36 @@ class SummaryActivity : AppCompatActivity() {
                 val defaultLocation = points.get(0)
                 mapController.animateTo(defaultLocation)
             }
+
+            val pins: ArrayList<OverlayItem> = ArrayList()
+
+            viewModel.getPins(runID).observe(this) {
+                for(pin in it) {
+                    val overlayItem = OverlayItem("Pin", "", pin.geoPoint)
+                    pins.add(overlayItem)
+                    val overlay = ItemizedIconOverlay(
+                        pins,
+                        object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+                            override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                                val intent = Intent(context, ImageDetailsActivity::class.java)
+                                intent.putExtra("latitude", item.point.latitude)
+                                intent.putExtra("longitude", item.point.longitude)
+                                intent.putExtra("runID", runID)
+
+                                startActivity(intent)
+                                return true
+                            }
+
+                            override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                                return false
+                            }
+                        },
+                        context
+                    )
+                    mapView.overlays.add(overlay)
+                }
+                mapView.invalidate()
+            }
         }
 
         findViewById<Button>(R.id.buttonDeleteRun).setOnClickListener {
