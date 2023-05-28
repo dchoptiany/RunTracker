@@ -1,5 +1,6 @@
 package com.example.runtracker.history
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
@@ -33,12 +34,14 @@ class SummaryActivity : AppCompatActivity() {
     private lateinit var textViewDistance: TextView
     private lateinit var textViewTime: TextView
     private lateinit var textViewPace: TextView
+    private lateinit var textCalories: TextView
     // TODO: add 'photo markers' to map
     private lateinit var mapView: MapView
     // TODO: add gallery of photos from run
 
     private lateinit var mapController: IMapController
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_summary)
@@ -47,6 +50,7 @@ class SummaryActivity : AppCompatActivity() {
         textViewTime = findViewById(R.id.textViewTime)
         textViewPace = findViewById(R.id.textViewPace)
         mapView = findViewById(R.id.mapView)
+        textCalories = findViewById(R.id.textCalories)
 
         // map setup
         val context = applicationContext
@@ -77,10 +81,12 @@ class SummaryActivity : AppCompatActivity() {
                     timeMinutes / distanceKilometers // pace in minutes per kilometer
 
                 val points = it.points
+                val calories = String.format("%.2f",it.calories)
 
                 textViewDistance.text = StringFormatter.getInstance().formatDistance(distanceKilometers)
                 textViewTime.text = StringFormatter.getInstance().formatTime(timeSeconds)
                 textViewPace.text = StringFormatter.getInstance().formatPace(paceMinPerKm)
+                textCalories.text = "Calories burnt: $calories kcal"
 
                 // draw track
                 val pointsArrayList = ArrayList<GeoPoint>(points)
