@@ -71,14 +71,16 @@ class StatisticsActivity : AppCompatActivity() {
 
         viewModel.sumBurnedCalories.observe(this){
             if(it!=null){
-                findViewById<TextView>(R.id.textViewTotalCalories).text = "Total calories burnt: $it kcal"
+                val calories = String.format("%.1f",it)
+                findViewById<TextView>(R.id.textViewTotalCalories).text = "Total calories burnt: $calories kcal"
             }
         }
 
 
         viewModel.maxBurnedCalories.observe(this){
             if(it!=null){
-                findViewById<TextView>(R.id.textViewMaxCalories).text = "Most calories burnt: $it kcal"
+                val calories = String.format("%.1f",it)
+                findViewById<TextView>(R.id.textViewMaxCalories).text = "Most calories burnt: $calories kcal"
             }
         }
     }
