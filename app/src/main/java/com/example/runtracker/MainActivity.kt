@@ -8,9 +8,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         val title = findViewById<TextView>(R.id.text)
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
             }
             1 -> {
                 Intent(this, GalleryActivity::class.java).also {
-                    resultLauncher.launch(it)
+                    startActivity(it)
                 }
             }
             2 -> {
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
             }
             3 -> {
                 Intent(this, MyAccountActivity::class.java).also {
-                    resultLauncher.launch(it)
+                    startActivity(it)
                 }
             }
             4 -> {
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
             }
             5 -> {
                 Intent(this, SettingsActivity::class.java).also {
-                    resultLauncher.launch(it)
+                    startActivity(it)
                 }
             }
         }
@@ -109,24 +110,7 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         }
     }
 
-    var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data = result.data
-            if (data != null) {
-                data.getBooleanExtra("darkMode", false).let {
-                    editor.putBoolean("darkMode", it)
-                    editor.apply()
-                }
-                data.getBooleanExtra("notifications", false).let {
-                    editor.putBoolean("notifications", it)
-                    editor.apply()
-                }
-                data.getIntExtra("color", Color.BLACK).let {
-                    editor.putInt("color", it)
-                    editor.apply()
-                }
-            }
-        }
+
 
 
 }

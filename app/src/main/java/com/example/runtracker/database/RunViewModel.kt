@@ -12,6 +12,8 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
     var numberOfPins: LiveData<Int> = repository.numberOfPins.asLiveData()
     var longestDistance: LiveData<Float> = repository.longestDistance.asLiveData()
     var longestDuration: LiveData<Int> = repository.longestDuration.asLiveData()
+    var maxBurnedCalories : LiveData<Float> = repository.maxBurnedCalories.asLiveData()
+    var sumBurnedCalories : LiveData<Float> = repository.sumCalories.asLiveData()
 
 
     fun runsByDate(date: Date): LiveData<List<Run>> {

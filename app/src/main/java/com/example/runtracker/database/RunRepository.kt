@@ -13,6 +13,8 @@ class RunRepository(private val runDao: RunDao) {
     val numberOfPins: Flow<Int> = runDao.getNumberOfPins()
     val longestDistance: Flow<Float> = runDao.getLongestDistance()
     val longestDuration: Flow<Int> = runDao.getLongestDuration()
+    val maxBurnedCalories : Flow<Float> = runDao.getMaxCalories()
+    val totalCaloriesBurned : Flow<Float> = runDao.getTotalCalories()
 
 
     @WorkerThread

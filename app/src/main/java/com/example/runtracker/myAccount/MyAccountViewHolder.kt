@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.pow
 
 
 class MyAccountViewHolder(var view : View, private var onBlockClickListener: MyAccountAdapter.OnMyAccountClickListener) :  RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -102,6 +103,10 @@ class MyAccountViewHolder(var view : View, private var onBlockClickListener: MyA
             val alertText = createInputAlert("Height", "Enter your height")
             alertText.show()
         }
+
+
+
+
     }
 
     private fun createInputAlert(input: String, title: String): AlertDialog {
@@ -116,11 +121,22 @@ class MyAccountViewHolder(var view : View, private var onBlockClickListener: MyA
                 val text = inputText.text.toString()
                 editor.putString(input, text)
                 editor.apply()
+                calculateBMI()
                 onBlockClickListener.onBlockClick(adapterPosition)
             }
             .setNegativeButton("Cancel") { dialog, which -> }
             .create()
 
         return alertText
+    }
+
+    fun calculateBMI(){
+        if(sharedPreferences.getString("Height","")!="" && sharedPreferences.getString("Weight","")!=""){
+            val height = sharedPreferences.getString("Height","")?.toFloat()?.div(100.0)
+            val weight = sharedPreferences.getString("Weight","")?.toFloat()
+            editor.putString("BMI", String.format("%.2f", weight!! / height!!.toDouble().pow(2.0)))
+            editor.apply()
+            onBlockClickListener.onBlockClick(6)
+        }
     }
 }
