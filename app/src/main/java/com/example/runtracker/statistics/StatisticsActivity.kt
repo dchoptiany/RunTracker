@@ -23,56 +23,56 @@ class StatisticsActivity : AppCompatActivity() {
         viewModel.numberOfRuns.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewTotalRuns).text =
-                    "Total runs: $it"
+                    "Total runs:\n$it"
             }
         }
 
         viewModel.totalDistance.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewTotalDistance).text =
-                    "Total distance: ${StringFormatter.getInstance().formatDistance(it)}"
+                    "Total distance:\n${StringFormatter.getInstance().formatDistance(it)}"
             }
         }
 
         viewModel.totalDuration.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewTotalDuration).text =
-                    "Total duration: ${StringFormatter.getInstance().formatTime(it)}"
+                    "Total duration:\n${StringFormatter.getInstance().formatTime(it)}"
             }
         }
 
         viewModel.numberOfPins.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewTotalPhotos).text =
-                    "Total photos: $it"
+                    "Total photos:\n$it"
             }
         }
 
         viewModel.longestDistance.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewLongestDistance).text =
-                    "Longest distance: ${StringFormatter.getInstance().formatDistance(it)}"
+                    "Longest distance:\n${StringFormatter.getInstance().formatDistance(it)}"
             }
         }
 
         viewModel.longestDuration.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewLongestDuration).text =
-                    "Longest duration: ${StringFormatter.getInstance().formatTime(it)}"
+                    "Longest duration:\n${StringFormatter.getInstance().formatTime(it)}"
             }
         }
 
         viewModel.totalBurnedCalories.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewTotalCalories).text =
-                    "Total burned calories: $it kcal"
+                    "Total burned calories:\n$it kcal"
             }
         }
 
         viewModel.maxBurnedCalories.observe(this) {
             if (it != null) {
                 findViewById<TextView>(R.id.textViewMaxCalories).text =
-                    "Most burned calories:  $it kcal"
+                    "Most burned calories:\n$it kcal"
             }
         }
     }

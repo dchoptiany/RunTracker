@@ -9,12 +9,12 @@
     <string name="run_tracker">Run Tracker</string>
     <string name="delete">Delete</string>
     <string name="statistics">Statistics</string>
-    <string name="total_runs_0">Total runs: 0</string>
-    <string name="total_distance_0_000km">Total distance: 0.000km</string>
-    <string name="total_duration_00_00_00">Total duration: 00:00:00</string>
-    <string name="longest_distance_0_000km">Longest distance: 0.000km</string>
-    <string name="longest_duration_00_00_00">Longest duration: 00:00:00</string>
-    <string name="total_photos_0">Total photos: 0</string>
-    <string name="burned_calories_0_kcal">Total burned calories: 0 kcal</string>
-    <string name="max_calories_0_kcal">Most burned calories: 0 kcal</string>
+    <string name="total_runs_0">Total runs:\n0</string>
+    <string name="total_distance_0_000km">Total distance:\n0.000 km</string>
+    <string name="total_duration_00_00_00">Total duration:\n00:00:00</string>
+    <string name="longest_distance_0_000km">Longest distance:\n0.000 km</string>
+    <string name="longest_duration_00_00_00">Longest duration:\n00:00:00</string>
+    <string name="total_photos_0">Total photos:\n0</string>
+    <string name="burned_calories_0_kcal">Total burned calories:\n0 kcal</string>
+    <string name="max_calories_0_kcal">Most burned calories:\n0 kcal</string>
 </resources>

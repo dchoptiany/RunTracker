@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <TextView
             android:id="@+id/textViewTotalRuns"
@@ -37,7 +37,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="6dp" />
 
         <TextView
             android:id="@+id/textViewTotalDistance"
@@ -48,7 +48,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="6dp" />
 
         <TextView
             android:id="@+id/textViewTotalDuration"
@@ -59,7 +59,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="6dp" />
 
         <TextView
             android:id="@+id/textViewTotalPhotos"
@@ -70,7 +70,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="6dp" />
 
         <TextView
             android:id="@+id/textViewLongestDistance"
@@ -81,7 +81,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="6dp" />
 
         <TextView
             android:id="@+id/textViewLongestDuration"
@@ -92,7 +92,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="6dp" />
 
         <TextView
             android:id="@+id/textViewTotalCalories"
@@ -103,7 +103,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="6dp" />
 
         <TextView
             android:id="@+id/textViewMaxCalories"
