@@ -17,7 +17,7 @@ import kotlin.math.abs
 class ImageDetailsActivity : AppCompatActivity() {
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
-    private var runID : Int = 0
+    private var runID: Int = 0
     private var filesPath = ArrayList<String>()
     private var filesSize = 0
     private var currentPosition = 0
@@ -33,7 +33,7 @@ class ImageDetailsActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
         latitude = intent.getDoubleExtra("latitude", 0.0)
         longitude = intent.getDoubleExtra("longitude", 0.0)
-        runID = intent.getIntExtra("runID",0)
+        runID = intent.getIntExtra("runID", 0)
         setAppAppearance()
 
         getPhotos()
@@ -71,7 +71,7 @@ class ImageDetailsActivity : AppCompatActivity() {
             if (currentPosition > 0) View.VISIBLE
             else View.INVISIBLE
         rightButton.visibility =
-            if (currentPosition < filesSize-1)
+            if (currentPosition < filesSize - 1)
                 View.VISIBLE
             else View.INVISIBLE
     }
