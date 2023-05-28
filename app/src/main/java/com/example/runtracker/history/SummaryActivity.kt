@@ -1,6 +1,8 @@
 package com.example.runtracker.history
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
@@ -23,6 +25,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polyline
+import java.io.File
 
 class SummaryActivity : AppCompatActivity() {
     private var runID: Int = -1
@@ -109,8 +112,17 @@ class SummaryActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     fun buttonDeleteClicked(view: View) {
         GlobalScope.launch {
+            deletePhotos(runID)
             viewModel.deleteByID(runID)
             finish()
         }
+    }
+
+    private fun deletePhotos(runID: Int) {
+        val cw = ContextWrapper(this)
+        val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
+        val subDirectory = File(directory, "$runID")
+
+        subDirectory.deleteRecursively()
     }
 }
