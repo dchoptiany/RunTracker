@@ -7,14 +7,13 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
     var runs: LiveData<List<Run>> = repository.allRuns.asLiveData()
     var numberOfRuns: LiveData<Int> = repository.numberOfRuns.asLiveData()
     var totalDistance: LiveData<Float> = repository.totalDistance.asLiveData()
-    var maxRunID : LiveData<Int> = repository.maxRunID.asLiveData()
-
+    var maxRunID: LiveData<Int> = repository.maxRunID.asLiveData()
     var totalDuration: LiveData<Int> = repository.totalDuration.asLiveData()
-    //var totalPhotos: LiveData<Int> = repository.totalPhotos.asLiveData()
+    var numberOfPins: LiveData<Int> = repository.numberOfPins.asLiveData()
     var longestDistance: LiveData<Float> = repository.longestDistance.asLiveData()
     var longestDuration: LiveData<Int> = repository.longestDuration.asLiveData()
-    var maxBurnedCalories : LiveData<Float> = repository.maxBurnedCalories.asLiveData()
-    var sumBurnedCalories : LiveData<Float> = repository.sumCalories.asLiveData()
+    var maxBurnedCalories: LiveData<Float> = repository.maxBurnedCalories.asLiveData()
+    var totalBurnedCalories: LiveData<Float> = repository.totalCaloriesBurned.asLiveData()
 
 
     fun runsByDate(date: Date): LiveData<List<Run>> {
@@ -49,18 +48,16 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
         repository.updateRun(run)
     }
 
-
-    fun insertPin(pin: Pin){
+    fun insertPin(pin: Pin) {
         repository.insertPin(pin)
     }
 
-
-    fun getPins(runID : Int): LiveData<List<Pin>>{
+    fun getPins(runID: Int): LiveData<List<Pin>> {
         return repository.getPins(runID).asLiveData()
     }
 
-    fun getAllPins(): LiveData<List<Pin>>{
-       return  repository.getAllPins().asLiveData()
+    fun getAllPins(): LiveData<List<Pin>> {
+        return repository.getAllPins().asLiveData()
     }
 }
 
