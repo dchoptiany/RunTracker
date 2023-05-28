@@ -24,8 +24,6 @@ class SettingsViewHolder(val view : View,var onBlockListener : SettingsAdapter.O
 
 
     override fun onClick(v: View?) {
-
         onBlockListener.onBlockClick(adapterPosition)
-
     }
 }

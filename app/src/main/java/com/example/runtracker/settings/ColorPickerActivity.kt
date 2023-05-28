@@ -27,6 +27,7 @@ class ColorPickerActivity: AppCompatActivity() {
         val saturationBar =
             findViewById<com.larswerkman.holocolorpicker.SaturationBar>(R.id.saturationbar)
         val valueBar = findViewById<com.larswerkman.holocolorpicker.ValueBar>(R.id.valuebar)
+        picker.oldCenterColor = sharedPreferences.getInt("color", Color.BLACK)
         picker.addValueBar(valueBar)
         picker.addSaturationBar(saturationBar)
         val button = findViewById<Button>(R.id.button)

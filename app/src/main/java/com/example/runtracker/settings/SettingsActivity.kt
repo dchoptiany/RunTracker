@@ -45,10 +45,8 @@ class SettingsActivity :  AppCompatActivity() , SettingsAdapter.OnSettingsItemCl
     private fun addToSettingsItems() {
         val itemAppColor = settingsItem("Set app color", R.drawable.color_picker, false)
         val itemDarkMode = settingsItem("Dark mode", R.drawable.dark_mode, true)
-        val itemNotifications = settingsItem("Notifications", R.drawable.notifications, true)
         settingsItems.add(itemAppColor)
         settingsItems.add(itemDarkMode)
-        settingsItems.add(itemNotifications)
     }
 
     private fun setDarkMode() {
