@@ -4,14 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.gallery.GalleryActivity
@@ -64,7 +66,10 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
         when (position) {
             0 -> {
                 Intent(this, MapActivity::class.java).also {
-                    startActivity(it)
+                    if(isLocationPermissionGranted()) {
+                        Log.i("mymap", "Localization permission granted")
+                        startActivity(it)
+                    }
                 }
             }
             1 -> {
@@ -111,6 +116,27 @@ class MainActivity : AppCompatActivity(), MenuAdapter.OnBlockClickListener {
     }
 
 
-
+    private fun isLocationPermissionGranted(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                applicationContext,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                applicationContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                1
+            )
+            return false
+        } else {
+            return true
+        }
+    }
 
 }

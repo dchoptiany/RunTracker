@@ -36,28 +36,14 @@ class SettingsAdapter(var settingsItems : ArrayList<settingsItem>, var  onBlockL
         if(holder.text.text == "Dark mode" && sharedPreferences.getBoolean("darkMode",false)){
             holder.switch.isChecked = true
         }
-        if(holder.text.text == "Notifications" && sharedPreferences.getBoolean("notifications",false)){
-            holder.switch.isChecked = true
-        }
         if(!settingsItems[position].showSwith){
             holder.switch.visibility = View.INVISIBLE
         }
         else{
             holder.switch.setOnCheckedChangeListener { buttonView, isChecked ->
-                when(position){
-
-                    1 -> {
                         editor.putBoolean("darkMode",isChecked)
                         editor.apply()
                         onBlockListener.onBlockClick(position)
-
-                    }
-                    2 -> {
-                        editor.putBoolean("notifications",isChecked)
-                        editor.apply()
-                        onBlockListener.onBlockClick(position)
-                    }
-                }
             }
         }
     }
