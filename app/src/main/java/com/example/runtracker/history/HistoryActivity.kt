@@ -42,7 +42,7 @@ class HistoryActivity : AppCompatActivity(), RunHistoryAdapter.OnRunItemClickLis
         val runHistoryItems = ArrayList<RunHistoryItem>()
 
         runs.forEach {
-            runHistoryItems.add(RunHistoryItem(it.id, it.date, it.distance, it.duration))
+            runHistoryItems.add(RunHistoryItem(it.id, it.dateTime, it.distance, it.duration))
         }
 
         return runHistoryItems

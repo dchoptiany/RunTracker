@@ -5,11 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.runtracker.converters.DateConverter
+import com.example.runtracker.converters.LocalDateTimeConverter
 import com.example.runtracker.converters.PointsListConverter
 
 @Database(entities = [Run::class, Pin::class], version = 1, exportSchema = false)
-@TypeConverters(DateConverter::class, PointsListConverter::class)
+@TypeConverters(LocalDateTimeConverter::class, PointsListConverter::class)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runDao(): RunDao
 
