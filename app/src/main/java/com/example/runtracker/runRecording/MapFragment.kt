@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.runtracker.BuildConfig
 import com.example.runtracker.R
-
 import com.example.runtracker.RunApplication
 import com.example.runtracker.database.Pin
 import com.example.runtracker.database.Run
@@ -42,8 +41,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import java.sql.Date
-import java.util.Calendar
+import java.time.LocalDateTime
 
 class MapFragment : Fragment() {
     companion object {
@@ -326,13 +324,10 @@ class MapFragment : Fragment() {
         activityStatus = ACTIVITY_STOPPED
 
         // saving recorded run in database
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
         val weight = sharedPreferences.getString("Weight", "0")?.takeIf { it.isNotBlank() } ?: "0"
         val calories = weight.toFloat() * distance / 1000
-        val run = Run(0, Date.valueOf("$year-$month-$day"), distance / 1000, time.toInt(), points,calories)
+        val dateTime = LocalDateTime.now()
+        val run = Run(0, dateTime, distance / 1000, time.toInt(), points,calories)
         GlobalScope.launch {
             runViewModel.insertRun(run)
         }

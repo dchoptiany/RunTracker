@@ -2,15 +2,15 @@ package com.example.runtracker.database
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import java.sql.Date
+import java.time.LocalDateTime
 
 @Dao
 interface RunDao {
     @Query("SELECT * FROM run")
     fun getAll(): Flow<List<Run>>
 
-    @Query("SELECT * FROM run WHERE date == :date")
-    fun getByDate(date: Date): Flow<List<Run>>
+    @Query("SELECT * FROM run WHERE dateTime == :dateTime")
+    fun getByDate(dateTime: LocalDateTime): Flow<List<Run>>
 
     @Query("SELECT * FROM run WHERE id == :runID")
     fun getByID(runID: Int): Flow<Run>
@@ -66,9 +66,9 @@ interface RunDao {
     @Query("SELECT * FROM Pin WHERE runId ==:runID")
     fun getPins(runID: Int): Flow<List<Pin>>
 
-    @Query("SELECT * FROM Pin")
+    @Query("SELECT * FROM pin")
     fun getAllPins(): Flow<List<Pin>>
 
-    @Query("SELECT COUNT(*) FROM Pin")
+    @Query("SELECT COUNT(*) FROM pin")
     fun getNumberOfPins(): Flow<Int>
 }

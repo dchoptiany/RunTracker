@@ -1,20 +1,20 @@
 package com.example.runtracker
 
-import com.example.runtracker.converters.DateConverter
+import com.example.runtracker.converters.LocalDateTimeConverter
 import com.example.runtracker.converters.PointsListConverter
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.osmdroid.util.GeoPoint
-import java.sql.Date
+import java.time.LocalDateTime
 
 class ConvertersUnitTests {
     @Test
-    fun dateConverterTest() {
-        val date: Date = Date.valueOf("2022-12-31")
-        val converter = DateConverter()
-        val converted = converter.toString(date)
-        val dateFromString = converter.toDate(converted)
-        assertEquals(date, dateFromString)
+    fun localDateTimeConverterTest() {
+        val dateTime = LocalDateTime.parse("2023-12-31T12:30:45")
+        val converter = LocalDateTimeConverter()
+        val converted = converter.toString(dateTime)
+        val dateTimeFromString = converter.toLocalDateTime(converted)
+        assertEquals(dateTime, dateTimeFromString)
     }
 
     @Test
