@@ -19,7 +19,7 @@ class MyAccountActivity : AppCompatActivity(), MyAccountAdapter.OnMyAccountClick
     private lateinit var sharedPreferencesSettings: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var recyclerViewAccount: RecyclerView
-    private var myAccountItems = ArrayList<MyAccountItem>()
+    private var myAccountItems = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,18 +53,17 @@ class MyAccountActivity : AppCompatActivity(), MyAccountAdapter.OnMyAccountClick
     }
 
     private fun addMenuItems() {
-        addToAccountItemsList("Name", "input")
-        addToAccountItemsList("Surname", "input")
-        addToAccountItemsList("Sex", "spinner")
-        addToAccountItemsList("Date of birth", "calendar")
-        addToAccountItemsList("Weight", "input")
-        addToAccountItemsList("Height", "input")
-        addToAccountItemsList("BMI","text")
+        addToAccountItemsList("Name")
+        addToAccountItemsList("Surname")
+        addToAccountItemsList("Sex")
+        addToAccountItemsList("Date of birth")
+        addToAccountItemsList("Weight")
+        addToAccountItemsList("Height")
+        addToAccountItemsList("BMI")
     }
 
-    private fun addToAccountItemsList(data: String, appWidget: String) {
-        val menuItem = MyAccountItem(data, appWidget)
-        myAccountItems.add(menuItem)
+    private fun addToAccountItemsList(data: String) {
+        myAccountItems.add(data)
     }
 
     @SuppressLint("NotifyDataSetChanged")

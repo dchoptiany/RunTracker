@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.runtracker.R
 
-class MyAccountAdapter(private val menuItem : ArrayList<MyAccountItem>, private var onBlockListener: OnMyAccountClickListener)
+class MyAccountAdapter(private val menuItem : ArrayList<String>, private var onBlockListener: OnMyAccountClickListener)
     : RecyclerView.Adapter<MyAccountViewHolder>() {
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -31,8 +31,8 @@ class MyAccountAdapter(private val menuItem : ArrayList<MyAccountItem>, private 
         sharedPreferences =
             holder.view.context.getSharedPreferences("my_account", Context.MODE_PRIVATE)
 
-        holder.textViewTitle.text = menuItem[position].item
-        holder.textViewData.text = sharedPreferences.getString(menuItem[position].item, "")
+        holder.textViewTitle.text = menuItem[position]
+        holder.textViewData.text = sharedPreferences.getString(menuItem[position], "")
     }
 
     interface OnMyAccountClickListener {
