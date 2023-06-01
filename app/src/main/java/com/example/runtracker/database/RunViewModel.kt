@@ -1,7 +1,7 @@
 package com.example.runtracker.database
 
 import androidx.lifecycle.*
-import java.sql.Date
+import java.time.LocalDateTime
 
 class RunViewModel(private val repository: RunRepository): ViewModel() {
     var runs: LiveData<List<Run>> = repository.allRuns.asLiveData()
@@ -16,8 +16,8 @@ class RunViewModel(private val repository: RunRepository): ViewModel() {
     var totalBurnedCalories: LiveData<Float> = repository.totalCaloriesBurned.asLiveData()
 
 
-    fun runsByDate(date: Date): LiveData<List<Run>> {
-        return repository.getByDate(date).asLiveData()
+    fun runsByDate(dateTime: LocalDateTime): LiveData<List<Run>> {
+        return repository.getByDate(dateTime).asLiveData()
     }
 
     fun runByID(ID: Int): LiveData<Run> {

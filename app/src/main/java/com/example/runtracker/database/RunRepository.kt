@@ -2,7 +2,7 @@ package com.example.runtracker.database
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
-import java.sql.Date
+import java.time.LocalDateTime
 
 class RunRepository(private val runDao: RunDao) {
     val allRuns: Flow<List<Run>> = runDao.getAll()
@@ -18,8 +18,8 @@ class RunRepository(private val runDao: RunDao) {
 
 
     @WorkerThread
-    fun getByDate(date: Date): Flow<List<Run>> {
-        return runDao.getByDate(date)
+    fun getByDate(dateTime: LocalDateTime): Flow<List<Run>> {
+        return runDao.getByDate(dateTime)
     }
 
     @WorkerThread

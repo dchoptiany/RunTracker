@@ -12,7 +12,6 @@ import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.ActivityCompat
 import org.osmdroid.util.GeoPoint
-import java.sql.Date
 import java.util.*
 
 class TrackerService : Service() {
