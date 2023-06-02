@@ -29,12 +29,8 @@ class TrackerService : Service() {
     private var latitude = 0.0
     private var longitude = 0.0
 
-    private var duration: Int = 0
     private var distance: Float = 0f
     private var points: MutableList<GeoPoint> = mutableListOf()
-
-    private lateinit var startingTime: Date
-    private lateinit var stoppedTime: Date
 
     override fun onBind(p0: Intent?): IBinder? = null
 
@@ -56,22 +52,11 @@ class TrackerService : Service() {
     }
 
     private fun startTracking() {
-        // get "run start" time
-        val starting = Calendar.getInstance().time
-        startingTime = Date(starting.time)
-
         // start recording location changes
         timer.scheduleAtFixedRate(DistanceTask(distance), 0, 1000)
     }
 
     private fun stopTracking() {
-        // get "run stop" time
-        val stopped = Calendar.getInstance().time
-        stoppedTime = Date(stopped.time)
-
-        // calc "run duration"
-        duration = (stoppedTime.time - startingTime.time).toInt()
-
         // stop recording location changes
         timer.cancel()
     }
